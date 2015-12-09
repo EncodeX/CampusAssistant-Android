@@ -15,7 +15,31 @@
 		app:titleTextColor="@android:color/white"
 		android:elevation="8dp"/>
 
+	<RelativeLayout
+		android:id="@+id/box_title_bar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:elevation="8dp"
+		android:visibility="invisible">
+		<android.support.v7.widget.Toolbar
+			android:layout_width="match_parent"
+			android:layout_height="?attr/actionBarSize"
+			android:background="@color/colorPrimary"
+			app:title="百宝箱"
+			app:titleTextColor="@android:color/white"/>
+		<ImageButton
+			android:id="@+id/close_box_button"
+			android:layout_width="?attr/actionBarSize"
+			android:layout_height="?attr/actionBarSize"
+			android:layout_alignParentRight="true"
+			android:src="@drawable/ic_functions"
+			android:scaleType="fitCenter"
+			android:padding="12dp"
+			android:background="@android:color/transparent"/>
+	</RelativeLayout>
+
     <ScrollView
+	    android:layout_below="@id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
