@@ -1,4 +1,4 @@
-package edu.neu.campusassistant;
+package edu.neu.campusassistant.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -21,6 +21,8 @@ import com.nineoldandroids.view.ViewHelper;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import edu.neu.campusassistant.view.RevealCircleBackground;
+
+import edu.neu.campusassistant.R;
 
 public class MainActivity extends AppCompatActivity {
 
