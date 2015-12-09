@@ -1,3 +1,11 @@
 <resources>
 	<string name="app_name">CampusAssistant</string>
+	<string name="weather_title">天气</string>
+
+	<string name="study_life_title">学习生活</string>
+	<string name="study_life_next_class">下一节课</string>
+	<string name="study_life_check_class_list">看课表</string>
+	<string name="study_life_check_empty_classroom">上自习</string>
+	<string name="study_life_check_grade">查成绩</string>
+	<string name="study_life_check_test_agenda">考试日程</string>
 </resources>
