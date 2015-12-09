@@ -101,9 +101,9 @@ public class MainActivity extends AppCompatActivity {
 
 	@TargetApi(21)
 	private void applyCircularRevealAnimation(){
+		AnimatorSet animatorSet = new AnimatorSet();
 		if(Build.VERSION.SDK_INT >= 21){
 			// get the center for the clipping circle
-
 			int circlecx = mCircularViewWidth / 2;
 			int circlecy = mCircularViewHeight / 2;
 
@@ -116,31 +116,40 @@ public class MainActivity extends AppCompatActivity {
 
 			ObjectAnimator translateXAnim = ObjectAnimator.ofFloat(mCircularView,"x",mCircularViewTranslateX,mCircularViewX);
 			ObjectAnimator translateYAnim = ObjectAnimator.ofFloat(mCircularView,"y",mCircularViewTranslateY,mCircularViewY);
-			ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar,"alpha",0.0f,1.0f);
 
 			// make the view visible and start the animation
 			mBoxFab.setVisibility(View.INVISIBLE);
-			mCircularView.setVisibility(View.VISIBLE);
-			mBoxTitleBar.setVisibility(View.VISIBLE);
-			mCloseBoxButton.setEnabled(true);
-			AnimatorSet animatorSet = new AnimatorSet();
 			anim.setInterpolator(new AccelerateInterpolator(1.5f));
 			anim.setDuration(250);
 			translateXAnim.setDuration(200);
 			translateYAnim.setDuration(200);
-			dimBoxBarAnim.setDuration(200);
-			animatorSet.playTogether(anim,translateXAnim,translateYAnim,dimBoxBarAnim);
-			animatorSet.start();
+			animatorSet.playTogether(anim,translateXAnim,translateYAnim);
 		}else{
-			mCircularView.setVisibility(View.VISIBLE);
+			ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(mCircularView,"alpha",0.0f,1.0f);
+			fadeAnim.setDuration(200);
+			fadeAnim.addListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					super.onAnimationEnd(animation);
+					mBoxFab.setVisibility(View.INVISIBLE);
+				}
+			});
+			animatorSet.playTogether(fadeAnim);
 		}
+		ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar,"alpha",0.0f,1.0f);
+		dimBoxBarAnim.setDuration(200);
+		mBoxTitleBar.setVisibility(View.VISIBLE);
+		mCircularView.setVisibility(View.VISIBLE);
+		animatorSet.playTogether(dimBoxBarAnim);
+		mCloseBoxButton.setEnabled(true);
+		animatorSet.start();
 	}
 
 	@TargetApi(21)
 	private void applyCircularCloseAnimation(){
+		AnimatorSet animatorSet = new AnimatorSet();
 		if(Build.VERSION.SDK_INT >= 21){
 			// get the center for the clipping circle
-
 			int circlecx = mCircularViewWidth / 2;
 			int circlecy = mCircularViewHeight / 2;
 
@@ -153,31 +162,39 @@ public class MainActivity extends AppCompatActivity {
 
 			ObjectAnimator translateXAnim = ObjectAnimator.ofFloat(mCircularView,"x",mCircularViewX,mCircularViewTranslateX);
 			ObjectAnimator translateYAnim = ObjectAnimator.ofFloat(mCircularView,"y",mCircularViewY,mCircularViewTranslateY);
-			ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar,"alpha",1.0f,0.0f);
 
 			// make the view invisible when the animation is done
 			anim.addListener(new AnimatorListenerAdapter() {
 				@Override
 				public void onAnimationEnd(Animator animation) {
 					super.onAnimationEnd(animation);
-					mCircularView.setVisibility(View.INVISIBLE);
-					mBoxTitleBar.setVisibility(View.INVISIBLE);
 					mBoxFab.setVisibility(View.VISIBLE);
 				}
 			});
 
 			// start the animation
-			mCloseBoxButton.setEnabled(false);
-			AnimatorSet animatorSet = new AnimatorSet();
 			anim.setInterpolator(new DecelerateInterpolator(2.0f));
 			anim.setDuration(400);
 			translateXAnim.setDuration(200);
 			translateYAnim.setDuration(200);
-			dimBoxBarAnim.setDuration(200);
-			animatorSet.playTogether(anim,translateXAnim,translateYAnim,dimBoxBarAnim);
-			animatorSet.start();
+			animatorSet.playTogether(anim,translateXAnim,translateYAnim);
 		}else{
-			mCircularView.setVisibility(View.INVISIBLE);
+			ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(mCircularView,"alpha",1.0f,0.0f);
+			fadeAnim.setDuration(200);
+			mBoxFab.setVisibility(View.VISIBLE);
+			animatorSet.playTogether(fadeAnim);
 		}
+		ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar,"alpha",1.0f,0.0f);
+		dimBoxBarAnim.setDuration(200);
+		animatorSet.playTogether(dimBoxBarAnim);
+		animatorSet.addListener(new AnimatorListenerAdapter() {
+			@Override
+			public void onAnimationEnd(Animator animator) {
+				mCircularView.setVisibility(View.INVISIBLE);
+				mBoxTitleBar.setVisibility(View.INVISIBLE);
+			}
+		});
+		mCloseBoxButton.setEnabled(false);
+		animatorSet.start();
 	}
 }
