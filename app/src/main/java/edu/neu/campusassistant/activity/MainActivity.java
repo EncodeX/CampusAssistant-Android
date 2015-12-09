@@ -126,14 +126,10 @@ public class MainActivity extends AppCompatActivity {
 			animatorSet.playTogether(anim,translateXAnim,translateYAnim);
 		}else{
 			ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(mCircularView,"alpha",0.0f,1.0f);
+			ObjectAnimator fabFadeAnim = ObjectAnimator.ofFloat(mBoxFab,"alpha",1.0f,0.0f);
 			fadeAnim.setDuration(200);
-			fadeAnim.addListener(new AnimatorListenerAdapter() {
-				@Override
-				public void onAnimationEnd(Animator animation) {
-					super.onAnimationEnd(animation);
-					mBoxFab.setVisibility(View.INVISIBLE);
-				}
-			});
+			fabFadeAnim.setDuration(200);
+			mBoxFab.setEnabled(false);
 			animatorSet.playTogether(fadeAnim);
 		}
 		ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar,"alpha",0.0f,1.0f);
@@ -163,15 +159,6 @@ public class MainActivity extends AppCompatActivity {
 			ObjectAnimator translateXAnim = ObjectAnimator.ofFloat(mCircularView,"x",mCircularViewX,mCircularViewTranslateX);
 			ObjectAnimator translateYAnim = ObjectAnimator.ofFloat(mCircularView,"y",mCircularViewY,mCircularViewTranslateY);
 
-			// make the view invisible when the animation is done
-			anim.addListener(new AnimatorListenerAdapter() {
-				@Override
-				public void onAnimationEnd(Animator animation) {
-					super.onAnimationEnd(animation);
-					mBoxFab.setVisibility(View.VISIBLE);
-				}
-			});
-
 			// start the animation
 			anim.setInterpolator(new DecelerateInterpolator(2.0f));
 			anim.setDuration(400);
@@ -179,10 +166,12 @@ public class MainActivity extends AppCompatActivity {
 			translateYAnim.setDuration(200);
 			animatorSet.playTogether(anim,translateXAnim,translateYAnim);
 		}else{
-			ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(mCircularView,"alpha",1.0f,0.0f);
-			fadeAnim.setDuration(200);
-			mBoxFab.setVisibility(View.VISIBLE);
-			animatorSet.playTogether(fadeAnim);
+			ObjectAnimator viewFadeAnim = ObjectAnimator.ofFloat(mCircularView,"alpha",1.0f,0.0f);
+			ObjectAnimator fabFadeAnim = ObjectAnimator.ofFloat(mBoxFab,"alpha",0.0f,1.0f);
+			viewFadeAnim.setDuration(200);
+			fabFadeAnim.setDuration(200);
+			mBoxFab.setEnabled(true);
+			animatorSet.playTogether(viewFadeAnim,fabFadeAnim);
 		}
 		ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar,"alpha",1.0f,0.0f);
 		dimBoxBarAnim.setDuration(200);
@@ -192,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
 			public void onAnimationEnd(Animator animator) {
 				mCircularView.setVisibility(View.INVISIBLE);
 				mBoxTitleBar.setVisibility(View.INVISIBLE);
+				mBoxFab.setVisibility(View.VISIBLE);
 			}
 		});
 		mCloseBoxButton.setEnabled(false);
