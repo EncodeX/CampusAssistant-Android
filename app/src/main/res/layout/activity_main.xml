@@ -53,10 +53,10 @@
         </LinearLayout>
     </ScrollView>
 
-	<android.support.design.widget.FloatingActionButton
+	<edu.neu.campusassistant.view.TestFAB
 		android:id="@+id/box_fab"
-		android:layout_width="64dp"
-		android:layout_height="64dp"
+		android:layout_width="?attr/actionBarSize"
+		android:layout_height="?attr/actionBarSize"
 		android:layout_alignParentBottom="true"
 		android:layout_alignParentRight="true"
 		android:layout_margin="16dp"
