@@ -3,6 +3,7 @@ package edu.neu.campusassistant.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -23,7 +24,8 @@ import com.nineoldandroids.view.ViewHelper;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import edu.neu.campusassistant.view.RevealCircleBackground;
+import edu.neu.campusassistant.view.BoxLayout;
+import edu.neu.campusassistant.view.CircularRevealLayout;
 
 import edu.neu.campusassistant.R;
 
@@ -35,17 +37,19 @@ public class MainActivity extends AppCompatActivity {
 	private int mCircularViewTranslateY;
 	private int mCircularViewHeight;
 	private int mCircularViewWidth;
+	private int mBoxYOffset;
+	private int mBoxXOffset;
 	private boolean mIsCircularViewInitialized = false;
 
 	@Bind(R.id.app_bar)
 	Toolbar mToolBar;
 	ActionBar mAppBar;
-	@Bind(R.id.circular_test_view)
-	RevealCircleBackground mCircularView;
 	@Bind(R.id.box_fab)
 	FloatingActionButton mBoxFab;
+	@Bind(R.id.circular_reveal_layout)
+	CircularRevealLayout mCircularRevealLayout;
 	@Bind(R.id.box_layout)
-	RelativeLayout mBoxLayout;
+	BoxLayout mBoxLayout;
 	@Bind(R.id.box_title_bar)
 	RelativeLayout mBoxTitleBar;
 	@Bind(R.id.close_box_button)
@@ -69,22 +73,28 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View view) {
 				if(!mIsCircularViewInitialized){
-					mCircularViewX = (int) ViewHelper.getX(mCircularView);
-					mCircularViewY = (int) ViewHelper.getY(mCircularView);
-					mCircularViewHeight = mCircularView.getHeight();
-					mCircularViewWidth = mCircularView.getWidth();
+					mCircularViewX = (int) ViewHelper.getX(mCircularRevealLayout);
+					mCircularViewY = (int) ViewHelper.getY(mCircularRevealLayout);
+					mCircularViewHeight = mCircularRevealLayout.getHeight();
+					mCircularViewWidth = mCircularRevealLayout.getWidth();
 
 					int cx = mCircularViewX + mCircularViewWidth / 2;
 					int cy = mCircularViewY + mCircularViewHeight / 2;
 
 					int fabcx = (int) ViewHelper.getX(mBoxFab) + mBoxFab.getWidth() / 2;
-					int fabcy = (int) ViewHelper.getY(mBoxFab) + mBoxFab.getHeight() / 2 - (int)ViewHelper.getY(mBoxLayout);
+					int fabcy = (int) ViewHelper.getY(mBoxFab) + mBoxFab.getHeight() / 2;
 
 					mCircularViewTranslateX = mCircularViewX+fabcx-cx;
 					mCircularViewTranslateY = mCircularViewY+fabcy-cy;
 
+					mBoxYOffset = mBoxLayout.getHeight() / 6 ;
+					mBoxXOffset = mBoxLayout.getWidth() / 12 ;
+
 					Log.d("Test",mCircularViewX + " "+ mCircularViewY + " "+ mCircularViewHeight + " "+ mCircularViewWidth + " " + mCircularViewTranslateX + " "+ mCircularViewTranslateY);
 
+					if(Build.VERSION.SDK_INT < 21){
+						mCircularRevealLayout.setBackgroundColor(0xFFFFFFFF);
+					}
 					mIsCircularViewInitialized = true;
 				}
 				applyCircularRevealAnimation();
@@ -108,14 +118,16 @@ public class MainActivity extends AppCompatActivity {
 			int circlecy = mCircularViewHeight / 2;
 
 			// get the final radius for the clipping circle
-			int finalRadius = Math.max(mCircularView.getWidth(), mCircularView.getHeight());
+			int finalRadius = Math.max(mCircularRevealLayout.getWidth(), mCircularRevealLayout.getHeight());
 
 			// create the animator for this view (the start radius is zero)
 			Animator anim =
-					ViewAnimationUtils.createCircularReveal(mCircularView, circlecx, circlecy, mBoxFab.getWidth() / 2, finalRadius);
+					ViewAnimationUtils.createCircularReveal(mCircularRevealLayout, circlecx, circlecy, mBoxFab.getWidth() / 2, finalRadius);
 
-			ObjectAnimator translateXAnim = ObjectAnimator.ofFloat(mCircularView,"x",mCircularViewTranslateX,mCircularViewX);
-			ObjectAnimator translateYAnim = ObjectAnimator.ofFloat(mCircularView,"y",mCircularViewTranslateY,mCircularViewY);
+			ObjectAnimator translateXAnim = ObjectAnimator.ofFloat(mCircularRevealLayout,"x",mCircularViewTranslateX,mCircularViewX);
+			ObjectAnimator translateYAnim = ObjectAnimator.ofFloat(mCircularRevealLayout,"y",mCircularViewTranslateY,mCircularViewY);
+			ObjectAnimator backgroundAnim = ObjectAnimator.ofObject(mCircularRevealLayout,"backgroundColor",new ArgbEvaluator(),0xFFFF4081,0xFFFFFFFF);
+			ObjectAnimator translateBoxXAnim = ObjectAnimator.ofFloat(mBoxLayout,"translationX",mBoxXOffset,0.0f);
 
 			// make the view visible and start the animation
 			mBoxFab.setVisibility(View.INVISIBLE);
@@ -123,9 +135,11 @@ public class MainActivity extends AppCompatActivity {
 			anim.setDuration(250);
 			translateXAnim.setDuration(200);
 			translateYAnim.setDuration(200);
-			animatorSet.playTogether(anim,translateXAnim,translateYAnim);
+			backgroundAnim.setDuration(400);
+			translateBoxXAnim.setDuration(300);
+			animatorSet.playTogether(anim,translateXAnim,translateYAnim,backgroundAnim,translateBoxXAnim);
 		}else{
-			ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(mCircularView,"alpha",0.0f,1.0f);
+			ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(mCircularRevealLayout,"alpha",0.0f,1.0f);
 			ObjectAnimator fabFadeAnim = ObjectAnimator.ofFloat(mBoxFab,"alpha",1.0f,0.0f);
 			fadeAnim.setDuration(200);
 			fabFadeAnim.setDuration(200);
@@ -133,10 +147,15 @@ public class MainActivity extends AppCompatActivity {
 			animatorSet.playTogether(fadeAnim);
 		}
 		ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar,"alpha",0.0f,1.0f);
+		ObjectAnimator dimBoxAnim = ObjectAnimator.ofFloat(mBoxLayout,"alpha",0.0f,1.0f);
+		ObjectAnimator translateBoxYAnim = ObjectAnimator.ofFloat(mBoxLayout,"translationY",mBoxYOffset,0.0f);
 		dimBoxBarAnim.setDuration(200);
+		dimBoxAnim.setDuration(300);
+		translateBoxYAnim.setDuration(350);
+		dimBoxAnim.setStartDelay(100);
 		mBoxTitleBar.setVisibility(View.VISIBLE);
-		mCircularView.setVisibility(View.VISIBLE);
-		animatorSet.playTogether(dimBoxBarAnim);
+		mCircularRevealLayout.setVisibility(View.VISIBLE);
+		animatorSet.playTogether(dimBoxBarAnim,dimBoxAnim,translateBoxYAnim);
 		mCloseBoxButton.setEnabled(true);
 		animatorSet.start();
 	}
@@ -150,38 +169,45 @@ public class MainActivity extends AppCompatActivity {
 			int circlecy = mCircularViewHeight / 2;
 
 			// get the initial radius for the clipping circle
-			int initialRadius = Math.max(mCircularView.getWidth(), mCircularView.getHeight());
+			int initialRadius = Math.max(mCircularRevealLayout.getWidth(), mCircularRevealLayout.getHeight());
 
 			// create the animation (the final radius is zero)
 			Animator anim =
-					ViewAnimationUtils.createCircularReveal(mCircularView, circlecx, circlecy, initialRadius, mBoxFab.getWidth() / 2);
+					ViewAnimationUtils.createCircularReveal(mCircularRevealLayout, circlecx, circlecy, initialRadius, mBoxFab.getWidth() / 2);
 
-			ObjectAnimator translateXAnim = ObjectAnimator.ofFloat(mCircularView,"x",mCircularViewX,mCircularViewTranslateX);
-			ObjectAnimator translateYAnim = ObjectAnimator.ofFloat(mCircularView,"y",mCircularViewY,mCircularViewTranslateY);
+			ObjectAnimator translateXAnim = ObjectAnimator.ofFloat(mCircularRevealLayout,"x",mCircularViewX,mCircularViewTranslateX);
+			ObjectAnimator translateYAnim = ObjectAnimator.ofFloat(mCircularRevealLayout,"y",mCircularViewY,mCircularViewTranslateY);
+			ObjectAnimator backgroundAnim = ObjectAnimator.ofObject(mCircularRevealLayout,"backgroundColor",new ArgbEvaluator(),0xFFFFFFFF,0xFFFF4081);
 
 			// start the animation
 			anim.setInterpolator(new DecelerateInterpolator(2.0f));
 			anim.setDuration(400);
 			translateXAnim.setDuration(200);
 			translateYAnim.setDuration(200);
-			animatorSet.playTogether(anim,translateXAnim,translateYAnim);
+			backgroundAnim.setDuration(200);
+			animatorSet.playTogether(anim,translateXAnim,translateYAnim,backgroundAnim);
 		}else{
-			ObjectAnimator viewFadeAnim = ObjectAnimator.ofFloat(mCircularView,"alpha",1.0f,0.0f);
+			ObjectAnimator viewFadeAnim = ObjectAnimator.ofFloat(mCircularRevealLayout,"alpha",1.0f,0.0f);
 			ObjectAnimator fabFadeAnim = ObjectAnimator.ofFloat(mBoxFab,"alpha",0.0f,1.0f);
+			ObjectAnimator translateBoxYAnim = ObjectAnimator.ofFloat(mBoxLayout,"translationY",0.0f,mBoxYOffset);
 			viewFadeAnim.setDuration(200);
 			fabFadeAnim.setDuration(200);
-			mBoxFab.setEnabled(true);
-			animatorSet.playTogether(viewFadeAnim,fabFadeAnim);
+			translateBoxYAnim.setDuration(350);
+			animatorSet.playTogether(viewFadeAnim,fabFadeAnim,translateBoxYAnim);
 		}
 		ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar,"alpha",1.0f,0.0f);
-		dimBoxBarAnim.setDuration(200);
-		animatorSet.playTogether(dimBoxBarAnim);
+		ObjectAnimator dimBoxAnim = ObjectAnimator.ofFloat(mBoxLayout,"alpha",1.0f,0.0f);
+		dimBoxBarAnim.setDuration(300);
+		dimBoxAnim.setStartDelay(100);
+		dimBoxAnim.setDuration(200);
+		animatorSet.playTogether(dimBoxBarAnim,dimBoxAnim);
 		animatorSet.addListener(new AnimatorListenerAdapter() {
 			@Override
 			public void onAnimationEnd(Animator animator) {
-				mCircularView.setVisibility(View.INVISIBLE);
+				mCircularRevealLayout.setVisibility(View.INVISIBLE);
 				mBoxTitleBar.setVisibility(View.INVISIBLE);
 				mBoxFab.setVisibility(View.VISIBLE);
+				mBoxFab.setEnabled(true);
 			}
 		});
 		mCloseBoxButton.setEnabled(false);

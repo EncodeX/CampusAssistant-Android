@@ -62,18 +62,34 @@
 		android:layout_margin="16dp"
 		android:src="@drawable/ic_functions"/>
 
-	<RelativeLayout
-		android:id="@+id/box_layout"
+	<edu.neu.campusassistant.view.CircularRevealLayout
+		android:id="@+id/circular_reveal_layout"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_below="@id/app_bar"
-		android:elevation="8dp">
-		<edu.neu.campusassistant.view.RevealCircleBackground
-			android:id="@+id/circular_test_view"
+		android:layout_centerInParent="true"
+		android:elevation="8dp"
+		android:background="@color/colorAccent"
+		android:visibility="invisible">
+		<edu.neu.campusassistant.view.BoxLayout
+			android:id="@+id/box_layout"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:background="@color/colorAccent"
-			android:layout_centerInParent="true"
-			android:visibility="invisible"/>
-	</RelativeLayout>
+			android:layout_gravity="center">
+			<ScrollView
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical">
+					<include layout="@layout/home_weather_item"></include>
+					<include layout="@layout/home_weather_item"></include>
+					<include layout="@layout/home_weather_item"></include>
+					<include layout="@layout/home_weather_item"></include>
+					<include layout="@layout/home_weather_item"></include>
+				</LinearLayout>
+			</ScrollView>
+		</edu.neu.campusassistant.view.BoxLayout>
+	</edu.neu.campusassistant.view.CircularRevealLayout>
 </RelativeLayout>
