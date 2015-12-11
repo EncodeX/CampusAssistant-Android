@@ -34,8 +34,6 @@ public class BoxLayout extends RelativeLayout {
 		setMeasuredDimension(getDefaultSize(0,widthMeasureSpec),getDefaultSize(0,heightMeasureSpec));
 
 		if(getParent() instanceof CircularRevealLayout && Build.VERSION.SDK_INT >= 21){
-			Log.d("Test",getMeasuredWidth()+" "+((CircularRevealLayout)getParent()).getMeasuredWidth());
-
 			int childWidthSize = ((CircularRevealLayout)getParent()).getMeasuredWidth() * 2 / 3;
 			int childHeightSize = getMeasuredHeight();
 			widthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize,MeasureSpec.EXACTLY);
