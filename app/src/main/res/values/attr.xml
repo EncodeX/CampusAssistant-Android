@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="FunctionButton">
+		<attr name="fb_text" format="string"/>
+		<attr name="fb_text_color" format="color"/>
+		<!--<attr name="fb_text_style" format="string"/>-->
+		<attr name="fb_text_size" format="dimension"/>
+		<attr name="fb_src" format="reference"/>
+		<!--<attr name="fb_scale_type" format="string"/>-->
+	</declare-styleable>
+</resources>

@@ -53,6 +53,15 @@
         </LinearLayout>
     </ScrollView>
 
+	<edu.neu.campusassistant.view.FunctionButton
+		android:layout_width="64dp"
+		android:layout_height="64dp"
+		android:layout_alignParentBottom="true"
+		app:fb_text="123456"
+		app:fb_text_size="12sp"
+		app:fb_src="@drawable/appbar_cloase"
+		android:elevation="12dp"/>
+
 	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/box_fab"
 		android:layout_width="?attr/actionBarSize"

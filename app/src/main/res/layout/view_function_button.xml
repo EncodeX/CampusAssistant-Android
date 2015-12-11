@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+				android:padding="4dp">
+	<RelativeLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true">
+		<TextView
+			android:id="@+id/function_button_label"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_alignParentBottom="true"
+			android:textSize="14sp"
+			android:textColor="@android:color/black"
+			android:text="按钮文本"/>
+		<edu.neu.campusassistant.view.SquareImageView
+			android:id="@+id/function_button_icon"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_margin="4dp"
+			android:layout_above="@id/function_button_label"
+			android:src="@drawable/weather_sun"/>
+	</RelativeLayout>
+</RelativeLayout>
