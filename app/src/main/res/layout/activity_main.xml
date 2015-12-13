@@ -32,7 +32,7 @@
 			android:layout_width="?attr/actionBarSize"
 			android:layout_height="?attr/actionBarSize"
 			android:layout_alignParentRight="true"
-			android:src="@drawable/ic_functions"
+			android:src="@drawable/appbar_cloase"
 			android:scaleType="fitCenter"
 			android:padding="12dp"
 			android:background="@android:color/transparent"/>
@@ -53,14 +53,14 @@
         </LinearLayout>
     </ScrollView>
 
-	<edu.neu.campusassistant.view.FunctionButton
-		android:layout_width="64dp"
-		android:layout_height="64dp"
-		android:layout_alignParentBottom="true"
-		app:fb_text="123456"
-		app:fb_text_size="12sp"
-		app:fb_src="@drawable/appbar_cloase"
-		android:elevation="12dp"/>
+	<!--<edu.neu.campusassistant.view.FunctionButton-->
+		<!--android:layout_width="64dp"-->
+		<!--android:layout_height="64dp"-->
+		<!--android:layout_alignParentBottom="true"-->
+		<!--app:fb_text="123456"-->
+		<!--app:fb_text_size="12sp"-->
+		<!--app:fb_src="@drawable/appbar_cloase"-->
+		<!--android:elevation="12dp"/>-->
 
 	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/box_fab"
@@ -69,7 +69,7 @@
 		android:layout_alignParentBottom="true"
 		android:layout_alignParentRight="true"
 		android:layout_margin="16dp"
-		android:src="@drawable/ic_functions"/>
+		android:src="@drawable/functions_menu"/>
 
 	<edu.neu.campusassistant.view.CircularRevealLayout
 		android:id="@+id/circular_reveal_layout"
@@ -88,16 +88,7 @@
 			<ScrollView
 				android:layout_width="match_parent"
 				android:layout_height="match_parent">
-				<LinearLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:orientation="vertical">
-					<include layout="@layout/home_weather_item"></include>
-					<include layout="@layout/home_weather_item"></include>
-					<include layout="@layout/home_weather_item"></include>
-					<include layout="@layout/home_weather_item"></include>
-					<include layout="@layout/home_weather_item"></include>
-				</LinearLayout>
+				<include layout="@layout/fuction_menu"></include>
 			</ScrollView>
 		</edu.neu.campusassistant.view.BoxLayout>
 	</edu.neu.campusassistant.view.CircularRevealLayout>
