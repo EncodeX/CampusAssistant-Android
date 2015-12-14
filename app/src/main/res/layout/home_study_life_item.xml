@@ -98,106 +98,71 @@
                 android:layout_width="match_parent"
                 android:layout_height="64dp">
                 <RelativeLayout
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:background="@drawable/card_foreground">
-
-                    <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <edu.neu.campusassistant.view.FunctionButton
                         android:id="@+id/check_class_list_button"
                         android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:scaleType="fitCenter"
-                        android:layout_marginTop="5dp"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/card_foreground"
-                        android:src="@drawable/study_life_check_classes"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="5dp"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorOrange"
-                        android:text="@string/study_life_check_class_list"/>
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        app:fb_src="@drawable/study_life_check_classes"
+                        app:fb_text="@string/study_life_check_class_list"
+                        app:fb_text_color="@color/colorOrange"
+                        app:fb_text_size="14sp">
+                    </edu.neu.campusassistant.view.FunctionButton>
+
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:background="@drawable/card_foreground">
-
-                    <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <edu.neu.campusassistant.view.FunctionButton
                         android:id="@+id/check_empty_classroom_button"
                         android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:layout_marginTop="5dp"
-                        android:scaleType="fitCenter"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/card_foreground"
-                        android:src="@drawable/study_life_empty_classroom"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="5dp"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorOrange"
-                        android:text="@string/study_life_check_empty_classroom"/>
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        app:fb_src="@drawable/study_life_empty_classroom"
+                        app:fb_text="@string/study_life_check_empty_classroom"
+                        app:fb_text_color="@color/colorOrange"
+                        app:fb_text_size="14sp">
+                    </edu.neu.campusassistant.view.FunctionButton>
+
                     </RelativeLayout>
                 <RelativeLayout
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:background="@drawable/card_foreground">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
-                    <ImageButton
+                    <edu.neu.campusassistant.view.FunctionButton
                         android:id="@+id/check_grade_button"
                         android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:layout_marginTop="5dp"
-                        android:scaleType="fitCenter"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/card_foreground"
-                        android:src="@drawable/study_life_search_grade"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="5dp"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorOrange"
-                        android:text="@string/study_life_check_grade"/>
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        app:fb_src="@drawable/study_life_search_grade"
+                        app:fb_text="@string/study_life_check_grade"
+                        app:fb_text_color="@color/colorOrange"
+                        app:fb_text_size="14sp">
+                    </edu.neu.campusassistant.view.FunctionButton>
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:clickable="true"
                     android:background="@drawable/card_foreground">
-
-                    <ImageButton
+                    <edu.neu.campusassistant.view.FunctionButton
                         android:id="@+id/check_test_agenda_button"
                         android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:layout_marginTop="5dp"
-                        android:scaleType="fitCenter"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/card_foreground"
-                        android:src="@drawable/study_life_test_agenda"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_alignParentBottom="true"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorOrange"
-                        android:text="@string/study_life_check_test_agenda"/>
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        app:fb_src="@drawable/study_life_test_agenda"
+                        app:fb_text="@string/study_life_check_test_agenda"
+                        app:fb_text_color="@color/colorOrange"
+                        app:fb_text_size="14sp">
+                    </edu.neu.campusassistant.view.FunctionButton>
                 </RelativeLayout>
 
             </LinearLayout>
