@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="app_menu_title_teacher">
+        <item>系统公告</item>
+        <item>系统消息</item>
+        <item>专业培养计划</item>
+        <item>学期教学任务</item>
+        <item>教师课表</item>
+        <item>考试日程</item>
+        <item>评教结果</item>
+        <item>学生点名册</item>
+        <item>学生成绩</item>
+    </string-array>
+    <array name="menu_icons_teacher">
+        <item>@drawable/menu_t1</item>
+        <item>@drawable/menu_t2</item>
+        <item>@drawable/menu_t3</item>
+        <item>@drawable/menu_s4</item>
+        <item>@drawable/menu_t4</item>
+        <item>@drawable/menu_t5</item>
+        <item>@drawable/menu_t6</item>
+        <item>@drawable/menu_t7</item>
+        <item>@drawable/menu_t8</item>
+    </array>
+    <string-array name="app_menu_title_student">
+        <item>系统公告</item>
+        <item>系统消息</item>
+        <item>专业培养计划</item>
+        <item>教学任务</item>
+        <item>学生课表</item>
+        <item>学生成绩</item>
+        <item>创新学分</item>
+        <item>学籍信息</item>
+        <item>考试日程</item>
+        <item>选课日志</item>
+        <item>重考报名结果</item>
+        <item>学业预警</item>
+        <item>空闲教室</item>
+    </string-array>
+    <array name="menu_icons_student">
+        <item>@drawable/menu_s1</item>
+        <item>@drawable/menu_s2</item>
+        <item>@drawable/menu_s3</item>
+        <item>@drawable/menu_s4</item>
+        <item>@drawable/menu_s5</item>
+        <item>@drawable/menu_s6</item>
+        <item>@drawable/menu_s7</item>
+        <item>@drawable/menu_s8</item>
+        <item>@drawable/menu_s9</item>
+        <item>@drawable/menu_s10</item>
+        <item>@drawable/menu_s11</item>
+        <item>@drawable/menu_s12</item>
+        <item>@drawable/menu_s13</item>
+    </array>
+    <string-array name="test_msg_data0">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="test_msg_data1">
+        <item>考试通知</item>
+        <item>第一次教研会议</item>
+        <item>放假通知</item>
+        <item>放假通知</item>
+        <item>放假通知</item>
+        <item>放假通知</item>
+        <item>放假通知</item>
+        <item>放假通知</item>
+        <item>放假通知</item>
+        <item>放假通知</item>
+        <item>放假通知</item>
+        <item>放假通知</item>
+        <item>放假通知</item>
+    </string-array>
+    <string-array name="test_msg_data2">
+        <item>2015/4/1</item>
+        <item>2015/4/2</item>
+        <item>2015/4/15</item>
+        <item>2015/4/15</item>
+        <item>2015/4/15</item>
+        <item>2015/4/15</item>
+        <item>2015/4/15</item>
+        <item>2015/4/15</item>
+        <item>2015/4/15</item>
+        <item>2015/4/15</item>
+        <item>2015/4/15</item>
+        <item>2015/4/15</item>
+        <item>2015/4/15</item>
+    </string-array>
+    <string-array name="test_msg_data3">
+        <item>中荷生物医学与信息工程学院</item>
+        <item>信息工程学院</item>
+        <item>教务处</item>
+        <item>教务处</item>
+        <item>教务处</item>
+        <item>教务处</item>
+        <item>教务处</item>
+        <item>教务处</item>
+        <item>教务处</item>
+        <item>教务处</item>
+        <item>教务处</item>
+        <item>教务处</item>
+        <item>教务处</item>
+    </string-array>
+    <string-array name="test_msg_data4">
+        <item>未读</item>
+        <item>未读</item>
+        <item>已读</item>
+        <item>已读</item>
+        <item>已读</item>
+        <item>已读</item>
+        <item>已读</item>
+        <item>已读</item>
+        <item>已读</item>
+        <item>已读</item>
+        <item>已读</item>
+        <item>已读</item>
+        <item>已读</item>
+    </string-array>
+    <string-array name="test_pdpbl_data1">
+        <item>2015A</item>
+        <item>2015B</item>
+        <item>2015C</item>
+    </string-array>
+    <string-array name="test_pdpbl_data2">
+        <item>2015本科版</item>
+        <item>2015本科版</item>
+        <item>2015本科版</item>
+    </string-array>
+    <string-array name="test_pdpbl_data3">
+        <item>本科</item>
+        <item>专科</item>
+        <item>分校</item>
+    </string-array>
+    <string-array name="test_pdpb_data1">
+        <item>01</item>
+        <item>02</item>
+        <item>03</item>
+    </string-array>
+    <string-array name="test_pdpb_data2">
+        <item>计算机科学与技术（国防生）</item>
+        <item>信科</item>
+        <item>外语</item>
+    </string-array>
+    <string-array name="test_pdpp_data1">
+        <item>2010-2011学年第一学期</item>
+        <item>2010-2011学年第二学期</item>
+        <item>2011-2012学年第一学期</item>
+    </string-array>
+    <string-array name="test_pdpp_data2">
+        <item>W801701A102</item>
+        <item>W801701A102</item>
+        <item>W801701A102</item>
+    </string-array>
+    <string-array name="test_pdpp_data3">
+        <item>学位课</item>
+        <item>学位课</item>
+        <item>非学位</item>
+    </string-array>
+    <string-array name="test_pdpp_data4">
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+    </string-array>
+    <string-array name="test_select_term">
+        <item>2010-2011学年第一学期</item>
+        <item>2010-2011学年第二学期</item>
+        <item>2011-2012学年第一学期</item>
+    </string-array>
+    <string-array name="test_select_term_value">
+        <item>111111</item>
+        <item>222222</item>
+        <item>333333</item>
+    </string-array>
+    <string-array name="test_teaching_tasks_data1">
+        <item>W801701A102</item>
+        <item>W801701A102</item>
+        <item>W801701A102</item>
+    </string-array>
+    <string-array name="test_teaching_tasks_data2">
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>大学英语</item>
+        <item>高等数学</item>
+    </string-array>
+    <string-array name="test_teaching_tasks_data3">
+        <item>包莫日根高</item>
+        <item>包莫日根高</item>
+        <item>包莫日根高</item>
+    </string-array>
+    <string-array name="test_teaching_tasks_data4">
+        <item>学位课</item>
+        <item>学位课</item>
+        <item>非学位</item>
+    </string-array>
+    <string-array name="test_teaching_tasks_data5">
+        <item>99</item>
+        <item>99</item>
+        <item>99</item>
+    </string-array>
+    <string-array name="test_teaching_tasks_data6">
+        <item>999</item>
+        <item>999</item>
+        <item>999</item>
+    </string-array>
+    <string-array name="test_ss_data1">
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>大学英语</item>
+        <item>高等数学</item>
+    </string-array>
+    <string-array name="test_ss_data2">
+        <item>1-18周</item>
+        <item>1-18周</item>
+        <item>1-18周</item>
+    </string-array>
+    <string-array name="test_ss_data3">
+        <item>星期三</item>
+        <item>星期三</item>
+        <item>星期三</item>
+    </string-array>
+    <string-array name="test_ss_data4">
+        <item>10:00-12:00</item>
+        <item>10:00-12:00</item>
+        <item>10:00-12:00</item>
+    </string-array>
+    <string-array name="test_ss_data5">
+        <item>机械学院微机室(150)</item>
+        <item>机械学院微机室(150)</item>
+        <item>机械学院微机室(150)</item>
+    </string-array>
+    <string-array name="test_ss_data6">
+        <item>99</item>
+        <item>99</item>
+        <item>99</item>
+    </string-array>
+    <string-array name="test_ss_data7">
+        <item>999</item>
+        <item>999</item>
+        <item>999</item>
+    </string-array>
+    <string-array name="test_sscore_data1">
+        <item>2010-2011学年第一学期</item>
+        <item>2010-2011学年第一学期</item>
+        <item>2010-2011学年第一学期</item>
+    </string-array>
+    <string-array name="test_sscore_data2">
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+    </string-array>
+    <string-array name="test_sscore_data3">
+        <item>12.5</item>
+        <item>2</item>
+        <item>4</item>
+    </string-array>
+    <string-array name="test_sscore_data4">
+        <item>不及格</item>
+        <item>及格</item>
+        <item>及格</item>
+    </string-array>
+    <string-array name="test_sscore_data5">
+        <item>期末考试</item>
+        <item>期末考试</item>
+        <item>期末考试</item>
+    </string-array>
+    <string-array name="test_sscore_data6">
+        <item>不及格</item>
+        <item>及格</item>
+        <item>及格</item>
+    </string-array>
+    <string-array name="test_sscore_data7">
+        <item>及格</item>
+        <item>不及格</item>
+        <item>及格</item>
+    </string-array>
+    <string-array name="test_sscore_data8">
+        <item>及格</item>
+        <item>不及格</item>
+        <item>及格</item>
+    </string-array>
+    <string-array name="test_ic_data1">
+        <item>辽宁省普通高等学校本科大学生大学生机器人竞赛</item>
+        <item>辽宁省普通高等学校本科大学生大学生机器人竞赛</item>
+        <item>辽宁省普通高等学校本科大学生大学生机器人竞赛</item>
+    </string-array>
+    <string-array name="test_ic_data2">
+        <item>国际</item>
+        <item>国际</item>
+        <item>国际</item>
+    </string-array>
+    <string-array name="test_ic_data3">
+        <item>特等奖</item>
+        <item>特等奖</item>
+        <item>特等奖</item>
+    </string-array>
+    <string-array name="test_ic_data4">
+        <item>12.5</item>
+        <item>12.5</item>
+        <item>12.5</item>
+    </string-array>
+    <string-array name="test_es_data1">
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+    </string-array>
+    <string-array name="test_es_data2">
+        <item>18周</item>
+        <item>8周</item>
+        <item>18周</item>
+    </string-array>
+    <string-array name="test_es_data3">
+        <item>星期三</item>
+        <item>星期三</item>
+        <item>星期三</item>
+    </string-array>
+    <string-array name="test_es_data4">
+        <item>10:00-12:00</item>
+        <item>10:00-12:00</item>
+        <item>10:00-12:00</item>
+    </string-array>
+    <string-array name="test_es_data5">
+        <item>机械学院微机室(150)</item>
+        <item>机械学院微机室(150)</item>
+        <item>机械学院微机室(150)</item>
+    </string-array>
+    <string-array name="test_scr_data1">
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+    </string-array>
+    <string-array name="test_scr_data2">
+        <item>选课</item>
+        <item>取消</item>
+        <item>选课</item>
+    </string-array>
+    <string-array name="test_scr_data3">
+        <item>2015/2/28 18:30:00</item>
+        <item>2015/2/28 18:30:00</item>
+        <item>2015/2/28 18:30:00</item>
+    </string-array>
+    <string-array name="test_rrb_data1">
+        <item>2015A</item>
+        <item>2015B</item>
+        <item>2015C</item>
+    </string-array>
+    <string-array name="test_rr_data1">
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+    </string-array>
+    <string-array name="test_rr_data2">
+        <item>W801701A102</item>
+        <item>W801701A102</item>
+        <item>W801701A102</item>
+    </string-array>
+    <string-array name="test_rr_data3">
+        <item>包莫日根高</item>
+        <item>包莫日根高</item>
+        <item>包莫日根高</item>
+    </string-array>
+    <string-array name="test_rr_data4">
+        <item>一二三</item>
+        <item>一二三</item>
+        <item>一二三</item>
+    </string-array>
+    <string-array name="test_fc_data1">
+        <item>010418A214</item>
+        <item>010418A214</item>
+        <item>010418A214</item>
+    </string-array>
+    <string-array name="test_fc_data2">
+        <item>空闲</item>
+        <item>空闲</item>
+        <item>空闲</item>
+    </string-array>
+    <string-array name="test_fc_data3">
+        <item>10:00-12:00</item>
+        <item>10:00-12:00</item>
+        <item>10:00-12:00</item>
+    </string-array>
+    <string-array name="test_fc_data4">
+        <item>05-22</item>
+        <item>05-22</item>
+        <item>05-22</item>
+    </string-array>
+    <string-array name="test_te_data1">
+        <item>2010-2011学年第一学期</item>
+        <item>2010-2011学年第一学期</item>
+        <item>2010-2011学年第一学期</item>
+    </string-array>
+    <string-array name="test_te_data2">
+        <item>89.4</item>
+        <item>89.4</item>
+        <item>89.4</item>
+    </string-array>
+    <string-array name="test_te_data3">
+        <item>92</item>
+        <item>92</item>
+        <item>92</item>
+    </string-array>
+    <string-array name="test_te_data4">
+        <item>W801701A102</item>
+        <item>W801701A102</item>
+        <item>W801701A102</item>
+    </string-array>
+    <string-array name="test_te_data5">
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+    </string-array>
+    <string-array name="test_rbt_data1">
+        <item>000001</item>
+        <item>000002</item>
+        <item>000003</item>
+    </string-array>
+    <string-array name="test_rbt_data2">
+        <item>W801701A102</item>
+        <item>W801701A102</item>
+        <item>W801701A102</item>
+    </string-array>
+    <string-array name="test_rbt_data3">
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+        <item>超大规模集成电路(VLSI)设计与EDA工程概论</item>
+    </string-array>
+    <string-array name="test_rb_data1">
+        <item>计算机1501</item>
+        <item>计算机1501</item>
+        <item>计算机1501</item>
+    </string-array>
+    <string-array name="test_rb_data2">
+        <item>20082250</item>
+        <item>20082250</item>
+        <item>20082250</item>
+    </string-array>
+    <string-array name="test_rb_data3">
+        <item>阿卜杜热合曼·阿卜杜哈力克</item>
+        <item>阿卜杜热合曼·阿卜杜哈力克</item>
+        <item>阿卜杜热合曼·阿卜杜哈力克</item>
+    </string-array>
+    <string-array name="test_ssa_data1">
+        <item>计算机1501</item>
+        <item>计算机1501</item>
+        <item>计算机1501</item>
+    </string-array>
+    <string-array name="test_ssa_data2">
+        <item>20082250</item>
+        <item>20082250</item>
+        <item>20082250</item>
+    </string-array>
+    <string-array name="test_ssa_data3">
+        <item>阿卜杜热合曼·阿卜杜哈力克</item>
+        <item>阿卜杜热合曼·阿卜杜哈力克</item>
+        <item>阿卜杜热合曼·阿卜杜哈力克</item>
+    </string-array>
+</resources>

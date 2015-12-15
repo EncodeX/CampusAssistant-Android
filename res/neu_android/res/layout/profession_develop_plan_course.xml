@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@android:color/white" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:customTools="http://schemas.android.com/apk/res/com.dy.neu">
+    <com.dy.neu.view.TitleView android:id="@id/title_bar" android:layout_width="fill_parent" android:layout_height="wrap_content" customTools:title_name="课程" />
+    <LinearLayout android:orientation="vertical" android:padding="15.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <Button android:textSize="24.0dip" android:textColor="@android:color/white" android:id="@id/btnIntroduce" android:background="@color/btn_color" android:padding="10.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="课程简介" />
+        <TextView android:textSize="17.0dip" android:textColor="@android:color/black" android:ellipsize="marquee" android:id="@id/tvCourseIntroduce" android:paddingTop="15.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="test" />
+    </LinearLayout>
+</LinearLayout>

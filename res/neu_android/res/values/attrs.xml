@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="bg_color" format="color" />
+    <attr name="title_name" format="reference|string" />
+    <attr name="right_button_type" format="integer" />
+    <attr name="right_text" format="reference|string" />
+    <attr name="rightImgResid" format="reference" />
+    <attr name="leftButonVisible" format="boolean" />
+</resources>

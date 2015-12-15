@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@android:color/white" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:customTools="http://schemas.android.com/apk/res/com.dy.neu">
+    <com.dy.neu.view.TitleView android:id="@id/title_bar" android:layout_width="fill_parent" android:layout_height="wrap_content" customTools:title_name="系统帮助" />
+    <LinearLayout android:orientation="vertical" android:padding="15.0dip" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <TextView android:textSize="17.0dip" android:textColor="@android:color/black" android:id="@id/tvHelpDetail1" android:paddingTop="15.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="1.教务信息查询APP系统仅对本科学生及教师提供查询服务。" />
+        <TextView android:textSize="17.0dip" android:textColor="@android:color/black" android:id="@id/tvHelpDetail2" android:paddingTop="15.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="2.使用教务系统中的学生或教师的用户名和密码即可登录。" />
+        <TextView android:textSize="17.0dip" android:textColor="@android:color/black" android:id="@id/tvHelpDetail3" android:paddingTop="15.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="3.学生用户使用学号作为用户名登录，教师用户使用8位教师编号作为用户名登录。" />
+    </LinearLayout>
+</LinearLayout>
