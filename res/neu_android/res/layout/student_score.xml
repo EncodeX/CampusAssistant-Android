@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@android:color/white" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:customTools="http://schemas.android.com/apk/res/com.dy.neu">
+    <com.dy.neu.view.TitleView android:id="@id/title_bar" android:layout_width="fill_parent" android:layout_height="wrap_content" customTools:title_name="学生成绩" />
+    <LinearLayout android:orientation="horizontal" android:id="@id/searchArea" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <EditText android:id="@id/editStudentId" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="请输入学号" android:singleLine="true" android:layout_weight="1.0" android:imeOptions="actionSearch" />
+        <ImageButton android:id="@id/imgSearch" android:layout_width="60.0dip" android:layout_height="wrap_content" android:src="@drawable/search" android:scaleType="fitCenter" />
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:id="@id/spinnerArea" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <Spinner android:id="@id/score_term_list" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0" />
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal" android:id="@id/pointArea" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView android:textSize="26.0dip" android:textColor="@android:color/black" android:gravity="center" android:id="@id/tvPoint" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    </LinearLayout>
+    <ListView android:id="@id/studentScoreList" android:background="@android:color/white" android:layout_width="wrap_content" android:layout_height="wrap_content" android:divider="@color/menu_divider_color" android:dividerHeight="1.0dip" android:headerDividersEnabled="true" android:footerDividersEnabled="true" />
+</LinearLayout>

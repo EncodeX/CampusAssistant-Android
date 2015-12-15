@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@android:color/white" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:customTools="http://schemas.android.com/apk/res/com.dy.neu">
+    <com.dy.neu.view.TitleView android:id="@id/title_bar" android:layout_width="fill_parent" android:layout_height="wrap_content" customTools:title_name="课表查询(点击查看详细)" />
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+        <TextView android:id="@id/test_empty" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="" />
+        <TextView android:gravity="center" android:id="@id/test_monday_course" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/mon" android:layout_toRightOf="@id/test_empty" />
+        <TextView android:gravity="center" android:id="@id/test_tuesday_course" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/tue" android:layout_toRightOf="@id/test_monday_course" />
+        <TextView android:gravity="center" android:id="@id/test_wednesday_course" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/wen" android:layout_toRightOf="@id/test_tuesday_course" />
+        <TextView android:gravity="center" android:id="@id/test_thursday_course" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/thu" android:layout_toRightOf="@id/test_wednesday_course" />
+        <TextView android:gravity="center" android:id="@id/test_friday_course" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/fri" android:layout_toRightOf="@id/test_thursday_course" />
+        <TextView android:gravity="center" android:id="@id/test_saturday_course" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/sta" android:layout_toRightOf="@id/test_friday_course" />
+        <TextView android:gravity="center" android:id="@id/test_sunday_course" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/sun" android:layout_toRightOf="@id/test_saturday_course" />
+        <ScrollView android:id="@id/scroll_body" android:scrollbars="none" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_below="@id/test_empty">
+            <RelativeLayout android:id="@id/test_course_rl" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+        </ScrollView>
+    </RelativeLayout>
+</LinearLayout>

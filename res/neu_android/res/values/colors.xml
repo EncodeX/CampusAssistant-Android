@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="menu_divider_color">#ffc9c9c9</color>
+    <color name="btn_color">#ff31b26b</color>
+</resources>
