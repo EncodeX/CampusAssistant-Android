@@ -86,10 +86,13 @@ public abstract class BaseActivity
       public void handleMessage(Message paramAnonymousMessage)
       {
         super.handleMessage(paramAnonymousMessage);
+
         if (paramAnonymousMessage.what == 0) {
           paramAnonymousMessage = (ResponseData)paramAnonymousMessage.obj;
         }
+
         while (paramAnonymousMessage.what != -1) {
+
           for (;;)
           {
             try
@@ -123,6 +126,7 @@ public abstract class BaseActivity
               BaseActivity.this.fetchData((List)paramAnonymousMessage.getData(), paramString2);
             }
           }
+
         }
         if (BaseActivity.this.dialog.isShowing()) {
           BaseActivity.this.dialog.dismiss();
@@ -130,6 +134,7 @@ public abstract class BaseActivity
         Toast.makeText(BaseActivity.this.getApplicationContext(), "系统繁忙，请稍候再试", 1).show();
       }
     };
+
     this.dialog = ProgressDialog.show(this, null, getString(2131034117), true, true, new DialogInterface.OnCancelListener()
     {
       public void onCancel(DialogInterface paramAnonymousDialogInterface)
@@ -137,6 +142,7 @@ public abstract class BaseActivity
         Toast.makeText(BaseActivity.this.getApplicationContext(), "用户取消操作", 1).show();
       }
     });
+
     new Thread()
     {
       public void run()
