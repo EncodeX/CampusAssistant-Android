@@ -15,6 +15,17 @@
 		app:titleTextColor="@android:color/white"
 		android:elevation="8dp"/>
 
+	<ImageButton
+		android:id="@+id/drawer_button"
+		android:layout_width="?attr/actionBarSize"
+		android:layout_height="?attr/actionBarSize"
+		android:layout_alignRight="@id/app_bar"
+		android:src="@drawable/arrow_left"
+		android:background="@drawable/card_foreground"
+		android:scaleType="fitCenter"
+		android:padding="12dp"
+		android:elevation="8dp"/>
+
 	<RelativeLayout
 		android:id="@+id/box_title_bar"
 		android:layout_width="match_parent"
@@ -38,38 +49,58 @@
 			android:background="@android:color/transparent"/>
 	</RelativeLayout>
 
-    <ScrollView
-	    android:layout_below="@id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <include layout="@layout/home_weather_item"></include>
-            <include layout="@layout/home_study_life_item"></include>
-            <include layout="@layout/home_weather_item"></include>
-            <include layout="@layout/home_study_life_item"></include>
-        </LinearLayout>
-    </ScrollView>
+	<android.support.v4.widget.DrawerLayout
+		android:id="@+id/drawer_layout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/app_bar"
+		android:elevation="6dp">
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
 
-	<!--<edu.neu.campusassistant.view.FunctionButton-->
-		<!--android:layout_width="64dp"-->
-		<!--android:layout_height="64dp"-->
-		<!--android:layout_alignParentBottom="true"-->
-		<!--app:fb_text="123456"-->
-		<!--app:fb_text_size="12sp"-->
-		<!--app:fb_src="@drawable/appbar_cloase"-->
-		<!--android:elevation="12dp"/>-->
+			<ScrollView
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:orientation="vertical">
+					<include layout="@layout/home_weather_item"></include>
+					<include layout="@layout/home_study_life_item"></include>
+					<include layout="@layout/home_weather_item"></include>
+					<include layout="@layout/home_study_life_item"></include>
+				</LinearLayout>
+			</ScrollView>
 
-	<android.support.design.widget.FloatingActionButton
-		android:id="@+id/box_fab"
-		android:layout_width="?attr/actionBarSize"
-		android:layout_height="?attr/actionBarSize"
-		android:layout_alignParentBottom="true"
-		android:layout_alignParentRight="true"
-		android:layout_margin="16dp"
-		android:src="@drawable/functions_menu"/>
+			<!--<edu.neu.campusassistant.view.FunctionButton-->
+			<!--android:layout_width="64dp"-->
+			<!--android:layout_height="64dp"-->
+			<!--android:layout_alignParentBottom="true"-->
+			<!--app:fb_text="123456"-->
+			<!--app:fb_text_size="12sp"-->
+			<!--app:fb_src="@drawable/appbar_cloase"-->
+			<!--android:elevation="12dp"/>-->
+
+			<android.support.design.widget.FloatingActionButton
+				android:id="@+id/box_fab"
+				android:layout_width="?attr/actionBarSize"
+				android:layout_height="?attr/actionBarSize"
+				android:layout_alignParentBottom="true"
+				android:layout_alignParentRight="true"
+				android:layout_margin="16dp"
+				android:src="@drawable/functions_menu"/>
+		</RelativeLayout>
+
+		<RelativeLayout
+			android:id="@+id/sub_drawer"
+			android:layout_width="296dp"
+			android:layout_height="match_parent"
+			android:background="@android:color/white"
+			android:layout_gravity="end">
+
+		</RelativeLayout>
+	</android.support.v4.widget.DrawerLayout>
 
 	<edu.neu.campusassistant.view.CircularRevealLayout
 		android:id="@+id/circular_reveal_layout"
