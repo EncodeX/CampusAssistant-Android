@@ -289,7 +289,7 @@ http://202.118.31.241:8080/api/v1/professionDevelopPlan/&lt;planBatchId&gt;/&lt;
 	* courseName : 课程名称
 	* grade : 授课年级
 	* term : 授课学期
-	* examMode : 考试类型 (大概)
+	* examMode : 考试类型 (考试 / 考查)
 	* courseGroup : 所属课程群名称
 	* hours : 学时
 	* credit : 学分
