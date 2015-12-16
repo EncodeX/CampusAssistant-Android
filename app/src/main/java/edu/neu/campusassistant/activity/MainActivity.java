@@ -8,6 +8,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -54,6 +55,12 @@ public class MainActivity extends AppCompatActivity {
 	RelativeLayout mBoxTitleBar;
 	@Bind(R.id.close_box_button)
 	ImageButton mCloseBoxButton;
+	@Bind(R.id.drawer_layout)
+	DrawerLayout mDrawerLayout;
+	@Bind(R.id.sub_drawer)
+	RelativeLayout mSubDrawer;
+	@Bind(R.id.drawer_button)
+	ImageButton mDrawerButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 					int cy = mCircularViewY + mCircularViewHeight / 2;
 
 					int fabcx = (int) ViewHelper.getX(mBoxFab) + mBoxFab.getWidth() / 2;
-					int fabcy = (int) ViewHelper.getY(mBoxFab) + mBoxFab.getHeight() / 2;
+					int fabcy = (int) ViewHelper.getY(mBoxFab) + mBoxFab.getHeight() / 2 + (int)ViewHelper.getY(mCircularRevealLayout);
 
 					mCircularViewTranslateX = mCircularViewX+fabcx-cx;
 					mCircularViewTranslateY = mCircularViewY+fabcy-cy;
@@ -105,6 +112,40 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View view) {
 				applyCircularCloseAnimation();
+			}
+		});
+
+		mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+			@Override
+			public void onDrawerSlide(View drawerView, float slideOffset) {
+				Log.d("Test","offset: "+slideOffset);
+				ViewHelper.setRotationY(mDrawerButton, (180 * (float)(Math.cos(Math.PI * (slideOffset-1)) / 2 + 0.5)));
+			}
+
+			@Override
+			public void onDrawerOpened(View drawerView) {
+
+			}
+
+			@Override
+			public void onDrawerClosed(View drawerView) {
+
+			}
+
+			@Override
+			public void onDrawerStateChanged(int newState) {
+
+			}
+		});
+
+		mDrawerButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(mDrawerLayout.isDrawerOpen(mSubDrawer)){
+					mDrawerLayout.closeDrawer(mSubDrawer);
+				}else{
+					mDrawerLayout.openDrawer(mSubDrawer);
+				}
 			}
 		});
 	}
