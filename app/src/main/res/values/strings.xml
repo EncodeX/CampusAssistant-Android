@@ -47,6 +47,6 @@
 	<string name="account_ecard">校园一卡通</string>
 
 	<string name="profile_ipwg_title">IP网关</string>
-	<string name="ipwg_user_name_placeholder">请输入校园网账号</string>
-	<string name="ipwg_password_placeholder">请输入校园网密码</string>
+	<string name="ipgw_user_name_placeholder">请输入校园网账号</string>
+	<string name="ipgw_password_placeholder">请输入校园网密码</string>
 </resources>
