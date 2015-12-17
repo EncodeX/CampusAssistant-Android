@@ -21,7 +21,17 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.nineoldandroids.view.ViewHelper;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -62,15 +72,49 @@ public class MainActivity extends AppCompatActivity {
 	@Bind(R.id.drawer_button)
 	ImageButton mDrawerButton;
 
+	RequestQueue requestQueue;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
 		initView();
+
+		requestQueue = Volley.newRequestQueue(this);
+
+		StringRequest request = new StringRequest(
+				Request.Method.POST,
+				"http://ipgw.neu.edu.cn/ipgw/ipgw.ipgw",
+				new Response.Listener<String>() {
+					@Override
+					public void onResponse(String response) {
+						Log.d("test",response);
+					}
+				},
+				new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError error) {
+
+					}
+				}){
+			@Override
+			protected Map<String, String> getParams() throws AuthFailureError {
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("uid", "20134649");
+				params.put("password", "950426");
+				params.put("operation", "connect");
+				params.put("range", "2");
+				params.put("timeout", "1");
+				return params;
+			}
+		};
+
+		// 此句会发送联网请求
+//		requestQueue.add(request);
 	}
 
-	private void initView(){
+	private void initView() {
 		ButterKnife.bind(this);
 
 		setSupportActionBar(mToolBar);
@@ -79,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 		mBoxFab.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(!mIsCircularViewInitialized){
+				if (!mIsCircularViewInitialized) {
 					mCircularViewX = (int) ViewHelper.getX(mCircularRevealLayout);
 					mCircularViewY = (int) ViewHelper.getY(mCircularRevealLayout);
 					mCircularViewHeight = mCircularRevealLayout.getHeight();
@@ -92,15 +136,15 @@ public class MainActivity extends AppCompatActivity {
 					int fabcy = (int) ViewHelper.getY(mBoxFab) + mBoxFab.getHeight() / 2;
 //					int fabcy = (int) ViewHelper.getY(mBoxFab) + mBoxFab.getHeight() / 2 + (int)ViewHelper.getY(mCircularRevealLayout);
 
-					mCircularViewTranslateX = mCircularViewX+fabcx-cx;
-					mCircularViewTranslateY = mCircularViewY+fabcy-cy;
+					mCircularViewTranslateX = mCircularViewX + fabcx - cx;
+					mCircularViewTranslateY = mCircularViewY + fabcy - cy;
 
-					mBoxYOffset = mBoxLayout.getHeight() / 6 ;
-					mBoxXOffset = mBoxLayout.getWidth() / 12 ;
+					mBoxYOffset = mBoxLayout.getHeight() / 6;
+					mBoxXOffset = mBoxLayout.getWidth() / 12;
 
-					Log.d("Test",mCircularViewX + " "+ mCircularViewY + " "+ mCircularViewHeight + " "+ mCircularViewWidth + " " + mCircularViewTranslateX + " "+ mCircularViewTranslateY);
+					Log.d("Test", mCircularViewX + " " + mCircularViewY + " " + mCircularViewHeight + " " + mCircularViewWidth + " " + mCircularViewTranslateX + " " + mCircularViewTranslateY);
 
-					if(Build.VERSION.SDK_INT < 21){
+					if (Build.VERSION.SDK_INT < 21) {
 						mCircularRevealLayout.setBackgroundColor(0xFFFFFFFF);
 					}
 					mIsCircularViewInitialized = true;
@@ -122,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onDrawerSlide(View drawerView, float slideOffset) {
 //				Log.d("Test","offset: "+slideOffset);
-				ViewHelper.setRotationY(mDrawerButton, (180 * (float)(Math.cos(Math.PI * (slideOffset-1)) / 2 + 0.5)));
+				ViewHelper.setRotationY(mDrawerButton, (180 * (float) (Math.cos(Math.PI * (slideOffset - 1)) / 2 + 0.5)));
 			}
 
 			@Override
@@ -144,9 +188,9 @@ public class MainActivity extends AppCompatActivity {
 		mDrawerButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(mDrawerLayout.isDrawerOpen(mSubDrawer)){
+				if (mDrawerLayout.isDrawerOpen(mSubDrawer)) {
 					mDrawerLayout.closeDrawer(mSubDrawer);
-				}else{
+				} else {
 					mDrawerLayout.openDrawer(mSubDrawer);
 				}
 			}
@@ -154,9 +198,9 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	@TargetApi(21)
-	private void applyCircularRevealAnimation(){
+	private void applyCircularRevealAnimation() {
 		AnimatorSet animatorSet = new AnimatorSet();
-		if(Build.VERSION.SDK_INT >= 21){
+		if (Build.VERSION.SDK_INT >= 21) {
 			// get the center for the clipping circle
 			int circlecx = mCircularViewWidth / 2;
 			int circlecy = mCircularViewHeight / 2;
@@ -168,10 +212,10 @@ public class MainActivity extends AppCompatActivity {
 			Animator anim =
 					ViewAnimationUtils.createCircularReveal(mCircularRevealLayout, circlecx, circlecy, mBoxFab.getWidth() / 2, finalRadius);
 
-			ObjectAnimator translateXAnim = ObjectAnimator.ofFloat(mCircularRevealLayout,"x",mCircularViewTranslateX,mCircularViewX);
-			ObjectAnimator translateYAnim = ObjectAnimator.ofFloat(mCircularRevealLayout,"y",mCircularViewTranslateY,mCircularViewY);
-			ObjectAnimator backgroundAnim = ObjectAnimator.ofObject(mCircularRevealLayout,"backgroundColor",new ArgbEvaluator(),0xFFFF4081,0xFFFFFFFF);
-			ObjectAnimator translateBoxXAnim = ObjectAnimator.ofFloat(mBoxLayout,"translationX",mBoxXOffset,0.0f);
+			ObjectAnimator translateXAnim = ObjectAnimator.ofFloat(mCircularRevealLayout, "x", mCircularViewTranslateX, mCircularViewX);
+			ObjectAnimator translateYAnim = ObjectAnimator.ofFloat(mCircularRevealLayout, "y", mCircularViewTranslateY, mCircularViewY);
+			ObjectAnimator backgroundAnim = ObjectAnimator.ofObject(mCircularRevealLayout, "backgroundColor", new ArgbEvaluator(), 0xFFFF4081, 0xFFFFFFFF);
+			ObjectAnimator translateBoxXAnim = ObjectAnimator.ofFloat(mBoxLayout, "translationX", mBoxXOffset, 0.0f);
 
 			// make the view visible and start the animation
 			mBoxFab.setVisibility(View.INVISIBLE);
@@ -181,33 +225,33 @@ public class MainActivity extends AppCompatActivity {
 			translateYAnim.setDuration(200);
 			backgroundAnim.setDuration(400);
 			translateBoxXAnim.setDuration(300);
-			animatorSet.playTogether(anim,translateXAnim,translateYAnim,backgroundAnim,translateBoxXAnim);
-		}else{
-			ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(mCircularRevealLayout,"alpha",0.0f,1.0f);
-			ObjectAnimator fabFadeAnim = ObjectAnimator.ofFloat(mBoxFab,"alpha",1.0f,0.0f);
+			animatorSet.playTogether(anim, translateXAnim, translateYAnim, backgroundAnim, translateBoxXAnim);
+		} else {
+			ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(mCircularRevealLayout, "alpha", 0.0f, 1.0f);
+			ObjectAnimator fabFadeAnim = ObjectAnimator.ofFloat(mBoxFab, "alpha", 1.0f, 0.0f);
 			fadeAnim.setDuration(200);
 			fabFadeAnim.setDuration(200);
 			mBoxFab.setEnabled(false);
 			animatorSet.playTogether(fadeAnim);
 		}
-		ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar,"alpha",0.0f,1.0f);
-		ObjectAnimator dimBoxAnim = ObjectAnimator.ofFloat(mBoxLayout,"alpha",0.0f,1.0f);
-		ObjectAnimator translateBoxYAnim = ObjectAnimator.ofFloat(mBoxLayout,"translationY",mBoxYOffset,0.0f);
+		ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar, "alpha", 0.0f, 1.0f);
+		ObjectAnimator dimBoxAnim = ObjectAnimator.ofFloat(mBoxLayout, "alpha", 0.0f, 1.0f);
+		ObjectAnimator translateBoxYAnim = ObjectAnimator.ofFloat(mBoxLayout, "translationY", mBoxYOffset, 0.0f);
 		dimBoxBarAnim.setDuration(200);
 		dimBoxAnim.setDuration(300);
 		translateBoxYAnim.setDuration(350);
 		dimBoxAnim.setStartDelay(100);
 		mBoxTitleBar.setVisibility(View.VISIBLE);
 		mCircularRevealLayout.setVisibility(View.VISIBLE);
-		animatorSet.playTogether(dimBoxBarAnim,dimBoxAnim,translateBoxYAnim);
+		animatorSet.playTogether(dimBoxBarAnim, dimBoxAnim, translateBoxYAnim);
 		mCloseBoxButton.setEnabled(true);
 		animatorSet.start();
 	}
 
 	@TargetApi(21)
-	private void applyCircularCloseAnimation(){
+	private void applyCircularCloseAnimation() {
 		AnimatorSet animatorSet = new AnimatorSet();
-		if(Build.VERSION.SDK_INT >= 21){
+		if (Build.VERSION.SDK_INT >= 21) {
 			// get the center for the clipping circle
 			int circlecx = mCircularViewWidth / 2;
 			int circlecy = mCircularViewHeight / 2;
@@ -219,9 +263,9 @@ public class MainActivity extends AppCompatActivity {
 			Animator anim =
 					ViewAnimationUtils.createCircularReveal(mCircularRevealLayout, circlecx, circlecy, initialRadius, mBoxFab.getWidth() / 2);
 
-			ObjectAnimator translateXAnim = ObjectAnimator.ofFloat(mCircularRevealLayout,"x",mCircularViewX,mCircularViewTranslateX);
-			ObjectAnimator translateYAnim = ObjectAnimator.ofFloat(mCircularRevealLayout,"y",mCircularViewY,mCircularViewTranslateY);
-			ObjectAnimator backgroundAnim = ObjectAnimator.ofObject(mCircularRevealLayout,"backgroundColor",new ArgbEvaluator(),0xFFFFFFFF,0xFFFF4081);
+			ObjectAnimator translateXAnim = ObjectAnimator.ofFloat(mCircularRevealLayout, "x", mCircularViewX, mCircularViewTranslateX);
+			ObjectAnimator translateYAnim = ObjectAnimator.ofFloat(mCircularRevealLayout, "y", mCircularViewY, mCircularViewTranslateY);
+			ObjectAnimator backgroundAnim = ObjectAnimator.ofObject(mCircularRevealLayout, "backgroundColor", new ArgbEvaluator(), 0xFFFFFFFF, 0xFFFF4081);
 
 			// start the animation
 			anim.setInterpolator(new DecelerateInterpolator(2.0f));
@@ -229,22 +273,22 @@ public class MainActivity extends AppCompatActivity {
 			translateXAnim.setDuration(200);
 			translateYAnim.setDuration(200);
 			backgroundAnim.setDuration(200);
-			animatorSet.playTogether(anim,translateXAnim,translateYAnim,backgroundAnim);
-		}else{
-			ObjectAnimator viewFadeAnim = ObjectAnimator.ofFloat(mCircularRevealLayout,"alpha",1.0f,0.0f);
-			ObjectAnimator fabFadeAnim = ObjectAnimator.ofFloat(mBoxFab,"alpha",0.0f,1.0f);
-			ObjectAnimator translateBoxYAnim = ObjectAnimator.ofFloat(mBoxLayout,"translationY",0.0f,mBoxYOffset);
+			animatorSet.playTogether(anim, translateXAnim, translateYAnim, backgroundAnim);
+		} else {
+			ObjectAnimator viewFadeAnim = ObjectAnimator.ofFloat(mCircularRevealLayout, "alpha", 1.0f, 0.0f);
+			ObjectAnimator fabFadeAnim = ObjectAnimator.ofFloat(mBoxFab, "alpha", 0.0f, 1.0f);
+			ObjectAnimator translateBoxYAnim = ObjectAnimator.ofFloat(mBoxLayout, "translationY", 0.0f, mBoxYOffset);
 			viewFadeAnim.setDuration(200);
 			fabFadeAnim.setDuration(200);
 			translateBoxYAnim.setDuration(350);
-			animatorSet.playTogether(viewFadeAnim,fabFadeAnim,translateBoxYAnim);
+			animatorSet.playTogether(viewFadeAnim, fabFadeAnim, translateBoxYAnim);
 		}
-		ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar,"alpha",1.0f,0.0f);
-		ObjectAnimator dimBoxAnim = ObjectAnimator.ofFloat(mBoxLayout,"alpha",1.0f,0.0f);
+		ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar, "alpha", 1.0f, 0.0f);
+		ObjectAnimator dimBoxAnim = ObjectAnimator.ofFloat(mBoxLayout, "alpha", 1.0f, 0.0f);
 		dimBoxBarAnim.setDuration(300);
 		dimBoxAnim.setStartDelay(100);
 		dimBoxAnim.setDuration(200);
-		animatorSet.playTogether(dimBoxBarAnim,dimBoxAnim);
+		animatorSet.playTogether(dimBoxBarAnim, dimBoxAnim);
 		animatorSet.addListener(new AnimatorListenerAdapter() {
 			@Override
 			public void onAnimationEnd(Animator animator) {
