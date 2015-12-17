@@ -110,7 +110,7 @@
                 android:textColor="@color/colorAccent"
                 android:layout_centerVertical="true"
                 android:textSize="12sp"
-                android:text="已锁定"/>
+                android:text="已绑定"/>
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/account_library"
@@ -137,7 +137,7 @@
                 android:textColor="@color/colorAccent"
                 android:background="@color/colorClear"
                 android:textSize="12sp"
-                android:text="已锁定"/>
+                android:text="已绑定"/>
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/account_ecard"
@@ -164,7 +164,7 @@
                 android:textColor="@color/colorgray"
                 android:background="@color/colorClear"
                 android:textSize="12sp"
-                android:text="未锁定"/>
+                android:text="未绑定"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
