@@ -89,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
 					int cy = mCircularViewY + mCircularViewHeight / 2;
 
 					int fabcx = (int) ViewHelper.getX(mBoxFab) + mBoxFab.getWidth() / 2;
-					int fabcy = (int) ViewHelper.getY(mBoxFab) + mBoxFab.getHeight() / 2 + (int)ViewHelper.getY(mCircularRevealLayout);
+					int fabcy = (int) ViewHelper.getY(mBoxFab) + mBoxFab.getHeight() / 2;
+//					int fabcy = (int) ViewHelper.getY(mBoxFab) + mBoxFab.getHeight() / 2 + (int)ViewHelper.getY(mCircularRevealLayout);
 
 					mCircularViewTranslateX = mCircularViewX+fabcx-cx;
 					mCircularViewTranslateY = mCircularViewY+fabcy-cy;
