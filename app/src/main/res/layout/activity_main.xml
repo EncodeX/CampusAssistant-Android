@@ -105,8 +105,10 @@
 		android:id="@+id/sub_drawer"
 		android:layout_width="296dp"
 		android:layout_height="match_parent"
-		android:background="@android:color/white"
+		android:background="#FFFFFF"
 		android:layout_gravity="end">
+
+
 
 	</RelativeLayout>
 </android.support.v4.widget.DrawerLayout>

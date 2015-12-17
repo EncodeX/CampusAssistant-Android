@@ -116,10 +116,12 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
+		mDrawerLayout.setScrimColor(0x66000000);
+
 		mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
 			@Override
 			public void onDrawerSlide(View drawerView, float slideOffset) {
-				Log.d("Test","offset: "+slideOffset);
+//				Log.d("Test","offset: "+slideOffset);
 				ViewHelper.setRotationY(mDrawerButton, (180 * (float)(Math.cos(Math.PI * (slideOffset-1)) / 2 + 0.5)));
 			}
 
