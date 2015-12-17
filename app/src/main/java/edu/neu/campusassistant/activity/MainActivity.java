@@ -89,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
 					int cy = mCircularViewY + mCircularViewHeight / 2;
 
 					int fabcx = (int) ViewHelper.getX(mBoxFab) + mBoxFab.getWidth() / 2;
-					int fabcy = (int) ViewHelper.getY(mBoxFab) + mBoxFab.getHeight() / 2 + (int)ViewHelper.getY(mCircularRevealLayout);
+					int fabcy = (int) ViewHelper.getY(mBoxFab) + mBoxFab.getHeight() / 2;
+//					int fabcy = (int) ViewHelper.getY(mBoxFab) + mBoxFab.getHeight() / 2 + (int)ViewHelper.getY(mCircularRevealLayout);
 
 					mCircularViewTranslateX = mCircularViewX+fabcx-cx;
 					mCircularViewTranslateY = mCircularViewY+fabcy-cy;
@@ -115,10 +116,12 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
+		mDrawerLayout.setScrimColor(0x66000000);
+
 		mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
 			@Override
 			public void onDrawerSlide(View drawerView, float slideOffset) {
-				Log.d("Test","offset: "+slideOffset);
+//				Log.d("Test","offset: "+slideOffset);
 				ViewHelper.setRotationY(mDrawerButton, (180 * (float)(Math.cos(Math.PI * (slideOffset-1)) / 2 + 0.5)));
 			}
 
