@@ -3,11 +3,13 @@
 	<color name="colorPrimary">#FF3F51B5</color>
 	<color name="colorPrimaryDark">#FF303F9F</color>
 	<color name="colorAccent">#FFFF4081</color>
-
+	<color name="colorAccentPressed">#de195d</color>
 	<color name="colorOrange">#F8850A</color>
 	<color name="colorWhite">#FFFFFF</color>
 	<color name="colorBlack">#000000</color>
-	<color name="yellowColor">#FFEB3A</color>
+	<color name="colorTransparentBlack">#41000000</color>
+	<color name="colorClear">#00000000</color>
+	<color name="colorgray">#A29C9C</color>
 	<color name="rippleBlack">#1A000000</color>
 	<color name="rippleWhite">#66FFFFFF</color>
 

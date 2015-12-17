@@ -140,7 +140,7 @@ http://202.118.31.241:8080/api/v1/termList
 
 获取学期成绩
 
-http://202.118.31.241:8080/api/v1/score/&lt;termId&gt
+http://202.118.31.241:8080/api/v1/score/&lt;termId&gt;
 
 #### 参数
 
