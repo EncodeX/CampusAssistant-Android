@@ -8,4 +8,19 @@
 		<item name="colorAccent">@color/colorAccent</item>
 	</style>
 
+	<style name="AppTheme.Button.Pink" parent="Widget.AppCompat.Button">
+		<item name="android:background">@drawable/btn_pink</item>
+		<item name="android:textColor">@android:color/white</item>
+	</style>
+
+	<style name="AppTheme.Button.Pink.Borderless" parent="Widget.AppCompat.Button.Borderless.Colored">
+		<item name="android:background">@drawable/btn_pink</item>
+		<item name="android:textColor">@android:color/white</item>
+	</style>
+
+	<style name="AppTheme.Button.Clear.Borderless" parent="Widget.AppCompat.Button.Borderless.Colored">
+		<item name="android:background">@drawable/btn_borderless</item>
+		<item name="android:textColor">@color/colorAccent</item>
+	</style>
+
 </resources>

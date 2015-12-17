@@ -107,8 +107,10 @@
 		android:layout_height="match_parent"
 		android:background="#FFFFFF"
 		android:layout_gravity="end">
-
-
-
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+			<include layout="@layout/drawer_menu"/>
+		</ScrollView>
 	</RelativeLayout>
 </android.support.v4.widget.DrawerLayout>
