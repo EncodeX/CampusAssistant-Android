@@ -24,12 +24,12 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1">
-            <ImageButton
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:scaleType="fitCenter"
-                android:background="@color/colorClear"
-                android:layout_margin="10dp"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:scaleType="centerCrop"
+                android:layout_margin="12dp"
+                android:layout_centerInParent="true"
                 android:src="@drawable/default_profile_icon"/>
         </RelativeLayout>
         <RelativeLayout
@@ -38,28 +38,23 @@
             android:layout_toRightOf="@+id/profile_icon"
             android:layout_weight="3">
             <RelativeLayout
-                android:id="@+id/user_name"
                 android:layout_width="match_parent"
-                android:layout_height="48dp">
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true">
                 <TextView
+                    android:id="@+id/user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="5dp"
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp"
+                    android:textStyle="bold"
                     android:text="用户名"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/user_info"
-                android:layout_below="@+id/user_name"
-                android:layout_width="match_parent"
-                android:layout_height="48dp">
                 <TextView
+                    android:id="@+id/user_info"
+                    android:layout_below="@+id/user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="6dp"
                     android:textColor="@color/colorWhite"
                     android:textSize="14sp"
                     android:text="软件学院 软件工程 20132037"/>

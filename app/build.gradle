@@ -29,4 +29,5 @@ dependencies {
 	compile 'com.jakewharton:butterknife:7.0.1'
 	compile 'com.nineoldandroids:library:2.4.0'
 	compile 'com.mcxiaoke.volley:library:1.0.19'
+	compile 'de.hdodenhof:circleimageview:2.0.0'
 }
