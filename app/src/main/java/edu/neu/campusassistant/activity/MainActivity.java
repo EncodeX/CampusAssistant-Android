@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
@@ -39,6 +40,7 @@ import edu.neu.campusassistant.view.BoxLayout;
 import edu.neu.campusassistant.view.CircularRevealLayout;
 
 import edu.neu.campusassistant.R;
+import edu.neu.campusassistant.view.FunctionButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
 	RelativeLayout mSubDrawer;
 	@Bind(R.id.drawer_button)
 	ImageButton mDrawerButton;
+	@Bind(R.id.check_class_list_button)
+	FunctionButton mCheckClassListButton;
 
 	RequestQueue requestQueue;
 
@@ -80,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 
 		initView();
+
+		/** ip网关与网络请求 **/
 
 		requestQueue = Volley.newRequestQueue(this);
 
@@ -112,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
 
 		// 此句会发送联网请求
 //		requestQueue.add(request);
+
+		/** FunctionButton开启新Activity **/
+		mCheckClassListButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
 	}
 
 	private void initView() {

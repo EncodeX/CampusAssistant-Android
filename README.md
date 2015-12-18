@@ -295,3 +295,21 @@ http://202.118.31.241:8080/api/v1/professionDevelopPlan/&lt;planBatchId&gt;/&lt;
 	* isDegree : 是否为学位课
 	* courseType : 课程类别 (学位课 / 一般选修 / 鼓励选修)
 	* courseMode ： 课程模式
+	
+### 教室列表
+
+http://202.118.31.241:8080/api/v1/buildings
+
+### 学籍信息
+
+## 交互（暂定）
+
+1. LoginActivity 教务处账号登录
+2. 登录成功记录账户信息 进入MainActivity
+3. 进入MainActivity时进行一系列可行的更新操作
+	* 天气
+	* 课程
+	* etc.
+	
+	更新时有视觉刷新提示
+4. 

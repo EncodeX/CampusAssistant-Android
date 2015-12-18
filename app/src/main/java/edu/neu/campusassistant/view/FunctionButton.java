@@ -1,11 +1,13 @@
 package edu.neu.campusassistant.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,12 +23,16 @@ import edu.neu.campusassistant.R;
  * Package: edu.neu.campusassistant.view
  */
 public class FunctionButton extends RelativeLayout {
+	private Context mContext;
+
 	private String mText;
 	private int mTextColor;
 	private String mTextStyle;
 	private int mTextSize;
 	private int mSrc;
 	private String mScaleType;
+
+	private String mIntentActivity;     // exp: "edu.neu.campusassistant.activity.MainActivity"
 
 	@Bind(R.id.function_button_icon)
 	SquareImageView mButtonIcon;
@@ -46,9 +52,18 @@ public class FunctionButton extends RelativeLayout {
 		init(context, attrs);
 	}
 
+	public String getIntentActivity() {
+		return mIntentActivity;
+	}
+
+	public void setIntentActivity(String intentActivity) {
+		this.mIntentActivity = intentActivity;
+	}
+
 	private void init(@NonNull Context context, @NonNull AttributeSet attrs){
 		inflate(getContext(), R.layout.view_function_button, this);
 
+		mContext = context;
 		ButterKnife.bind(this);
 
 		TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.FunctionButton);
@@ -70,5 +85,21 @@ public class FunctionButton extends RelativeLayout {
 
 		this.setClickable(true);
 		setBackgroundResource(R.drawable.card_foreground);
+
+		this.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Class<?> intentActivity = null;
+				if(mIntentActivity!=null){
+					try {
+						intentActivity = Class.forName(mIntentActivity);
+						if(intentActivity!=null)
+							mContext.startActivity(new Intent(mContext,intentActivity));
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 	}
 }
