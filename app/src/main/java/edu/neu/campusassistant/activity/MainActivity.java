@@ -44,6 +44,8 @@ import com.nineoldandroids.view.ViewHelper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -131,14 +133,16 @@ public class MainActivity extends AppCompatActivity {
                 username = mIPWGUsernameEditText.getText().toString();
                 password = mIPWGPasswordEditText.getText().toString();
                 if (username.equals("")) {
-                    Toast.makeText(getApplicationContext(), "请输入校园网账号", Toast.LENGTH_SHORT).show();
-                } else if (password.equals("")){
-                    Toast.makeText(getApplicationContext(), "请输入校园网密码", Toast.LENGTH_SHORT).show();
+                    showToastWithString("请输入校园网账号", true);
+                } else if (password.equals("")) {
+                    showToastWithString("请输入校园网密码", true);
                 } else {
-                    hideSoftKeyboard(MainActivity.this);
+                    hideSoftKeyboard(MainActivity.this); // 隐藏键盘
+
                     mIPWGProgressWheel.setVisibility(View.VISIBLE);
                     mIPWGConnectButton.setVisibility(View.INVISIBLE);
                     mIPWGDisconnectButton.setVisibility(View.INVISIBLE);
+
                     /** ip网关与网络请求 **/
                     requestQueue = Volley.newRequestQueue(getBaseContext());
                     StringRequest request = new StringRequest(
@@ -147,12 +151,26 @@ public class MainActivity extends AppCompatActivity {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    Log.d("ipwg", response);
+                                    mIPWGProgressWheel.setVisibility(View.INVISIBLE);
+                                    mIPWGConnectButton.setVisibility(View.VISIBLE);
+                                    mIPWGDisconnectButton.setVisibility(View.VISIBLE);
+                                    Map<String, String> map = extractValuesFromResponse(response);
+                                    String isSuccess = map.get("SUCCESS");
+                                    if (isSuccess.equals("NO")){
+                                        String reason = map.get("REASON");
+                                        showToastWithString("连接失败,原因：" + reason, true);
+                                    }else {
+                                        showToastWithString("连接成功", true);
+                                    }
                                 }
                             },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
+                                    mIPWGProgressWheel.setVisibility(View.INVISIBLE);
+                                    mIPWGConnectButton.setVisibility(View.VISIBLE);
+                                    mIPWGDisconnectButton.setVisibility(View.VISIBLE);
+                                    showToastWithString("连接超时，请检查WIFI是否连接到校园网", true);
                                 }
                             }) {
                         @Override
@@ -166,15 +184,14 @@ public class MainActivity extends AppCompatActivity {
                             return params;
                         }
                     };
-
                     // 此句会发送联网请求
                     requestQueue.add(request);
                 }
             }
         });
-        mIPWGProgressWheel.setOnClickListener(new View.OnClickListener(){
+        mIPWGProgressWheel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 mIPWGProgressWheel.setVisibility(View.INVISIBLE);
                 mIPWGConnectButton.setVisibility(View.VISIBLE);
                 mIPWGDisconnectButton.setVisibility(View.VISIBLE);
@@ -372,7 +389,7 @@ public class MainActivity extends AppCompatActivity {
         animatorSet.start();
     }
 
-//    public void closeKeyboard(View view) {
+    //    public void closeKeyboard(View view) {
 //
 //        //Set up touch listener for non-text box views to hide keyboard.
 //        if(!(view instanceof EditText)) {
@@ -399,11 +416,35 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 //
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+    private static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
+    private static Map<String, String> extractValuesFromResponse(String response) {
+        String comment = "";
+        Pattern p = Pattern.compile("\\<!--(.+)--\\>");
+        Matcher m = p.matcher(response);
+        while (m.find()) {
+            comment = m.group();
+        }
+        String[] params = comment.split(" ");
+        Map<String, String> map = new HashMap<String, String>();
+        for (String param : params) {
+            if (param.contains("=")) {
+                String name = param.split("=")[0];
+                String value = param.split("=")[1];
+                map.put(name, value);
+            }
+        }
+        return map;
+    }
 
-
+    private void showToastWithString(String message, boolean isShort){
+        if (!isShort){
+            Toast.makeText(getApplicationContext(), message , Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(getApplicationContext(), message , Toast.LENGTH_SHORT).show();
+        }
+    }
 }
