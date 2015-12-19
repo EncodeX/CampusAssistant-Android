@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
@@ -352,62 +353,72 @@ public class MainActivity extends AppCompatActivity {
             showToastWithString("请输入校园网密码", true);
         } else {
             hideSoftKeyboard(MainActivity.this); // 隐藏键盘
+            new Handler().postDelayed(new Runnable(){
+                public void run() {
+                    //execute the task
+                    mIPWGProgressWheel.setVisibility(View.VISIBLE);
+                    mIPWGConnectButton.setVisibility(View.INVISIBLE);
+                    mIPWGDisconnectButton.setVisibility(View.INVISIBLE);
 
-            mIPWGProgressWheel.setVisibility(View.VISIBLE);
-            mIPWGConnectButton.setVisibility(View.INVISIBLE);
-            mIPWGDisconnectButton.setVisibility(View.INVISIBLE);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
 
-            /** ip网关与网络请求 **/
-            requestQueue = Volley.newRequestQueue(getBaseContext());
-            StringRequest request = new StringRequest(
-                    Request.Method.POST,
-                    "http://ipgw.neu.edu.cn/ipgw/ipgw.ipgw",
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            mIPWGProgressWheel.setVisibility(View.INVISIBLE);
-                            mIPWGConnectButton.setVisibility(View.VISIBLE);
-                            mIPWGDisconnectButton.setVisibility(View.VISIBLE);
-                            Map<String, String> map = extractValuesFromResponse(response);
-                            String isSuccess = map.get("SUCCESS");
-                            if (isSuccess.equals("NO")){
-                                String reason = map.get("REASON");
-                                if (operation.equals("connect")){
-                                    showToastWithString("连接失败,原因：" + reason, true);
-                                }else {
-                                    showToastWithString("断开连接失败,原因：" + reason, true);
+                            /** ip网关与网络请求 **/
+                            requestQueue = Volley.newRequestQueue(getBaseContext());
+                            StringRequest request = new StringRequest(
+                                    Request.Method.POST,
+                                    "http://ipgw.neu.edu.cn/ipgw/ipgw.ipgw",
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            mIPWGProgressWheel.setVisibility(View.INVISIBLE);
+                                            mIPWGConnectButton.setVisibility(View.VISIBLE);
+                                            mIPWGDisconnectButton.setVisibility(View.VISIBLE);
+                                            Map<String, String> map = extractValuesFromResponse(response);
+                                            String isSuccess = map.get("SUCCESS");
+                                            if (isSuccess.equals("NO")){
+                                                String reason = map.get("REASON");
+                                                if (operation.equals("connect")){
+                                                    showToastWithString("连接失败,原因：" + reason, true);
+                                                }else {
+                                                    showToastWithString("断开连接失败,原因：" + reason, true);
+                                                }
+                                            }else {
+                                                if (operation.equals("connect")){
+                                                    showToastWithString("连接成功", true);
+                                                }else {
+                                                    showToastWithString("断开连接成功", true);
+                                                }
+                                            }
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            mIPWGProgressWheel.setVisibility(View.INVISIBLE);
+                                            mIPWGConnectButton.setVisibility(View.VISIBLE);
+                                            mIPWGDisconnectButton.setVisibility(View.VISIBLE);
+                                            showToastWithString("连接超时，请检查WIFI是否连接到校园网", true);
+                                        }
+                                    }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map<String, String> params = new HashMap<String, String>();
+                                    params.put("uid", username); // 20134649
+                                    params.put("password", password); // 950426
+                                    params.put("operation", operation);
+                                    params.put("range", "2");
+                                    params.put("timeout", "1");
+                                    return params;
                                 }
-                            }else {
-                                if (operation.equals("connect")){
-                                    showToastWithString("连接成功", true);
-                                }else {
-                                    showToastWithString("断开连接成功", true);
-                                }
-                            }
+                            };
+                            // 此句会发送联网请求
+                            requestQueue.add(request);
                         }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            mIPWGProgressWheel.setVisibility(View.INVISIBLE);
-                            mIPWGConnectButton.setVisibility(View.VISIBLE);
-                            mIPWGDisconnectButton.setVisibility(View.VISIBLE);
-                            showToastWithString("连接超时，请检查WIFI是否连接到校园网", true);
-                        }
-                    }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("uid", username); // 20134649
-                    params.put("password", password); // 950426
-                    params.put("operation", operation);
-                    params.put("range", "2");
-                    params.put("timeout", "1");
-                    return params;
+                    }, 1500);
                 }
-            };
-            // 此句会发送联网请求
-            requestQueue.add(request);
+            }, 1000);
         }
     }
 
