@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+				xmlns:wheel="http://schemas.android.com/apk/res-auto">
     <RelativeLayout
         android:id="@+id/drawer_profile_section"
         android:layout_width="match_parent"
@@ -165,10 +166,19 @@
 				    android:layout_centerVertical="true"
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-				    android:layout_marginBottom="8dp"
 				    android:textColor="@color/colorgray"
 				    android:textSize="14sp"
 				    android:text="@string/profile_ipwg_title"/>
+				<com.pnikosis.materialishprogress.ProgressWheel
+					android:id="@+id/ipwg_progress_wheel"
+					android:layout_width="30dp"
+					android:layout_height="30dp"
+					android:layout_centerVertical="true"
+					android:layout_alignParentRight="true"
+					android:layout_marginRight="20dp"
+					android:visibility="invisible"
+					wheel:matProg_barColor="@color/colorAccent"
+					wheel:matProg_progressIndeterminate="true"/>
 			    <Button
 				    android:id="@+id/drawer_ipwg_connect_button"
 				    android:layout_width="64dp"
@@ -195,6 +205,7 @@
 
 
 		    <EditText
+				android:id="@+id/drawer_ipwg_user_name_edit_text"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:layout_marginLeft="16dp"
@@ -205,6 +216,7 @@
 			    android:textSize="16sp"
 			    android:textColor="@color/colorBlack"/>
 		    <EditText
+				android:id="@+id/drawer_ipwg_password_edit_text"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:layout_marginLeft="16dp"
