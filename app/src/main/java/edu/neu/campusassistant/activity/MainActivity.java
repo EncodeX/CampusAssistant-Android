@@ -9,6 +9,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
@@ -69,8 +70,11 @@ public class MainActivity extends AppCompatActivity {
     private int mBoxYOffset;
     private int mBoxXOffset;
     private boolean mIsCircularViewInitialized = false;
-    private String username;
-    private String password;
+    private String ipwg_username;
+    private String ipwg_password;
+
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     @Bind(R.id.app_bar)
     Toolbar mToolBar;
@@ -112,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /** 初始化操作 **/
         initView();
 
         /** IP网关相关操作 **/
@@ -154,6 +159,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         ButterKnife.bind(this);
+
+
+        sharedPreferences=getSharedPreferences("edu.neu.campusassistant.mainAvtivity.preference",MODE_PRIVATE);
+        editor=sharedPreferences.edit();
+
+        // 初始化文本框内容
+        ipwg_username = sharedPreferences.getString("ipwg_username", "");
+        ipwg_password = sharedPreferences.getString("ipwg_password", "");
+        mIPWGUsernameEditText.setText(ipwg_username);
+        mIPWGPasswordEditText.setText(ipwg_password);
 
         setSupportActionBar(mToolBar);
         mAppBar = getSupportActionBar();
@@ -345,11 +360,11 @@ public class MainActivity extends AppCompatActivity {
      * 执行IPWG相关操作
      */
     private void doIPWGOperation(final String operation){
-        username = mIPWGUsernameEditText.getText().toString();
-        password = mIPWGPasswordEditText.getText().toString();
-        if (username.equals("")) {
+        ipwg_username = mIPWGUsernameEditText.getText().toString();
+        ipwg_password = mIPWGPasswordEditText.getText().toString();
+        if (ipwg_username.equals("")) {
             showToastWithString("请输入校园网账号", true);
-        } else if (password.equals("")) {
+        } else if (ipwg_password.equals("")) {
             showToastWithString("请输入校园网密码", true);
         } else {
             hideSoftKeyboard(MainActivity.this); // 隐藏键盘
@@ -359,6 +374,8 @@ public class MainActivity extends AppCompatActivity {
                     mIPWGProgressWheel.setVisibility(View.VISIBLE);
                     mIPWGConnectButton.setVisibility(View.INVISIBLE);
                     mIPWGDisconnectButton.setVisibility(View.INVISIBLE);
+                    mIPWGUsernameEditText.setEnabled(false);
+                    mIPWGPasswordEditText.setEnabled(false);
 
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -375,6 +392,9 @@ public class MainActivity extends AppCompatActivity {
                                             mIPWGProgressWheel.setVisibility(View.INVISIBLE);
                                             mIPWGConnectButton.setVisibility(View.VISIBLE);
                                             mIPWGDisconnectButton.setVisibility(View.VISIBLE);
+                                            mIPWGUsernameEditText.setEnabled(true);
+                                            mIPWGPasswordEditText.setEnabled(true);
+
                                             Map<String, String> map = extractValuesFromResponse(response);
                                             String isSuccess = map.get("SUCCESS");
                                             if (isSuccess.equals("NO")){
@@ -385,6 +405,9 @@ public class MainActivity extends AppCompatActivity {
                                                     showToastWithString("断开连接失败,原因：" + reason, true);
                                                 }
                                             }else {
+                                                editor.putString("ipwg_username",ipwg_username);
+                                                editor.putString("ipwg_password",ipwg_password);
+                                                editor.commit();
                                                 if (operation.equals("connect")){
                                                     showToastWithString("连接成功", true);
                                                 }else {
@@ -399,14 +422,16 @@ public class MainActivity extends AppCompatActivity {
                                             mIPWGProgressWheel.setVisibility(View.INVISIBLE);
                                             mIPWGConnectButton.setVisibility(View.VISIBLE);
                                             mIPWGDisconnectButton.setVisibility(View.VISIBLE);
+                                            mIPWGUsernameEditText.setEnabled(true);
+                                            mIPWGPasswordEditText.setEnabled(true);
                                             showToastWithString("连接超时，请检查WIFI是否连接到校园网", true);
                                         }
                                     }) {
                                 @Override
                                 protected Map<String, String> getParams() throws AuthFailureError {
                                     Map<String, String> params = new HashMap<String, String>();
-                                    params.put("uid", username); // 20134649
-                                    params.put("password", password); // 950426
+                                    params.put("uid", ipwg_username); // 20134649
+                                    params.put("password", ipwg_password); // 950426
                                     params.put("operation", operation);
                                     params.put("range", "2");
                                     params.put("timeout", "1");
