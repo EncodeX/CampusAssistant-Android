@@ -130,65 +130,16 @@ public class MainActivity extends AppCompatActivity {
         mIPWGConnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                username = mIPWGUsernameEditText.getText().toString();
-                password = mIPWGPasswordEditText.getText().toString();
-                if (username.equals("")) {
-                    showToastWithString("请输入校园网账号", true);
-                } else if (password.equals("")) {
-                    showToastWithString("请输入校园网密码", true);
-                } else {
-                    hideSoftKeyboard(MainActivity.this); // 隐藏键盘
-
-                    mIPWGProgressWheel.setVisibility(View.VISIBLE);
-                    mIPWGConnectButton.setVisibility(View.INVISIBLE);
-                    mIPWGDisconnectButton.setVisibility(View.INVISIBLE);
-
-                    /** ip网关与网络请求 **/
-                    requestQueue = Volley.newRequestQueue(getBaseContext());
-                    StringRequest request = new StringRequest(
-                            Request.Method.POST,
-                            "http://ipgw.neu.edu.cn/ipgw/ipgw.ipgw",
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    mIPWGProgressWheel.setVisibility(View.INVISIBLE);
-                                    mIPWGConnectButton.setVisibility(View.VISIBLE);
-                                    mIPWGDisconnectButton.setVisibility(View.VISIBLE);
-                                    Map<String, String> map = extractValuesFromResponse(response);
-                                    String isSuccess = map.get("SUCCESS");
-                                    if (isSuccess.equals("NO")){
-                                        String reason = map.get("REASON");
-                                        showToastWithString("连接失败,原因：" + reason, true);
-                                    }else {
-                                        showToastWithString("连接成功", true);
-                                    }
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    mIPWGProgressWheel.setVisibility(View.INVISIBLE);
-                                    mIPWGConnectButton.setVisibility(View.VISIBLE);
-                                    mIPWGDisconnectButton.setVisibility(View.VISIBLE);
-                                    showToastWithString("连接超时，请检查WIFI是否连接到校园网", true);
-                                }
-                            }) {
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> params = new HashMap<String, String>();
-                            params.put("uid", username); // 20134649
-                            params.put("password", password); // 950426
-                            params.put("operation", "connect");
-                            params.put("range", "2");
-                            params.put("timeout", "1");
-                            return params;
-                        }
-                    };
-                    // 此句会发送联网请求
-                    requestQueue.add(request);
-                }
+                doIPWGOperation("connect");
             }
         });
+        mIPWGDisconnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doIPWGOperation("disconnectall");
+            }
+        });
+
         mIPWGProgressWheel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -389,38 +340,88 @@ public class MainActivity extends AppCompatActivity {
         animatorSet.start();
     }
 
-    //    public void closeKeyboard(View view) {
-//
-//        //Set up touch listener for non-text box views to hide keyboard.
-//        if(!(view instanceof EditText)) {
-//
-//            view.setOnTouchListener(new View.OnTouchListener() {
-//
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    hideSoftKeyboard(MainActivity.this);
-//                    return false;
-//                }
-//
-//            });
-//        }
-//
-//        //If a layout container, iterate over children and seed recursion.
-//        if (view instanceof ViewGroup) {
-//
-//            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-//
-//                View innerView = ((ViewGroup) view).getChildAt(i);
-//
-//                closeKeyboard(innerView);
-//            }
-//        }
-//    }
-//
+    /***
+     * 执行IPWG相关操作
+     */
+    private void doIPWGOperation(final String operation){
+        username = mIPWGUsernameEditText.getText().toString();
+        password = mIPWGPasswordEditText.getText().toString();
+        if (username.equals("")) {
+            showToastWithString("请输入校园网账号", true);
+        } else if (password.equals("")) {
+            showToastWithString("请输入校园网密码", true);
+        } else {
+            hideSoftKeyboard(MainActivity.this); // 隐藏键盘
+
+            mIPWGProgressWheel.setVisibility(View.VISIBLE);
+            mIPWGConnectButton.setVisibility(View.INVISIBLE);
+            mIPWGDisconnectButton.setVisibility(View.INVISIBLE);
+
+            /** ip网关与网络请求 **/
+            requestQueue = Volley.newRequestQueue(getBaseContext());
+            StringRequest request = new StringRequest(
+                    Request.Method.POST,
+                    "http://ipgw.neu.edu.cn/ipgw/ipgw.ipgw",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            mIPWGProgressWheel.setVisibility(View.INVISIBLE);
+                            mIPWGConnectButton.setVisibility(View.VISIBLE);
+                            mIPWGDisconnectButton.setVisibility(View.VISIBLE);
+                            Map<String, String> map = extractValuesFromResponse(response);
+                            String isSuccess = map.get("SUCCESS");
+                            if (isSuccess.equals("NO")){
+                                String reason = map.get("REASON");
+                                if (operation.equals("connect")){
+                                    showToastWithString("连接失败,原因：" + reason, true);
+                                }else {
+                                    showToastWithString("断开连接失败,原因：" + reason, true);
+                                }
+                            }else {
+                                if (operation.equals("connect")){
+                                    showToastWithString("连接成功", true);
+                                }else {
+                                    showToastWithString("断开连接成功", true);
+                                }
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            mIPWGProgressWheel.setVisibility(View.INVISIBLE);
+                            mIPWGConnectButton.setVisibility(View.VISIBLE);
+                            mIPWGDisconnectButton.setVisibility(View.VISIBLE);
+                            showToastWithString("连接超时，请检查WIFI是否连接到校园网", true);
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("uid", username); // 20134649
+                    params.put("password", password); // 950426
+                    params.put("operation", operation);
+                    params.put("range", "2");
+                    params.put("timeout", "1");
+                    return params;
+                }
+            };
+            // 此句会发送联网请求
+            requestQueue.add(request);
+        }
+    }
+
+    /**
+     * 隐藏键盘
+     */
     private static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
+    /**
+     * 重response中提取响应的响应
+     */
     private static Map<String, String> extractValuesFromResponse(String response) {
         String comment = "";
         Pattern p = Pattern.compile("\\<!--(.+)--\\>");
