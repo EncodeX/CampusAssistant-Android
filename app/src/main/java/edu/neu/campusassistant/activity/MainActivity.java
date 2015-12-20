@@ -152,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
                 mIPWGProgressWheel.setVisibility(View.INVISIBLE);
                 mIPWGConnectButton.setVisibility(View.VISIBLE);
                 mIPWGDisconnectButton.setVisibility(View.VISIBLE);
+                mIPWGUsernameEditText.setEnabled(true);
+                mIPWGPasswordEditText.setEnabled(true);
             }
         });
 
