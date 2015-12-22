@@ -372,7 +372,7 @@ http://202.118.31.241:8080/api/v1/schoolRoll
 	* professionId : 专业编号
 	* professionName : 专业名称
 	* collegeName : 院系名称
-	* professionType : 专业名称
+	* professionType : 专业类别
 	* className : 所在班级
 	* level : 级别/层次 (本科/硕士/etc.)
 	* StudyForm : 学习形式 (如 普通全日制)
