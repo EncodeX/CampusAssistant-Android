@@ -226,11 +226,11 @@ http://202.118.31.241:8080/api/v1/professionDevelopPlan
 
 获取专业列表 (指定批次&lt;planBatchId&gt;)
 
-http://202.118.31.241:8080/api/v1/professionDevelopPlan/&lt;planBatchId&gt
+http://202.118.31.241:8080/api/v1/professionDevelopPlan/&lt;planBatchId&gt;
 
 获取专业培养计划课程列表 (指定批次与专业)
 
-http://202.118.31.241:8080/api/v1/professionDevelopPlan/&lt;planBatchId&gt;/&lt;professionId&gt
+http://202.118.31.241:8080/api/v1/professionDevelopPlan/&lt;planBatchId&gt;/&lt;professionId&gt;
 
 查看培养计划某一课程信息
 
@@ -254,7 +254,7 @@ http://202.118.31.241:8080/api/v1/professionDevelopPlan/&lt;planBatchId&gt;/&lt;
 * data : 若请求成功时的学年/批次列表 (JSONArray)
 	* planBatchId : 批次id
 	* planBatchName : 批次名称
-	* level : 级别 (本科/硕士/etc.)
+	* level : 级别/层次 (本科/硕士/etc.)
 
 专业列表
 
@@ -296,11 +296,89 @@ http://202.118.31.241:8080/api/v1/professionDevelopPlan/&lt;planBatchId&gt;/&lt;
 	* courseType : 课程类别 (学位课 / 一般选修 / 鼓励选修)
 	* courseMode ： 课程模式
 	
-### 教室列表
+### 教室空闲情况查询
+
+获取教学楼列表
 
 http://202.118.31.241:8080/api/v1/buildings
 
+获取教学楼教室列表
+
+http://202.118.31.241:8080/api/v1/freeClassrooms/&lt;buildingId&gt;
+
+获取教室空闲情况
+
+http://202.118.31.241:8080/api/v1/freeTimes/&lt;classroomId&gt;
+
+#### 参数
+
+* token : 校验token
+
+#### 返回
+
+教学楼列表
+
+* success : 请求是否成功，0为是，-1为否
+* errCode : 若请求失败的错误代码
+* errMsg : 若请求失败的错误信息
+* data : 若请求成功时的教学楼列表 (JSONArray)
+	* buildingId : 教学楼id
+	* buildingName : 教学楼名称
+
+教学楼教室列表
+
+* success : 请求是否成功，0为是，-1为否
+* errCode : 若请求失败的错误代码
+* errMsg : 若请求失败的错误信息
+* data : 若请求成功时的教室列表 (JSONArray)
+	* buildingId : 教学楼id
+	* classroomsId : 教室id
+	* classroomsName : 教室名称
+
+教室空闲情况
+
+* success : 请求是否成功，0为是，-1为否
+* errCode : 若请求失败的错误代码
+* errMsg : 若请求失败的错误信息
+* data : 若请求成功时的空闲情况列表 (JSONArray)
+	* classroomsId : 教室id
+	* classroomsName : 教室名称
+	* freeTimes : 课节 (如 "1-2节" "3-4节" 此项可不理会，全部数据都是按照1~12节的顺序分为6段记录的)
+	* status : 对应课节的教室状态
+
 ### 学籍信息
+
+http://202.118.31.241:8080/api/v1/schoolRoll
+
+#### 参数
+
+* token : 校验token
+
+#### 返回
+
+* success : 请求是否成功，0为是，-1为否
+* errCode : 若请求失败的错误代码
+* errMsg : 若请求失败的错误信息
+* data : 若请求成功时的学籍信息 (JSONArray)
+	* examId : 考生号
+	* StudentId : 学号
+	* StudentName : 姓名
+	* englishName : 英文姓名
+	* sex : 性别
+	* birth : 出生日期
+	* idCard : 身份证号
+	* political : 政治面貌
+	* nation : 民族
+	* professionId : 专业编号
+	* professionName : 专业名称
+	* collegeName : 院系名称
+	* professionType : 专业名称
+	* className : 所在班级
+	* level : 级别/层次 (本科/硕士/etc.)
+	* StudyForm : 学习形式 (如 普通全日制)
+	* standard : 学制 (年)
+	* startDate : 入学日期
+	* endDate : 预计毕业年月
 
 ## 交互（暂定）
 
@@ -312,4 +390,3 @@ http://202.118.31.241:8080/api/v1/buildings
 	* etc.
 	
 	更新时有视觉刷新提示
-4. 
