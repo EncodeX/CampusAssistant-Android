@@ -66,8 +66,7 @@
 				android:orientation="vertical">
 				<include layout="@layout/home_weather_item"/>
 				<include layout="@layout/home_study_life_item"/>
-				<include layout="@layout/home_weather_item"/>
-				<include layout="@layout/home_study_life_item"/>
+
 			</LinearLayout>
 		</ScrollView>
 
