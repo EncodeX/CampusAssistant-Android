@@ -40,10 +40,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.nineoldandroids.view.ViewHelper;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -51,13 +55,19 @@ import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import edu.neu.campusassistant.utils.AppController;
 import edu.neu.campusassistant.view.BoxLayout;
 import edu.neu.campusassistant.view.CircularRevealLayout;
 
 import edu.neu.campusassistant.R;
 import edu.neu.campusassistant.view.FunctionButton;
+import edu.neu.campusassistant.view.WeatherItemView;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean mIsCircularViewInitialized = false;
     private String ipwg_username;
     private String ipwg_password;
+
+    public static final String IPWG_TAG = "IPWG";
+    public static final String WEATHER_TAG = "weather";
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -107,9 +120,8 @@ public class MainActivity extends AppCompatActivity {
     EditText mIPWGPasswordEditText;
     @Bind(R.id.ipwg_progress_wheel)
     ProgressWheel mIPWGProgressWheel;
-
-
-    RequestQueue requestQueue;
+    @Bind(R.id.home_weather_item)
+    WeatherItemView mWeatherItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,9 +131,14 @@ public class MainActivity extends AppCompatActivity {
         /** 初始化操作 **/
         initView();
 
+        /** 获取天气 **/
+        obtainCurrentWeatherInfo();
+
         /** IP网关相关操作 **/
         ipwgOperation();
 
+        /** 设置weekNo**/
+        setupWeatherWeekNo();
         /** 点击EditView以外区域关闭键盘 **/
 //        closeKeyboard(mDrawerLayout);
 
@@ -129,42 +146,12 @@ public class MainActivity extends AppCompatActivity {
         mCheckClassListButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
     }
 
-    /**
-     * ip网关操作
-     */
-    private void ipwgOperation() {
-        mIPWGConnectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doIPWGOperation("connect");
-            }
-        });
-        mIPWGDisconnectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                doIPWGOperation("disconnectall");
-            }
-        });
-
-        mIPWGProgressWheel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mIPWGProgressWheel.setVisibility(View.INVISIBLE);
-                mIPWGConnectButton.setVisibility(View.VISIBLE);
-                mIPWGDisconnectButton.setVisibility(View.VISIBLE);
-                mIPWGUsernameEditText.setEnabled(true);
-                mIPWGPasswordEditText.setEnabled(true);
-            }
-        });
-
-    }
-
     private void initView() {
         ButterKnife.bind(this);
 
-
-        sharedPreferences=getSharedPreferences("edu.neu.campusassistant.mainAvtivity.preference",MODE_PRIVATE);
-        editor=sharedPreferences.edit();
+        // 初始化sharedPreferences
+        sharedPreferences = getSharedPreferences("edu.neu.campusassistant.mainAvtivity.preference", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         // 初始化文本框内容
         ipwg_username = sharedPreferences.getString("ipwg_username", "");
@@ -358,10 +345,41 @@ public class MainActivity extends AppCompatActivity {
         animatorSet.start();
     }
 
+    /**
+     * ip网关操作
+     */
+    private void ipwgOperation() {
+        mIPWGConnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doIPWGOperation("connect");
+            }
+        });
+        mIPWGDisconnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doIPWGOperation("disconnectall");
+            }
+        });
+
+        mIPWGProgressWheel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppController.getInstance().cancelPendingRequests(IPWG_TAG);
+                mIPWGProgressWheel.setVisibility(View.INVISIBLE);
+                mIPWGConnectButton.setVisibility(View.VISIBLE);
+                mIPWGDisconnectButton.setVisibility(View.VISIBLE);
+                mIPWGUsernameEditText.setEnabled(true);
+                mIPWGPasswordEditText.setEnabled(true);
+            }
+        });
+
+    }
+
     /***
      * 执行IPWG相关操作
      */
-    private void doIPWGOperation(final String operation){
+    private void doIPWGOperation(final String operation) {
         ipwg_username = mIPWGUsernameEditText.getText().toString();
         ipwg_password = mIPWGPasswordEditText.getText().toString();
         if (ipwg_username.equals("")) {
@@ -370,7 +388,7 @@ public class MainActivity extends AppCompatActivity {
             showToastWithString("请输入校园网密码", true);
         } else {
             hideSoftKeyboard(MainActivity.this); // 隐藏键盘
-            new Handler().postDelayed(new Runnable(){
+            new Handler().postDelayed(new Runnable() {
                 public void run() {
                     //execute the task
                     mIPWGProgressWheel.setVisibility(View.VISIBLE);
@@ -384,8 +402,7 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
 
                             /** ip网关与网络请求 **/
-                            requestQueue = Volley.newRequestQueue(getBaseContext());
-                            StringRequest request = new StringRequest(
+                            StringRequest stringRequest = new StringRequest(
                                     Request.Method.POST,
                                     "http://ipgw.neu.edu.cn/ipgw/ipgw.ipgw",
                                     new Response.Listener<String>() {
@@ -399,20 +416,20 @@ public class MainActivity extends AppCompatActivity {
 
                                             Map<String, String> map = extractValuesFromResponse(response);
                                             String isSuccess = map.get("SUCCESS");
-                                            if (isSuccess.equals("NO")){
+                                            if (isSuccess.equals("NO")) {
                                                 String reason = map.get("REASON");
-                                                if (operation.equals("connect")){
+                                                if (operation.equals("connect")) {
                                                     showToastWithString("连接失败,原因：" + reason, true);
-                                                }else {
+                                                } else {
                                                     showToastWithString("断开连接失败,原因：" + reason, true);
                                                 }
-                                            }else {
-                                                editor.putString("ipwg_username",ipwg_username);
-                                                editor.putString("ipwg_password",ipwg_password);
+                                            } else {
+                                                editor.putString("ipwg_username", ipwg_username);
+                                                editor.putString("ipwg_password", ipwg_password);
                                                 editor.commit();
-                                                if (operation.equals("connect")){
+                                                if (operation.equals("connect")) {
                                                     showToastWithString("连接成功", true);
-                                                }else {
+                                                } else {
                                                     showToastWithString("断开连接成功", true);
                                                 }
                                             }
@@ -441,7 +458,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             };
                             // 此句会发送联网请求
-                            requestQueue.add(request);
+                            AppController.getInstance().addToRequestQueue(stringRequest, IPWG_TAG);
                         }
                     }, 1500);
                 }
@@ -452,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 隐藏键盘
      */
-    private static void hideSoftKeyboard(Activity activity) {
+    private void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
@@ -460,7 +477,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 重response中提取响应的响应
      */
-    private static Map<String, String> extractValuesFromResponse(String response) {
+    private Map<String, String> extractValuesFromResponse(String response) {
         String comment = "";
         Pattern p = Pattern.compile("\\<!--(.+)--\\>");
         Matcher m = p.matcher(response);
@@ -479,11 +496,65 @@ public class MainActivity extends AppCompatActivity {
         return map;
     }
 
-    private void showToastWithString(String message, boolean isShort){
-        if (!isShort){
-            Toast.makeText(getApplicationContext(), message , Toast.LENGTH_LONG).show();
-        }else {
-            Toast.makeText(getApplicationContext(), message , Toast.LENGTH_SHORT).show();
+    /**
+     * 显示Toast
+     *
+     * @param message
+     * @param isShort
+     */
+    private void showToastWithString(String message, boolean isShort) {
+        if (!isShort) {
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * 获取天气信息
+     */
+    private void obtainCurrentWeatherInfo() {
+        String url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=Shenyang,CN&cnt=4&units=metric&APPID=66e616f33710e6af3c0f25b185001dde";
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url
+                , new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("weather", response.toString());
+                try {
+                    JSONArray listArray = response.getJSONArray("list");
+                    for (int i = 0; i < listArray.length(); i++) {
+                        JSONObject object = listArray.getJSONObject(i);
+                        JSONObject tempObject = object.getJSONObject("temp");
+                        int minTemp = (int)tempObject.getDouble("min");
+                        int maxTemp = (int)tempObject.getDouble("max");
+                        JSONObject weatherObject = object.getJSONArray("weather").getJSONObject(0);
+                        String icon = weatherObject.getString("icon");
+                        mWeatherItem.setupTemperature(i, minTemp, maxTemp);
+                        mWeatherItem.setupWeatherIcon(i, icon);
+                        Log.d("weather", ""+minTemp);
+                        Log.d("weather", ""+maxTemp);
+                        Log.d("weather", icon);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("weather", "Error: " + error.getMessage());
+            }
+        });
+// Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq, WEATHER_TAG);
+    }
+
+    private void setupWeatherWeekNo(){
+        Calendar calendar = Calendar.getInstance();
+        Date todayDate = new Date();
+        calendar.setTime(todayDate);
+        int i=calendar.get(Calendar.DAY_OF_WEEK);
+        mWeatherItem.setupWeedNoTextview(i);
     }
 }
