@@ -8,8 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
         <RelativeLayout
             android:id="@+id/study_life_layout"
             android:layout_width="match_parent"
@@ -26,8 +25,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/colorOrange"
-                android:text="@string/study_life_title"
-                />
+                android:text="@string/study_life_title"/>
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/next_class_info"
@@ -37,8 +35,7 @@
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:clickable="true"
-            android:background="@color/colorOrange"
-            >
+            android:background="@color/colorOrange">
             <TextView
                 android:id="@+id/next_class_text_view"
                 android:layout_width="wrap_content"
@@ -48,8 +45,7 @@
                 android:layout_alignParentLeft="true"
                 android:textSize="12sp"
                 android:textColor="@color/colorWhite"
-                android:text="@string/study_life_next_class"
-                />
+                android:text="@string/study_life_next_class"/>
             <TextView
                 android:id="@+id/next_class_name"
                 android:layout_width="match_parent"
@@ -61,8 +57,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/colorWhite"
-                android:text="移动互联导论"
-                />
+                android:text="移动互联导论"/>
             <TextView
                 android:id="@+id/next_class_location"
                 android:layout_width="wrap_content"
@@ -74,8 +69,7 @@
                 android:layout_alignParentLeft="true"
                 android:textSize="12sp"
                 android:textColor="@color/colorWhite"
-                android:text="建筑B403"
-                />
+                android:text="建筑B403"/>
             <TextView
                 android:id="@+id/next_class_time"
                 android:layout_width="wrap_content"
@@ -86,8 +80,7 @@
                 android:layout_marginLeft="10dp"
                 android:textSize="12sp"
                 android:textColor="@color/colorWhite"
-                android:text="5-6节"
-                />
+                android:text="5-6节"/>
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/button_Panel"
@@ -97,76 +90,44 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="64dp">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-                    <edu.neu.campusassistant.view.FunctionButton
-                        android:id="@+id/check_class_list_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        app:fb_src="@drawable/study_life_check_classes"
-                        app:fb_text="@string/study_life_check_class_list"
-                        app:fb_text_color="@color/colorOrange"
-                        app:fb_text_size="14sp">
-                    </edu.neu.campusassistant.view.FunctionButton>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-                    <edu.neu.campusassistant.view.FunctionButton
-                        android:id="@+id/check_empty_classroom_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        app:fb_src="@drawable/study_life_empty_classroom"
-                        app:fb_text="@string/study_life_check_empty_classroom"
-                        app:fb_text_color="@color/colorOrange"
-                        app:fb_text_size="14sp">
-                    </edu.neu.campusassistant.view.FunctionButton>
-
-                    </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <edu.neu.campusassistant.view.FunctionButton
-                        android:id="@+id/check_grade_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        app:fb_src="@drawable/study_life_search_grade"
-                        app:fb_text="@string/study_life_check_grade"
-                        app:fb_text_color="@color/colorOrange"
-                        app:fb_text_size="14sp">
-                    </edu.neu.campusassistant.view.FunctionButton>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <edu.neu.campusassistant.view.FunctionButton
+                    android:id="@+id/check_class_list_button"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:clickable="true"
-                    android:background="@drawable/card_foreground">
-                    <edu.neu.campusassistant.view.FunctionButton
-                        android:id="@+id/check_test_agenda_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        app:fb_src="@drawable/study_life_test_agenda"
-                        app:fb_text="@string/study_life_check_test_agenda"
-                        app:fb_text_color="@color/colorOrange"
-                        app:fb_text_size="14sp">
-                    </edu.neu.campusassistant.view.FunctionButton>
-                </RelativeLayout>
-
+                    app:fb_src="@drawable/study_life_check_classes"
+                    app:fb_text="@string/study_life_check_class_list"
+                    app:fb_text_color="@color/colorOrange"
+                    app:fb_text_size="14sp"/>
+                <edu.neu.campusassistant.view.FunctionButton
+                    android:id="@+id/check_empty_classroom_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:fb_src="@drawable/study_life_empty_classroom"
+                    app:fb_text="@string/study_life_check_empty_classroom"
+                    app:fb_text_color="@color/colorOrange"
+                    app:fb_text_size="14sp"/>
+                <edu.neu.campusassistant.view.FunctionButton
+                    android:id="@+id/check_grade_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:fb_src="@drawable/study_life_search_grade"
+                    app:fb_text="@string/study_life_check_grade"
+                    app:fb_text_color="@color/colorOrange"
+                    app:fb_text_size="14sp"/>
+                <edu.neu.campusassistant.view.FunctionButton
+                    android:id="@+id/check_test_agenda_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:fb_src="@drawable/study_life_test_agenda"
+                    app:fb_text="@string/study_life_check_test_agenda"
+                    app:fb_text_color="@color/colorOrange"
+                    app:fb_text_size="14sp"/>
             </LinearLayout>
-            </RelativeLayout>
+        </RelativeLayout>
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
