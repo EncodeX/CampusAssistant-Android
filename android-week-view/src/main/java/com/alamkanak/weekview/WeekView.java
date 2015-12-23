@@ -21,6 +21,7 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
@@ -81,7 +82,7 @@ public class WeekView extends View {
     private int mFetchedPeriod = -1; // the middle period the calendar has fetched.
     private boolean mRefreshEvents = false;
     private Direction mCurrentFlingDirection = Direction.NONE;
-    private ScaleGestureDetector mScaleDetector;
+//    private ScaleGestureDetector mScaleDetector;
     private boolean mIsZooming;
     private Calendar mFirstVisibleDay;
     private Calendar mLastVisibleDay;
@@ -165,10 +166,10 @@ public class WeekView extends View {
 
             // Calculate the new origin after scroll.
             switch (mCurrentScrollDirection) {
-                case HORIZONTAL:
-                    mCurrentOrigin.x -= distanceX * mXScrollingSpeed;
-                    ViewCompat.postInvalidateOnAnimation(WeekView.this);
-                    break;
+//                case HORIZONTAL:
+//                    mCurrentOrigin.x -= distanceX * mXScrollingSpeed;
+//                    ViewCompat.postInvalidateOnAnimation(WeekView.this);
+//                    break;
                 case VERTICAL:
                     mCurrentOrigin.y -= distanceY;
                     ViewCompat.postInvalidateOnAnimation(WeekView.this);
@@ -182,10 +183,11 @@ public class WeekView extends View {
             mScroller.forceFinished(true);
 
             mCurrentFlingDirection = mCurrentScrollDirection;
-            if (mCurrentFlingDirection == Direction.HORIZONTAL){
-                mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, (int) (velocityX * mXScrollingSpeed), 0, Integer.MIN_VALUE, Integer.MAX_VALUE, (int) -(mHourHeight * 24 + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - getHeight()), 0);
-            }
-            else if (mCurrentFlingDirection == Direction.VERTICAL){
+//            if (mCurrentFlingDirection == Direction.HORIZONTAL){
+//                mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, (int) (velocityX * mXScrollingSpeed), 0, Integer.MIN_VALUE, Integer.MAX_VALUE, (int) -(mHourHeight * 24 + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - getHeight()), 0);
+//            }
+//            else
+            if (mCurrentFlingDirection == Direction.VERTICAL){
                 mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, 0, (int) velocityY, Integer.MIN_VALUE, Integer.MAX_VALUE, (int) -(mHourHeight * 24 + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - getHeight()), 0);
             }
 
@@ -392,26 +394,26 @@ public class WeekView extends View {
         // Set default event color.
         mDefaultEventColor = Color.parseColor("#9fc6e7");
 
-        mScaleDetector = new ScaleGestureDetector(mContext, new ScaleGestureDetector.OnScaleGestureListener() {
-            @Override
-            public void onScaleEnd(ScaleGestureDetector detector) {
-                mIsZooming = false;
-            }
-
-            @Override
-            public boolean onScaleBegin(ScaleGestureDetector detector) {
-                mIsZooming = true;
-                goToNearestOrigin();
-                return true;
-            }
-
-            @Override
-            public boolean onScale(ScaleGestureDetector detector) {
-                mNewHourHeight = Math.round(mHourHeight * detector.getScaleFactor());
-                invalidate();
-                return true;
-            }
-        });
+//        mScaleDetector = new ScaleGestureDetector(mContext, new ScaleGestureDetector.OnScaleGestureListener() {
+//            @Override
+//            public void onScaleEnd(ScaleGestureDetector detector) {
+//                mIsZooming = false;
+//            }
+//
+//            @Override
+//            public boolean onScaleBegin(ScaleGestureDetector detector) {
+//                mIsZooming = true;
+//                goToNearestOrigin();
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onScale(ScaleGestureDetector detector) {
+//                mNewHourHeight = Math.round(mHourHeight * detector.getScaleFactor());
+//                invalidate();
+//                return true;
+//            }
+//        });
     }
 
     // fix rotation changes
@@ -490,14 +492,16 @@ public class WeekView extends View {
             mScrollToHour = -1;
             mAreDimensionsInvalid = false;
         }
+
+	    // Todo Here's a bug
         if (mIsFirstDraw){
             mIsFirstDraw = false;
 
             // If the week view is being drawn for the first time, then consider the first day of the week.
-            if(mNumberOfVisibleDays >= 7 && today.get(Calendar.DAY_OF_WEEK) != mFirstDayOfWeek) {
-                int difference = 7 + (today.get(Calendar.DAY_OF_WEEK) - mFirstDayOfWeek);
-                mCurrentOrigin.x += (mWidthPerDay + mColumnGap) * difference;
-            }
+//            if(mNumberOfVisibleDays >= 7 && today.get(Calendar.DAY_OF_WEEK) != mFirstDayOfWeek) {
+//                int difference = 7 + (today.get(Calendar.DAY_OF_WEEK) - mFirstDayOfWeek);
+//                mCurrentOrigin.x += (mWidthPerDay + mColumnGap) * difference;
+//            }
         }
 
         // Calculate the new height due to the zooming.
@@ -1639,7 +1643,7 @@ public class WeekView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        mScaleDetector.onTouchEvent(event);
+//        mScaleDetector.onTouchEvent(event);
         boolean val = mGestureDetector.onTouchEvent(event);
 
         // Check after call of mGestureDetector, so mCurrentFlingDirection and mCurrentScrollDirection are set.
@@ -1859,4 +1863,15 @@ public class WeekView extends View {
         return today;
     }
 
+
+	/////////////////////////////////////////////////////////////////
+	//
+	//      Other methods.
+	//
+	/////////////////////////////////////////////////////////////////
+
+	public double getCalendarAreaHeight(){
+		Log.d("Test","Height: "+getHeight());
+		return getHeight() - mHourHeight * 24 - mHeaderTextHeight - mHeaderRowPadding * 2 - mHeaderMarginBottom;
+	}
 }

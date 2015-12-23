@@ -6,26 +6,29 @@
 	android:layout_height="match_parent"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	tools:context="edu.neu.campusassistant.activity.CourseTableActivity">
+	<android.support.v7.widget.Toolbar
+		android:id="@+id/app_bar"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/colorPrimary"
+		app:title="课程表"
+		app:titleTextColor="@android:color/white"
+		android:elevation="8dp"/>
 	<com.alamkanak.weekview.WeekView
 		android:id="@+id/week_view"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:layout_below="@id/app_bar"
 		app:eventTextColor="@android:color/white"
 		app:textSize="12sp"
 		app:hourHeight="60dp"
-		app:headerColumnPadding="8dp"
+		app:headerColumnPadding="4dp"
 		app:headerColumnTextColor="#8f000000"
-		app:headerRowPadding="12dp"
-		app:columnGap="8dp"
-		app:noOfVisibleDays="3"
+		app:headerRowPadding="8dp"
+		app:columnGap="2dp"
+		app:noOfVisibleDays="7"
 		app:headerRowBackgroundColor="#ffefefef"
 		app:dayBackgroundColor="#05000000"
 		app:todayBackgroundColor="#1848adff"
 		app:headerColumnBackground="#ffffffff"/>
-	<Button
-		android:id="@+id/test_button"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:layout_alignParentRight="true"/>
 </RelativeLayout>

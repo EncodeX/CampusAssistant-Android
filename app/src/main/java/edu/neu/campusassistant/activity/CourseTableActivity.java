@@ -1,8 +1,10 @@
 package edu.neu.campusassistant.activity;
 
 import android.graphics.RectF;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -26,10 +28,11 @@ import edu.neu.campusassistant.R;
 
 public class CourseTableActivity extends AppCompatActivity {
 
+	@Bind(R.id.app_bar)
+	Toolbar mToolBar;
+	ActionBar mAppBar;
 	@Bind(R.id.week_view)
 	WeekView mWeekView;
-	@Bind(R.id.test_button)
-	Button mTestButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +41,24 @@ public class CourseTableActivity extends AppCompatActivity {
 
 		ButterKnife.bind(this);
 
+		setSupportActionBar(mToolBar);
+		mAppBar = getSupportActionBar();
+
+		if(mAppBar!=null) mAppBar.setDisplayHomeAsUpEnabled(true);
+		mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				onBackPressed();
+			}
+		});
+
 		mWeekView.setMonthChangeListener(new MonthLoader.MonthChangeListener() {
 			@Override
 			public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
 				List<WeekViewEvent> list = new ArrayList<WeekViewEvent>();
 
 				Calendar startTime = Calendar.getInstance();
-				startTime.set(Calendar.HOUR_OF_DAY, 3);
+				startTime.set(Calendar.HOUR_OF_DAY, 10);
 				startTime.set(Calendar.MINUTE, 0);
 				startTime.set(Calendar.MONTH, newMonth-1);
 				startTime.set(Calendar.YEAR, newYear);
@@ -58,30 +72,24 @@ public class CourseTableActivity extends AppCompatActivity {
 			}
 		});
 
-		mTestButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-//				mWeekView.goToToday();
-				mWeekView.setNumberOfVisibleDays(7);
-			}
-		});
+		Calendar calendar = Calendar.getInstance();
 
-//		Calendar calendar = Calendar.getInstance();
-//		calendar.setTime(new Date(2015,12,23));
-
-//		mWeekView.setFirstDayOfWeek(Calendar.SUNDAY);
-//		mWeekView.setHourHeight((int)(mWeekView.getHourHeight()*0.7));
-//		mWeekView.goToToday();
-//		mWeekView.goToHour(8);
-//		mWeekView.setDayNameLength(WeekView.LENGTH_SHORT);
+		mWeekView.setHourHeight((int)(mWeekView.getHourHeight()*0.7));
+		mWeekView.goToHour(8);
 
 		setupDateTimeInterpreter(false);
-//		mWeekView.goToToday();
+
+		if(calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY){
+			calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)-calendar.get(Calendar.DAY_OF_WEEK)+1);
+		}
+		mWeekView.goToDate(calendar);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+//		mWeekView.setHourHeight((int)(mWeekView.getCalendarAreaHeight() / 15));
 	}
 
 	/**

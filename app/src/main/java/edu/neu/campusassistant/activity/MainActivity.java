@@ -7,25 +7,18 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
@@ -37,13 +30,10 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.nineoldandroids.view.ViewHelper;
 
 import java.util.Calendar;
@@ -80,10 +70,10 @@ public class MainActivity extends AppCompatActivity {
     private int mBoxYOffset;
     private int mBoxXOffset;
     private boolean mIsCircularViewInitialized = false;
-    private String ipwg_username;
-    private String ipwg_password;
+    private String ipgw_username;
+    private String ipgw_password;
 
-    public static final String IPWG_TAG = "IPWG";
+    public static final String IPGW_TAG = "IPGW";
     public static final String WEATHER_TAG = "weather";
 
     SharedPreferences sharedPreferences;
@@ -110,16 +100,16 @@ public class MainActivity extends AppCompatActivity {
     ImageButton mDrawerButton;
     @Bind(R.id.check_class_list_button)
     FunctionButton mCheckClassListButton;
-    @Bind(R.id.drawer_ipwg_connect_button)
-    Button mIPWGConnectButton;
-    @Bind(R.id.drawer_ipwg_disconnect_button)
-    Button mIPWGDisconnectButton;
-    @Bind(R.id.drawer_ipwg_user_name_edit_text)
-    EditText mIPWGUsernameEditText;
-    @Bind(R.id.drawer_ipwg_password_edit_text)
-    EditText mIPWGPasswordEditText;
-    @Bind(R.id.ipwg_progress_wheel)
-    ProgressWheel mIPWGProgressWheel;
+    @Bind(R.id.drawer_ipgw_connect_button)
+    Button mIPGWConnectButton;
+    @Bind(R.id.drawer_ipgw_disconnect_button)
+    Button mIPGWDisconnectButton;
+    @Bind(R.id.drawer_ipgw_user_name_edit_text)
+    EditText mIPGWUsernameEditText;
+    @Bind(R.id.drawer_ipgw_password_edit_text)
+    EditText mIPGWPasswordEditText;
+    @Bind(R.id.ipgw_progress_wheel)
+    ProgressWheel mIPGWProgressWheel;
     @Bind(R.id.home_weather_item)
     WeatherItemView mWeatherItem;
 
@@ -135,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         obtainCurrentWeatherInfo();
 
         /** IP网关相关操作 **/
-        ipwgOperation();
+        ipgwOperation();
 
         /** 设置weekNo**/
         setupWeatherWeekNo();
@@ -154,10 +144,10 @@ public class MainActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
 
         // 初始化文本框内容
-        ipwg_username = sharedPreferences.getString("ipwg_username", "");
-        ipwg_password = sharedPreferences.getString("ipwg_password", "");
-        mIPWGUsernameEditText.setText(ipwg_username);
-        mIPWGPasswordEditText.setText(ipwg_password);
+        ipgw_username = sharedPreferences.getString("ipgw_username", "");
+        ipgw_password = sharedPreferences.getString("ipgw_password", "");
+        mIPGWUsernameEditText.setText(ipgw_username);
+        mIPGWPasswordEditText.setText(ipgw_password);
 
         setSupportActionBar(mToolBar);
         mAppBar = getSupportActionBar();
@@ -348,54 +338,54 @@ public class MainActivity extends AppCompatActivity {
     /**
      * ip网关操作
      */
-    private void ipwgOperation() {
-        mIPWGConnectButton.setOnClickListener(new View.OnClickListener() {
+    private void ipgwOperation() {
+        mIPGWConnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                doIPWGOperation("connect");
+                doIPGWOperation("connect");
             }
         });
-        mIPWGDisconnectButton.setOnClickListener(new View.OnClickListener() {
+        mIPGWDisconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doIPWGOperation("disconnectall");
+                doIPGWOperation("disconnectall");
             }
         });
 
-        mIPWGProgressWheel.setOnClickListener(new View.OnClickListener() {
+        mIPGWProgressWheel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppController.getInstance().cancelPendingRequests(IPWG_TAG);
-                mIPWGProgressWheel.setVisibility(View.INVISIBLE);
-                mIPWGConnectButton.setVisibility(View.VISIBLE);
-                mIPWGDisconnectButton.setVisibility(View.VISIBLE);
-                mIPWGUsernameEditText.setEnabled(true);
-                mIPWGPasswordEditText.setEnabled(true);
+                AppController.getInstance().cancelPendingRequests(IPGW_TAG);
+                mIPGWProgressWheel.setVisibility(View.INVISIBLE);
+                mIPGWConnectButton.setVisibility(View.VISIBLE);
+                mIPGWDisconnectButton.setVisibility(View.VISIBLE);
+                mIPGWUsernameEditText.setEnabled(true);
+                mIPGWPasswordEditText.setEnabled(true);
             }
         });
 
     }
 
     /***
-     * 执行IPWG相关操作
+     * 执行IPGW相关操作
      */
-    private void doIPWGOperation(final String operation) {
-        ipwg_username = mIPWGUsernameEditText.getText().toString();
-        ipwg_password = mIPWGPasswordEditText.getText().toString();
-        if (ipwg_username.equals("")) {
+    private void doIPGWOperation(final String operation) {
+        ipgw_username = mIPGWUsernameEditText.getText().toString();
+        ipgw_password = mIPGWPasswordEditText.getText().toString();
+        if (ipgw_username.equals("")) {
             showToastWithString("请输入校园网账号", true);
-        } else if (ipwg_password.equals("")) {
+        } else if (ipgw_password.equals("")) {
             showToastWithString("请输入校园网密码", true);
         } else {
             hideSoftKeyboard(MainActivity.this); // 隐藏键盘
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     //execute the task
-                    mIPWGProgressWheel.setVisibility(View.VISIBLE);
-                    mIPWGConnectButton.setVisibility(View.INVISIBLE);
-                    mIPWGDisconnectButton.setVisibility(View.INVISIBLE);
-                    mIPWGUsernameEditText.setEnabled(false);
-                    mIPWGPasswordEditText.setEnabled(false);
+                    mIPGWProgressWheel.setVisibility(View.VISIBLE);
+                    mIPGWConnectButton.setVisibility(View.INVISIBLE);
+                    mIPGWDisconnectButton.setVisibility(View.INVISIBLE);
+                    mIPGWUsernameEditText.setEnabled(false);
+                    mIPGWPasswordEditText.setEnabled(false);
 
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -408,11 +398,11 @@ public class MainActivity extends AppCompatActivity {
                                     new Response.Listener<String>() {
                                         @Override
                                         public void onResponse(String response) {
-                                            mIPWGProgressWheel.setVisibility(View.INVISIBLE);
-                                            mIPWGConnectButton.setVisibility(View.VISIBLE);
-                                            mIPWGDisconnectButton.setVisibility(View.VISIBLE);
-                                            mIPWGUsernameEditText.setEnabled(true);
-                                            mIPWGPasswordEditText.setEnabled(true);
+                                            mIPGWProgressWheel.setVisibility(View.INVISIBLE);
+                                            mIPGWConnectButton.setVisibility(View.VISIBLE);
+                                            mIPGWDisconnectButton.setVisibility(View.VISIBLE);
+                                            mIPGWUsernameEditText.setEnabled(true);
+                                            mIPGWPasswordEditText.setEnabled(true);
 
                                             Map<String, String> map = extractValuesFromResponse(response);
                                             String isSuccess = map.get("SUCCESS");
@@ -424,8 +414,8 @@ public class MainActivity extends AppCompatActivity {
                                                     showToastWithString("断开连接失败,原因：" + reason, true);
                                                 }
                                             } else {
-                                                editor.putString("ipwg_username", ipwg_username);
-                                                editor.putString("ipwg_password", ipwg_password);
+                                                editor.putString("ipgw_username", ipgw_username);
+                                                editor.putString("ipgw_password", ipgw_password);
                                                 editor.commit();
                                                 if (operation.equals("connect")) {
                                                     showToastWithString("连接成功", true);
@@ -438,19 +428,19 @@ public class MainActivity extends AppCompatActivity {
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            mIPWGProgressWheel.setVisibility(View.INVISIBLE);
-                                            mIPWGConnectButton.setVisibility(View.VISIBLE);
-                                            mIPWGDisconnectButton.setVisibility(View.VISIBLE);
-                                            mIPWGUsernameEditText.setEnabled(true);
-                                            mIPWGPasswordEditText.setEnabled(true);
+                                            mIPGWProgressWheel.setVisibility(View.INVISIBLE);
+                                            mIPGWConnectButton.setVisibility(View.VISIBLE);
+                                            mIPGWDisconnectButton.setVisibility(View.VISIBLE);
+                                            mIPGWUsernameEditText.setEnabled(true);
+                                            mIPGWPasswordEditText.setEnabled(true);
                                             showToastWithString("连接超时，请检查WIFI是否连接到校园网", true);
                                         }
                                     }) {
                                 @Override
                                 protected Map<String, String> getParams() throws AuthFailureError {
                                     Map<String, String> params = new HashMap<String, String>();
-                                    params.put("uid", ipwg_username); // 20134649
-                                    params.put("password", ipwg_password); // 950426
+                                    params.put("uid", ipgw_username); // 20134649
+                                    params.put("password", ipgw_password); // 950426
                                     params.put("operation", operation);
                                     params.put("range", "2");
                                     params.put("timeout", "1");
@@ -458,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             };
                             // 此句会发送联网请求
-                            AppController.getInstance().addToRequestQueue(stringRequest, IPWG_TAG);
+                            AppController.getInstance().addToRequestQueue(stringRequest, IPGW_TAG);
                         }
                     }, 1500);
                 }
