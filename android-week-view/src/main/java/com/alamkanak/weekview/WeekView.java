@@ -153,43 +153,43 @@ public class WeekView extends View {
                 return true;
 
             // Calculate the direction to scroll.
-//            if (mCurrentScrollDirection == Direction.NONE) {
-//                // allow scrolling only in one direction
-//                if (Math.abs(distanceX) > Math.abs(distanceY)){
-//                    mCurrentScrollDirection = Direction.HORIZONTAL;
-//                }
-//                else {
-//                    mCurrentScrollDirection = Direction.VERTICAL;
-//                }
-//            }
-//
-//            // Calculate the new origin after scroll.
-//            switch (mCurrentScrollDirection) {
-//                case HORIZONTAL:
-//                    mCurrentOrigin.x -= distanceX * mXScrollingSpeed;
-//                    ViewCompat.postInvalidateOnAnimation(WeekView.this);
-//                    break;
-//                case VERTICAL:
-//                    mCurrentOrigin.y -= distanceY;
-//                    ViewCompat.postInvalidateOnAnimation(WeekView.this);
-//                    break;
-//            }
+            if (mCurrentScrollDirection == Direction.NONE) {
+                // allow scrolling only in one direction
+                if (Math.abs(distanceX) > Math.abs(distanceY)){
+                    mCurrentScrollDirection = Direction.HORIZONTAL;
+                }
+                else {
+                    mCurrentScrollDirection = Direction.VERTICAL;
+                }
+            }
+
+            // Calculate the new origin after scroll.
+            switch (mCurrentScrollDirection) {
+                case HORIZONTAL:
+                    mCurrentOrigin.x -= distanceX * mXScrollingSpeed;
+                    ViewCompat.postInvalidateOnAnimation(WeekView.this);
+                    break;
+                case VERTICAL:
+                    mCurrentOrigin.y -= distanceY;
+                    ViewCompat.postInvalidateOnAnimation(WeekView.this);
+                    break;
+            }
             return true;
         }
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//            mScroller.forceFinished(true);
-//
-//            mCurrentFlingDirection = mCurrentScrollDirection;
-//            if (mCurrentFlingDirection == Direction.HORIZONTAL){
-//                mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, (int) (velocityX * mXScrollingSpeed), 0, Integer.MIN_VALUE, Integer.MAX_VALUE, (int) -(mHourHeight * 24 + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - getHeight()), 0);
-//            }
-//            else if (mCurrentFlingDirection == Direction.VERTICAL){
-//                mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, 0, (int) velocityY, Integer.MIN_VALUE, Integer.MAX_VALUE, (int) -(mHourHeight * 24 + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - getHeight()), 0);
-//            }
-//
-//            ViewCompat.postInvalidateOnAnimation(WeekView.this);
+            mScroller.forceFinished(true);
+
+            mCurrentFlingDirection = mCurrentScrollDirection;
+            if (mCurrentFlingDirection == Direction.HORIZONTAL){
+                mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, (int) (velocityX * mXScrollingSpeed), 0, Integer.MIN_VALUE, Integer.MAX_VALUE, (int) -(mHourHeight * 24 + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - getHeight()), 0);
+            }
+            else if (mCurrentFlingDirection == Direction.VERTICAL){
+                mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, 0, (int) velocityY, Integer.MIN_VALUE, Integer.MAX_VALUE, (int) -(mHourHeight * 24 + mHeaderTextHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom + mTimeTextHeight/2 - getHeight()), 0);
+            }
+
+            ViewCompat.postInvalidateOnAnimation(WeekView.this);
             return true;
         }
 
@@ -752,7 +752,7 @@ public class WeekView extends View {
         SpannableStringBuilder bob = new SpannableStringBuilder();
         if (event.getName() != null) {
             bob.append(event.getName());
-            bob.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, bob.length(), 0);
+            bob.setSpan(new StyleSpan(Typeface.BOLD), 0, bob.length(), 0);
             bob.append(' ');
         }
 
@@ -1287,10 +1287,10 @@ public class WeekView extends View {
      *     <b>Note:</b> This method will only work if the week view is set to display more than 6 days at
      *     once.
      * </p>
-     * @param firstDayOfWeek The supported values are {@link java.util.Calendar#SUNDAY},
-     * {@link java.util.Calendar#MONDAY}, {@link java.util.Calendar#TUESDAY},
-     * {@link java.util.Calendar#WEDNESDAY}, {@link java.util.Calendar#THURSDAY},
-     * {@link java.util.Calendar#FRIDAY}.
+     * @param firstDayOfWeek The supported values are {@link Calendar#SUNDAY},
+     * {@link Calendar#MONDAY}, {@link Calendar#TUESDAY},
+     * {@link Calendar#WEDNESDAY}, {@link Calendar#THURSDAY},
+     * {@link Calendar#FRIDAY}.
      */
     public void setFirstDayOfWeek(int firstDayOfWeek) {
         mFirstDayOfWeek = firstDayOfWeek;

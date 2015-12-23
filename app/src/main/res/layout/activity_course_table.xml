@@ -17,9 +17,15 @@
 		app:headerColumnTextColor="#8f000000"
 		app:headerRowPadding="12dp"
 		app:columnGap="8dp"
-		app:noOfVisibleDays="7"
+		app:noOfVisibleDays="3"
 		app:headerRowBackgroundColor="#ffefefef"
 		app:dayBackgroundColor="#05000000"
 		app:todayBackgroundColor="#1848adff"
 		app:headerColumnBackground="#ffffffff"/>
+	<Button
+		android:id="@+id/test_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentRight="true"/>
 </RelativeLayout>
