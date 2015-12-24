@@ -40,7 +40,7 @@
             android:layout_width="96dp">
 
             <ImageView
-                android:id="@+id/today_weather_icon"
+                android:id="@+id/current_weather_icon"
                 android:layout_centerHorizontal="true"
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
@@ -49,7 +49,7 @@
                 android:src="@drawable/weather_sun"/>
 
             <TextView
-                android:id="@+id/today_weather_temp"
+                android:id="@+id/current_weather_temp"
                 android:layout_alignParentBottom="true"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -80,11 +80,47 @@
                 android:layout_width="wrap_content">
 
                 <TextView
+                    android:id="@+id/today_week_no"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:text="今天"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorOrange"/>
+
+                <ImageView
+                    android:id="@+id/today_weather_icon"
+                    android:layout_below="@id/today_week_no"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="36dp"
+                    android:layout_width="36dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/weather_sun"/>
+
+                <TextView
+                    android:id="@+id/today_weather_temp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:text="5º~18º"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorOrange"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:background="@drawable/card_foreground"
+                android:clickable="true"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_width="wrap_content">
+
+                <TextView
                     android:id="@+id/tomorrow_week_no"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
-                    android:text="周二"
+                    android:text="周三"
                     android:textAlignment="center"
                     android:textColor="@color/colorOrange"/>
 
@@ -106,6 +142,7 @@
                     android:text="5º~18º"
                     android:textAlignment="center"
                     android:textColor="@color/colorOrange"/>
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -120,13 +157,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
-                    android:text="周三"
+                    android:text="周四"
                     android:textAlignment="center"
                     android:textColor="@color/colorOrange"/>
 
                 <ImageView
                     android:id="@+id/third_day_weather_icon"
-                    android:layout_below="@id/third_day_week_no"
+                    android:layout_below="@+id/third_day_week_no"
                     android:layout_centerHorizontal="true"
                     android:layout_height="36dp"
                     android:layout_width="36dp"
@@ -135,43 +172,6 @@
 
                 <TextView
                     android:id="@+id/third_day_weather_temp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_width="match_parent"
-                    android:text="5º~18º"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorOrange"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:background="@drawable/card_foreground"
-                android:clickable="true"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_width="wrap_content">
-
-                <TextView
-                    android:id="@+id/forth_day_week_no"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
-                    android:text="周四"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorOrange"/>
-
-                <ImageView
-                    android:id="@+id/forth_day_weather_icon"
-                    android:layout_below="@id/forth_day_week_no"
-                    android:layout_centerHorizontal="true"
-                    android:layout_height="36dp"
-                    android:layout_width="36dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/weather_sun"/>
-
-                <TextView
-                    android:id="@+id/forth_day_weather_temp"
                     android:layout_alignParentBottom="true"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"

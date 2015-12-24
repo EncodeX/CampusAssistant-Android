@@ -20,30 +20,29 @@ import edu.neu.campusassistant.utils.AppController;
 public class WeatherItemView extends RelativeLayout {
     private Context mContext;
 
+    @Bind(R.id.current_weather_temp)
+    TextView mCurrentTemp;
     @Bind(R.id.today_weather_temp)
     TextView mTodayTemp;
     @Bind(R.id.tomorrow_weather_temp)
     TextView mTomorrowTemp;
     @Bind(R.id.third_day_weather_temp)
     TextView mThirdTemp;
-    @Bind(R.id.forth_day_weather_temp)
-    TextView mForthTemp;
 
+    @Bind(R.id.current_weather_icon)
+    ImageView mCurrentWeatherIcon;
     @Bind(R.id.today_weather_icon)
     ImageView mTodayWeatherIcon;
     @Bind(R.id.tomorrow_weather_icon)
     ImageView mTomorrowWeatherIcon;
     @Bind(R.id.third_day_weather_icon)
     ImageView mThirdWeatherIcon;
-    @Bind(R.id.forth_day_weather_icon)
-    ImageView mForthWeatherIcon;
 
     @Bind(R.id.tomorrow_week_no)
     TextView mTomorrowNo;
     @Bind(R.id.third_day_week_no)
     TextView mThirdNo;
-    @Bind(R.id.forth_day_week_no)
-    TextView mForthNo;
+
 
 
     public WeatherItemView(Context context) {
@@ -65,6 +64,10 @@ public class WeatherItemView extends RelativeLayout {
         mContext = context;
         ButterKnife.bind(this);
     }
+    public void setupCurrentTemperature(int temp){
+        String currentTemp = temp + "ºC";
+        mCurrentTemp.setText(currentTemp);
+    }
 
     public void setupTemperature(int index, int min, int max){
         String temp = min + "º~"+ max + "ºC";
@@ -78,16 +81,12 @@ public class WeatherItemView extends RelativeLayout {
             case 2:
                 mThirdTemp.setText(temp);
                 break;
-            case 3:
-                mForthTemp.setText(temp);
-                break;
         }
     }
 
     public void setupWeedNoTextview(int today){
         setupWeekNo(mTomorrowNo, today + 1);
         setupWeekNo(mThirdNo, today + 2);
-        setupWeekNo(mForthNo, today + 3);
     }
 
     private void setupWeekNo(TextView textView, int weekNo){
@@ -147,13 +146,16 @@ public class WeatherItemView extends RelativeLayout {
                     mThirdWeatherIcon.setImageResource(R.drawable.weather_sun);
                 }
                 break;
-            case 3:
-                if (resID!=0) {
-                    mForthWeatherIcon.setImageResource(resID);
-                }else {
-                    mForthWeatherIcon.setImageResource(R.drawable.weather_sun);
-                }
-                break;
+        }
+    }
+
+    public void setupCurrentWeatherIcon(String iconName){
+        Resources res = getResources();
+        int resID = res.getIdentifier("weather_"+iconName, "drawable", AppController.getContext().getPackageName());
+        if (resID!=0) {
+            mCurrentWeatherIcon.setImageResource(resID);
+        }else {
+            mCurrentWeatherIcon.setImageResource(R.drawable.weather_sun);
         }
     }
 }

@@ -121,19 +121,24 @@ public class MainActivity extends AppCompatActivity {
         /** 初始化操作 **/
         initView();
 
-        /** 获取天气 **/
-        obtainCurrentWeatherInfo();
-
         /** IP网关相关操作 **/
         ipgwOperation();
 
         /** 设置weekNo**/
         setupWeatherWeekNo();
-        /** 点击EditView以外区域关闭键盘 **/
-//        closeKeyboard(mDrawerLayout);
 
         /** FunctionButton开启新Activity **/
         mCheckClassListButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        /** 获取当前天气 **/
+        obtainCurrentWeatherInfo();
+
+        /** 获取每日天气 **/
+        obtainDaliyWeather();
     }
 
     private void initView() {
@@ -504,8 +509,39 @@ public class MainActivity extends AppCompatActivity {
      * 获取天气信息
      */
     private void obtainCurrentWeatherInfo() {
-        String url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=Shenyang,CN&cnt=4&units=metric&APPID=66e616f33710e6af3c0f25b185001dde";
+        String url = "http://api.openweathermap.org/data/2.5/weather?q=Shengyang,CN&units=metric&APPID=66e616f33710e6af3c0f25b185001dde";
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url
+                , new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("weather", response.toString());
+                try {
+                    JSONObject mainObject = response.getJSONObject("main");
+                    int currentTemp = mainObject.getInt("temp");
+                    mWeatherItem.setupCurrentTemperature(currentTemp);
 
+                    JSONObject weatherObject = response.getJSONArray("weather").getJSONObject(0);
+                    String icon = weatherObject.getString("icon");
+                    mWeatherItem.setupCurrentWeatherIcon(icon);
+                    Log.d("weather", "" + currentTemp);
+                    Log.d("weather", icon);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                showToastWithString("天气更新失败，请检查当前网路连接", true);
+                Log.d("weather", "Error: " + error.getMessage());
+            }
+        });
+    // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq, WEATHER_TAG);
+    }
+
+    private void obtainDaliyWeather() {
+        String url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=Shenyang,CN&cnt=3&units=metric&APPID=66e616f33710e6af3c0f25b185001dde";
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url
                 , new Response.Listener<JSONObject>() {
             @Override
@@ -516,14 +552,15 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < listArray.length(); i++) {
                         JSONObject object = listArray.getJSONObject(i);
                         JSONObject tempObject = object.getJSONObject("temp");
-                        int minTemp = (int)tempObject.getDouble("min");
-                        int maxTemp = (int)tempObject.getDouble("max");
+                        int minTemp = (int) tempObject.getDouble("min");
+                        int maxTemp = (int) tempObject.getDouble("max");
                         JSONObject weatherObject = object.getJSONArray("weather").getJSONObject(0);
                         String icon = weatherObject.getString("icon");
                         mWeatherItem.setupTemperature(i, minTemp, maxTemp);
                         mWeatherItem.setupWeatherIcon(i, icon);
-                        Log.d("weather", ""+minTemp);
-                        Log.d("weather", ""+maxTemp);
+
+                        Log.d("weather", "" + minTemp);
+                        Log.d("weather", "" + maxTemp);
                         Log.d("weather", icon);
                     }
                 } catch (JSONException e) {
@@ -533,6 +570,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                showToastWithString("天气更新失败，请检查当前网路连接", true);
                 Log.d("weather", "Error: " + error.getMessage());
             }
         });
@@ -540,11 +578,11 @@ public class MainActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(jsonObjReq, WEATHER_TAG);
     }
 
-    private void setupWeatherWeekNo(){
+    private void setupWeatherWeekNo() {
         Calendar calendar = Calendar.getInstance();
         Date todayDate = new Date();
         calendar.setTime(todayDate);
-        int i=calendar.get(Calendar.DAY_OF_WEEK);
+        int i = calendar.get(Calendar.DAY_OF_WEEK);
         mWeatherItem.setupWeedNoTextview(i);
     }
 }
