@@ -1,14 +1,11 @@
 package edu.neu.campusassistant.activity;
 
-import android.graphics.RectF;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
-import android.widget.Button;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
@@ -18,13 +15,13 @@ import com.alamkanak.weekview.WeekViewEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import edu.neu.campusassistant.R;
+import edu.neu.campusassistant.utils.Constants;
 
 public class CourseTableActivity extends AppCompatActivity {
 
@@ -34,10 +31,21 @@ public class CourseTableActivity extends AppCompatActivity {
 	@Bind(R.id.week_view)
 	WeekView mWeekView;
 
+	SharedPreferences mSharedPreferences;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_course_table);
+
+		// 初始化视图
+		initView();
+
+		// 初始化数据
+		initData();
+	}
+	
+	private void initView(){
 
 		ButterKnife.bind(this);
 
@@ -85,11 +93,14 @@ public class CourseTableActivity extends AppCompatActivity {
 		mWeekView.goToDate(calendar);
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
+	private void initData(){
+		mSharedPreferences = this.getSharedPreferences(Constants.SHARED_PREFS_KEY, MODE_PRIVATE);
 
-//		mWeekView.setHourHeight((int)(mWeekView.getCalendarAreaHeight() / 15));
+		String token = mSharedPreferences.getString(Constants.AAO_TOKEN, "");
+
+		if(!token.equals("")){
+
+		}
 	}
 
 	/**

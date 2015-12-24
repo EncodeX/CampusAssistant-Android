@@ -45,7 +45,9 @@ import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import edu.neu.campusassistant.utils.AnimateBuilder;
 import edu.neu.campusassistant.utils.AppController;
+import edu.neu.campusassistant.utils.Constants;
 import edu.neu.campusassistant.view.BoxLayout;
 import edu.neu.campusassistant.view.CircularRevealLayout;
 
@@ -145,12 +147,12 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         // 初始化sharedPreferences
-        sharedPreferences = getSharedPreferences("edu.neu.campusassistant.mainAvtivity.preference", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(Constants.SHARED_PREFS_KEY, MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         // 初始化文本框内容
-        ipgw_username = sharedPreferences.getString("ipgw_username", "");
-        ipgw_password = sharedPreferences.getString("ipgw_password", "");
+        ipgw_username = sharedPreferences.getString(Constants.IPGW_USERNAME, "");
+        ipgw_password = sharedPreferences.getString(Constants.IPGW_PASSWORD, "");
         mIPGWUsernameEditText.setText(ipgw_username);
         mIPGWPasswordEditText.setText(ipgw_password);
 
@@ -179,8 +181,6 @@ public class MainActivity extends AppCompatActivity {
                     mBoxYOffset = mBoxLayout.getHeight() / 6;
                     mBoxXOffset = mBoxLayout.getWidth() / 12;
 
-                    Log.d("Test", mCircularViewX + " " + mCircularViewY + " " + mCircularViewHeight + " " + mCircularViewWidth + " " + mCircularViewTranslateX + " " + mCircularViewTranslateY);
-
                     if (Build.VERSION.SDK_INT < 21) {
                         mCircularRevealLayout.setBackgroundColor(0xFFFFFFFF);
                     }
@@ -202,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-//				Log.d("Test","offset: "+slideOffset);
                 ViewHelper.setRotationY(mDrawerButton, (180 * (float) (Math.cos(Math.PI * (slideOffset - 1)) / 2 + 0.5)));
             }
 
@@ -213,13 +212,15 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                // 隐藏键盘
-                hideSoftKeyboard(MainActivity.this);
+
             }
 
             @Override
             public void onDrawerStateChanged(int newState) {
-
+				if(newState == DrawerLayout.STATE_DRAGGING || newState == DrawerLayout.STATE_SETTLING){
+					// 隐藏键盘
+					hideSoftKeyboard(MainActivity.this);
+				}
             }
         });
 
@@ -246,42 +247,45 @@ public class MainActivity extends AppCompatActivity {
             // get the final radius for the clipping circle
             int finalRadius = Math.max(mCircularRevealLayout.getWidth(), mCircularRevealLayout.getHeight());
 
-            // create the animator for this view (the start radius is zero)
-            Animator anim =
-                    ViewAnimationUtils.createCircularReveal(mCircularRevealLayout, circlecx, circlecy, mBoxFab.getWidth() / 2, finalRadius);
+	        animatorSet.playTogether(
+			        AnimateBuilder.setInterpolator(
+					        AnimateBuilder.buildCircularRevealAnimation(
+							        mCircularRevealLayout, circlecx, circlecy,
+							        mBoxFab.getWidth() / 2, finalRadius, 250),
+					        new AccelerateInterpolator(1.5f)
+			        ),
+			        AnimateBuilder.buildAbsoluteTranslateAnimation(
+					        mCircularRevealLayout, AnimateBuilder.DIRECTION_X,
+					        mCircularViewTranslateX, mCircularViewX, 200
+			        ),
+			        AnimateBuilder.buildAbsoluteTranslateAnimation(
+					        mCircularRevealLayout, AnimateBuilder.DIRECTION_Y,
+					        mCircularViewTranslateY, mCircularViewY, 200
+			        ),
+			        AnimateBuilder.buildColorAnimation(mCircularRevealLayout, 0xFFFF4081, 0xFFFFFFFF, 400),
+			        AnimateBuilder.buildTranslateAnimation(
+					        mBoxLayout, AnimateBuilder.DIRECTION_X,
+					        mBoxXOffset, 0.0f, 300)
+	        );
 
-            ObjectAnimator translateXAnim = ObjectAnimator.ofFloat(mCircularRevealLayout, "x", mCircularViewTranslateX, mCircularViewX);
-            ObjectAnimator translateYAnim = ObjectAnimator.ofFloat(mCircularRevealLayout, "y", mCircularViewTranslateY, mCircularViewY);
-            ObjectAnimator backgroundAnim = ObjectAnimator.ofObject(mCircularRevealLayout, "backgroundColor", new ArgbEvaluator(), 0xFFFF4081, 0xFFFFFFFF);
-            ObjectAnimator translateBoxXAnim = ObjectAnimator.ofFloat(mBoxLayout, "translationX", mBoxXOffset, 0.0f);
-
-            // make the view visible and start the animation
-            mBoxFab.setVisibility(View.INVISIBLE);
-            anim.setInterpolator(new AccelerateInterpolator(1.5f));
-            anim.setDuration(250);
-            translateXAnim.setDuration(200);
-            translateYAnim.setDuration(200);
-            backgroundAnim.setDuration(400);
-            translateBoxXAnim.setDuration(300);
-            animatorSet.playTogether(anim, translateXAnim, translateYAnim, backgroundAnim, translateBoxXAnim);
+	        mBoxFab.setVisibility(View.INVISIBLE);
         } else {
-            ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(mCircularRevealLayout, "alpha", 0.0f, 1.0f);
-            ObjectAnimator fabFadeAnim = ObjectAnimator.ofFloat(mBoxFab, "alpha", 1.0f, 0.0f);
-            fadeAnim.setDuration(200);
-            fabFadeAnim.setDuration(200);
-            mBoxFab.setEnabled(false);
-            animatorSet.playTogether(fadeAnim);
+            animatorSet.playTogether(
+		            AnimateBuilder.buildAlphaAnimation(mCircularRevealLayout, 0.0f, 1.0f, 200),
+		            AnimateBuilder.buildAlphaAnimation(mBoxFab, 1.0f, 0.0f, 200)
+            );
+
+	        mBoxFab.setEnabled(false);
         }
-        ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar, "alpha", 0.0f, 1.0f);
-        ObjectAnimator dimBoxAnim = ObjectAnimator.ofFloat(mBoxLayout, "alpha", 0.0f, 1.0f);
-        ObjectAnimator translateBoxYAnim = ObjectAnimator.ofFloat(mBoxLayout, "translationY", mBoxYOffset, 0.0f);
-        dimBoxBarAnim.setDuration(200);
-        dimBoxAnim.setDuration(300);
-        translateBoxYAnim.setDuration(350);
-        dimBoxAnim.setStartDelay(100);
-        mBoxTitleBar.setVisibility(View.VISIBLE);
-        mCircularRevealLayout.setVisibility(View.VISIBLE);
-        animatorSet.playTogether(dimBoxBarAnim, dimBoxAnim, translateBoxYAnim);
+
+        animatorSet.playTogether(
+		        AnimateBuilder.buildAlphaAnimation(mBoxTitleBar, 0.0f, 1.0f, 200),
+		        AnimateBuilder.setStartDelay(AnimateBuilder.buildAlphaAnimation(mBoxLayout, 0.0f, 1.0f, 300), 100),
+		        AnimateBuilder.buildTranslateAnimation(mBoxLayout, AnimateBuilder.DIRECTION_Y, mBoxYOffset, 0.0f, 350)
+        );
+
+	    mBoxTitleBar.setVisibility(View.VISIBLE);
+	    mCircularRevealLayout.setVisibility(View.VISIBLE);
         mCloseBoxButton.setEnabled(true);
         animatorSet.start();
     }
@@ -290,43 +294,40 @@ public class MainActivity extends AppCompatActivity {
     private void applyCircularCloseAnimation() {
         AnimatorSet animatorSet = new AnimatorSet();
         if (Build.VERSION.SDK_INT >= 21) {
-            // get the center for the clipping circle
             int circlecx = mCircularViewWidth / 2;
             int circlecy = mCircularViewHeight / 2;
 
-            // get the initial radius for the clipping circle
             int initialRadius = Math.max(mCircularRevealLayout.getWidth(), mCircularRevealLayout.getHeight());
 
-            // create the animation (the final radius is zero)
-            Animator anim =
-                    ViewAnimationUtils.createCircularReveal(mCircularRevealLayout, circlecx, circlecy, initialRadius, mBoxFab.getWidth() / 2);
-
-            ObjectAnimator translateXAnim = ObjectAnimator.ofFloat(mCircularRevealLayout, "x", mCircularViewX, mCircularViewTranslateX);
-            ObjectAnimator translateYAnim = ObjectAnimator.ofFloat(mCircularRevealLayout, "y", mCircularViewY, mCircularViewTranslateY);
-            ObjectAnimator backgroundAnim = ObjectAnimator.ofObject(mCircularRevealLayout, "backgroundColor", new ArgbEvaluator(), 0xFFFFFFFF, 0xFFFF4081);
-
-            // start the animation
-            anim.setInterpolator(new DecelerateInterpolator(2.0f));
-            anim.setDuration(400);
-            translateXAnim.setDuration(200);
-            translateYAnim.setDuration(200);
-            backgroundAnim.setDuration(200);
-            animatorSet.playTogether(anim, translateXAnim, translateYAnim, backgroundAnim);
+            animatorSet.playTogether(
+		            AnimateBuilder.setInterpolator(
+				            AnimateBuilder.buildCircularRevealAnimation(
+						            mCircularRevealLayout, circlecx, circlecy,
+						            initialRadius, mBoxFab.getWidth() / 2, 400),
+				            new DecelerateInterpolator(2.0f)
+		            ),
+		            AnimateBuilder.buildAbsoluteTranslateAnimation(
+				            mCircularRevealLayout, AnimateBuilder.DIRECTION_X,
+				            mCircularViewX, mCircularViewTranslateX, 200
+		            ),
+		            AnimateBuilder.buildAbsoluteTranslateAnimation(
+				            mCircularRevealLayout, AnimateBuilder.DIRECTION_Y,
+				            mCircularViewY, mCircularViewTranslateY, 200
+		            ),
+		            AnimateBuilder.buildColorAnimation(mCircularRevealLayout, 0xFFFFFFFF, 0xFFFF4081, 200)
+            );
         } else {
-            ObjectAnimator viewFadeAnim = ObjectAnimator.ofFloat(mCircularRevealLayout, "alpha", 1.0f, 0.0f);
-            ObjectAnimator fabFadeAnim = ObjectAnimator.ofFloat(mBoxFab, "alpha", 0.0f, 1.0f);
-            ObjectAnimator translateBoxYAnim = ObjectAnimator.ofFloat(mBoxLayout, "translationY", 0.0f, mBoxYOffset);
-            viewFadeAnim.setDuration(200);
-            fabFadeAnim.setDuration(200);
-            translateBoxYAnim.setDuration(350);
-            animatorSet.playTogether(viewFadeAnim, fabFadeAnim, translateBoxYAnim);
+            animatorSet.playTogether(
+		            AnimateBuilder.buildAlphaAnimation(mCircularRevealLayout, 1.0f, 0.0f, 200),
+		            AnimateBuilder.buildAlphaAnimation(mBoxFab, 0.0f, 1.0f, 200),
+		            AnimateBuilder.buildTranslateAnimation(mBoxLayout, AnimateBuilder.DIRECTION_Y, 0.0f, mBoxYOffset, 350)
+            );
         }
-        ObjectAnimator dimBoxBarAnim = ObjectAnimator.ofFloat(mBoxTitleBar, "alpha", 1.0f, 0.0f);
-        ObjectAnimator dimBoxAnim = ObjectAnimator.ofFloat(mBoxLayout, "alpha", 1.0f, 0.0f);
-        dimBoxBarAnim.setDuration(300);
-        dimBoxAnim.setStartDelay(100);
-        dimBoxAnim.setDuration(200);
-        animatorSet.playTogether(dimBoxBarAnim, dimBoxAnim);
+
+        animatorSet.playTogether(
+		        AnimateBuilder.buildAlphaAnimation(mBoxTitleBar, 1.0f, 0.0f, 300),
+		        AnimateBuilder.setStartDelay(AnimateBuilder.buildAlphaAnimation(mBoxLayout, 1.0f, 0.0f, 200), 100)
+        );
         animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animator) {
@@ -383,81 +384,117 @@ public class MainActivity extends AppCompatActivity {
             showToastWithString("请输入校园网密码", true);
         } else {
             hideSoftKeyboard(MainActivity.this); // 隐藏键盘
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
-                    //execute the task
-                    mIPGWProgressWheel.setVisibility(View.VISIBLE);
-                    mIPGWConnectButton.setVisibility(View.INVISIBLE);
-                    mIPGWDisconnectButton.setVisibility(View.INVISIBLE);
-                    mIPGWUsernameEditText.setEnabled(false);
-                    mIPGWPasswordEditText.setEnabled(false);
 
-                    new Handler().postDelayed(new Runnable() {
+	        final AnimatorSet finishRequestAnimation = new AnimatorSet();
+
+	        finishRequestAnimation.playTogether(
+			        AnimateBuilder.buildAlphaAnimation(mIPGWConnectButton, 0.0f, 1.0f, 250),
+			        AnimateBuilder.buildAlphaAnimation(mIPGWDisconnectButton, 0.0f, 1.0f, 250),
+			        AnimateBuilder.buildAlphaAnimation(mIPGWProgressWheel, 1.0f, 0.0f, 250)
+	        );
+
+	        finishRequestAnimation.addListener(new Animator.AnimatorListener() {
+		        @Override
+		        public void onAnimationStart(Animator animator) {
+			        mIPGWConnectButton.setVisibility(View.VISIBLE);
+			        mIPGWDisconnectButton.setVisibility(View.VISIBLE);
+		        }
+
+		        @Override
+		        public void onAnimationEnd(Animator animator) {
+			        mIPGWProgressWheel.setVisibility(View.INVISIBLE);
+		        }
+
+		        @Override
+		        public void onAnimationCancel(Animator animator) {}
+
+		        @Override
+		        public void onAnimationRepeat(Animator animator) {}
+	        });
+
+            /** ip网关与网络请求 **/
+            final StringRequest stringRequest = new StringRequest(
+                    Request.Method.POST,
+                    "http://ipgw.neu.edu.cn/ipgw/ipgw.ipgw",
+                    new Response.Listener<String>() {
                         @Override
-                        public void run() {
+                        public void onResponse(String response) {
+                            mIPGWUsernameEditText.setEnabled(true);
+                            mIPGWPasswordEditText.setEnabled(true);
 
-                            /** ip网关与网络请求 **/
-                            StringRequest stringRequest = new StringRequest(
-                                    Request.Method.POST,
-                                    "http://ipgw.neu.edu.cn/ipgw/ipgw.ipgw",
-                                    new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            mIPGWProgressWheel.setVisibility(View.INVISIBLE);
-                                            mIPGWConnectButton.setVisibility(View.VISIBLE);
-                                            mIPGWDisconnectButton.setVisibility(View.VISIBLE);
-                                            mIPGWUsernameEditText.setEnabled(true);
-                                            mIPGWPasswordEditText.setEnabled(true);
-
-                                            Map<String, String> map = extractValuesFromResponse(response);
-                                            String isSuccess = map.get("SUCCESS");
-                                            if (isSuccess.equals("NO")) {
-                                                String reason = map.get("REASON");
-                                                if (operation.equals("connect")) {
-                                                    showToastWithString("连接失败,原因：" + reason, true);
-                                                } else {
-                                                    showToastWithString("断开连接失败,原因：" + reason, true);
-                                                }
-                                            } else {
-                                                editor.putString("ipgw_username", ipgw_username);
-                                                editor.putString("ipgw_password", ipgw_password);
-                                                editor.commit();
-                                                if (operation.equals("connect")) {
-                                                    showToastWithString("连接成功", true);
-                                                } else {
-                                                    showToastWithString("断开连接成功", true);
-                                                }
-                                            }
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            mIPGWProgressWheel.setVisibility(View.INVISIBLE);
-                                            mIPGWConnectButton.setVisibility(View.VISIBLE);
-                                            mIPGWDisconnectButton.setVisibility(View.VISIBLE);
-                                            mIPGWUsernameEditText.setEnabled(true);
-                                            mIPGWPasswordEditText.setEnabled(true);
-                                            showToastWithString("连接超时，请检查WIFI是否连接到校园网", true);
-                                        }
-                                    }) {
-                                @Override
-                                protected Map<String, String> getParams() throws AuthFailureError {
-                                    Map<String, String> params = new HashMap<String, String>();
-                                    params.put("uid", ipgw_username); // 20134649
-                                    params.put("password", ipgw_password); // 950426
-                                    params.put("operation", operation);
-                                    params.put("range", "2");
-                                    params.put("timeout", "1");
-                                    return params;
+                            Map<String, String> map = extractValuesFromResponse(response);
+                            String isSuccess = map.get("SUCCESS");
+                            if (isSuccess.equals("NO")) {
+                                String reason = map.get("REASON");
+                                if (operation.equals("connect")) {
+                                    showToastWithString("连接失败,原因：" + reason, true);
+                                } else {
+                                    showToastWithString("断开连接失败,原因：" + reason, true);
                                 }
-                            };
-                            // 此句会发送联网请求
-                            AppController.getInstance().addToRequestQueue(stringRequest, IPGW_TAG);
+                            } else {
+                                editor.putString(Constants.IPGW_USERNAME, ipgw_username);
+                                editor.putString(Constants.IPGW_PASSWORD, ipgw_password);
+                                editor.commit();
+                                if (operation.equals("connect")) {
+                                    showToastWithString("连接成功", true);
+                                } else {
+                                    showToastWithString("断开连接成功", true);
+                                }
+                            }
+	                        finishRequestAnimation.start();
                         }
-                    }, 1500);
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            mIPGWUsernameEditText.setEnabled(true);
+                            mIPGWPasswordEditText.setEnabled(true);
+                            showToastWithString("连接超时，请检查WIFI是否连接到校园网", true);
+
+	                        finishRequestAnimation.start();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("uid", ipgw_username);
+                    params.put("password", ipgw_password);
+                    params.put("operation", operation);
+                    params.put("range", "2");
+                    params.put("timeout", "1");
+                    return params;
                 }
-            }, 1000);
+            };
+
+	        AnimatorSet startRequestAnimation = new AnimatorSet();
+	        startRequestAnimation.playTogether(
+			        AnimateBuilder.buildAlphaAnimation(mIPGWConnectButton, 1.0f, 0.0f, 250),
+			        AnimateBuilder.buildAlphaAnimation(mIPGWDisconnectButton, 1.0f, 0.0f, 250),
+			        AnimateBuilder.buildAlphaAnimation(mIPGWProgressWheel, 0.0f, 1.0f, 250)
+	        );
+
+	        startRequestAnimation.addListener(new Animator.AnimatorListener() {
+		        @Override
+		        public void onAnimationStart(Animator animator) {
+			        mIPGWProgressWheel.setVisibility(View.VISIBLE);
+		        }
+
+		        @Override
+		        public void onAnimationEnd(Animator animator) {
+			        // 此句会发送联网请求
+			        AppController.getInstance().addToRequestQueue(stringRequest, IPGW_TAG);
+			        mIPGWConnectButton.setVisibility(View.INVISIBLE);
+			        mIPGWDisconnectButton.setVisibility(View.INVISIBLE);
+		        }
+
+		        @Override
+		        public void onAnimationCancel(Animator animator) {}
+
+		        @Override
+		        public void onAnimationRepeat(Animator animator) {}
+	        });
+
+	        startRequestAnimation.start();
         }
     }
 
