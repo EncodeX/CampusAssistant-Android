@@ -519,9 +519,6 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 显示Toast
-     *
-     * @param message
-     * @param isShort
      */
     private void showToastWithString(String message, boolean isShort) {
         if (!isShort) {
@@ -623,7 +620,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupButtonTargetActivity(){
         mCheckClassListButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
         mCheckEmprtClassroomButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
-        mCheckGradeButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
+        mCheckGradeButton.setIntentActivity("edu.neu.campusassistant.activity.GradeListActivity");
         mCheckTextAgendaButton.setIntentActivity("edu.neu.campusassistant.activity.ExamAgendaListActivity");
     }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="edu.neu.campusassistant"
-		  xmlns:android="http://schemas.android.com/apk/res/android">
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -23,6 +23,8 @@
         <activity android:name=".activity.CourseTableActivity">
         </activity>
         <activity android:name=".activity.ExamAgendaListActivity">
+        </activity>
+        <activity android:name=".activity.GradeListActivity">
         </activity>
     </application>
 

@@ -26,4 +26,13 @@
 		<item name="android:textColor">@color/colorAccent</item>
 	</style>
 
+	<style name="AppTheme.Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
+
+	</style>
+
+	<style name="Theme.AlertDialogPro.Material.Light" parent="Base.Theme.AlertDialogPro.Material.Light">
+		<item name="android:listChoiceIndicatorSingle">@drawable/abc_btn_radio_material</item>
+		<item name="android:listChoiceIndicatorMultiple">@drawable/abc_btn_check_material</item>
+	</style>
+
 </resources>
