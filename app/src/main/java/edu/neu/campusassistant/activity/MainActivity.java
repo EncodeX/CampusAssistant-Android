@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -53,6 +54,7 @@ import edu.neu.campusassistant.view.CircularRevealLayout;
 
 import edu.neu.campusassistant.R;
 import edu.neu.campusassistant.view.FunctionButton;
+import edu.neu.campusassistant.view.TestDialogFragment;
 import edu.neu.campusassistant.view.WeatherItemView;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
@@ -61,7 +63,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TestDialogFragment.TestDialogListener {
 
     private int mCircularViewX;
     private int mCircularViewY;
@@ -114,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
     ProgressWheel mIPGWProgressWheel;
     @Bind(R.id.home_weather_item)
     WeatherItemView mWeatherItem;
+	@Bind(R.id.account_education_system)
+	RelativeLayout mAAOAcountLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +137,17 @@ public class MainActivity extends AppCompatActivity {
         mCheckClassListButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
     }
 
-    @Override
+	@Override
+	public void onDialogNegativeClick(AppCompatDialogFragment dialog) {
+		Log.d("Dialog","Cancel");
+	}
+
+	@Override
+	public void onDialogPositiveClick(AppCompatDialogFragment dialog) {
+		Log.d("Dialog","OK");
+	}
+
+	@Override
     protected void onResume() {
         super.onResume();
         /** 获取当前天气 **/
@@ -206,22 +220,16 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onDrawerOpened(View drawerView) {
-
-            }
+            public void onDrawerOpened(View drawerView) {}
 
             @Override
             public void onDrawerClosed(View drawerView) {
-
+	            // 隐藏键盘
+	            hideSoftKeyboard(MainActivity.this);
             }
 
             @Override
-            public void onDrawerStateChanged(int newState) {
-				if(newState == DrawerLayout.STATE_DRAGGING || newState == DrawerLayout.STATE_SETTLING){
-					// 隐藏键盘
-					hideSoftKeyboard(MainActivity.this);
-				}
-            }
+            public void onDrawerStateChanged(int newState) {}
         });
 
         mDrawerButton.setOnClickListener(new View.OnClickListener() {
@@ -362,11 +370,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 AppController.getInstance().cancelPendingRequests(IPGW_TAG);
-                mIPGWProgressWheel.setVisibility(View.INVISIBLE);
-                mIPGWConnectButton.setVisibility(View.VISIBLE);
-                mIPGWDisconnectButton.setVisibility(View.VISIBLE);
-                mIPGWUsernameEditText.setEnabled(true);
-                mIPGWPasswordEditText.setEnabled(true);
+	            buildIPGWFinishRequestAnimation().start();
             }
         });
 
@@ -385,32 +389,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             hideSoftKeyboard(MainActivity.this); // 隐藏键盘
 
-	        final AnimatorSet finishRequestAnimation = new AnimatorSet();
-
-	        finishRequestAnimation.playTogether(
-			        AnimateBuilder.buildAlphaAnimation(mIPGWConnectButton, 0.0f, 1.0f, 250),
-			        AnimateBuilder.buildAlphaAnimation(mIPGWDisconnectButton, 0.0f, 1.0f, 250),
-			        AnimateBuilder.buildAlphaAnimation(mIPGWProgressWheel, 1.0f, 0.0f, 250)
-	        );
-
-	        finishRequestAnimation.addListener(new Animator.AnimatorListener() {
-		        @Override
-		        public void onAnimationStart(Animator animator) {
-			        mIPGWConnectButton.setVisibility(View.VISIBLE);
-			        mIPGWDisconnectButton.setVisibility(View.VISIBLE);
-		        }
-
-		        @Override
-		        public void onAnimationEnd(Animator animator) {
-			        mIPGWProgressWheel.setVisibility(View.INVISIBLE);
-		        }
-
-		        @Override
-		        public void onAnimationCancel(Animator animator) {}
-
-		        @Override
-		        public void onAnimationRepeat(Animator animator) {}
-	        });
+	        final AnimatorSet finishRequestAnimation = buildIPGWFinishRequestAnimation();
 
             /** ip网关与网络请求 **/
             final StringRequest stringRequest = new StringRequest(
@@ -497,6 +476,37 @@ public class MainActivity extends AppCompatActivity {
 	        startRequestAnimation.start();
         }
     }
+
+	private AnimatorSet buildIPGWFinishRequestAnimation(){
+		AnimatorSet finishRequestAnimation = new AnimatorSet();
+
+		finishRequestAnimation.playTogether(
+				AnimateBuilder.buildAlphaAnimation(mIPGWConnectButton, 0.0f, 1.0f, 250),
+				AnimateBuilder.buildAlphaAnimation(mIPGWDisconnectButton, 0.0f, 1.0f, 250),
+				AnimateBuilder.buildAlphaAnimation(mIPGWProgressWheel, 1.0f, 0.0f, 250)
+		);
+
+		finishRequestAnimation.addListener(new Animator.AnimatorListener() {
+			@Override
+			public void onAnimationStart(Animator animator) {
+				mIPGWConnectButton.setVisibility(View.VISIBLE);
+				mIPGWDisconnectButton.setVisibility(View.VISIBLE);
+			}
+
+			@Override
+			public void onAnimationEnd(Animator animator) {
+				mIPGWProgressWheel.setVisibility(View.INVISIBLE);
+			}
+
+			@Override
+			public void onAnimationCancel(Animator animator) {}
+
+			@Override
+			public void onAnimationRepeat(Animator animator) {}
+		});
+
+		return finishRequestAnimation;
+	}
 
     /**
      * 隐藏键盘

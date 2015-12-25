@@ -71,7 +71,7 @@ public class WeatherItemView extends RelativeLayout {
 
     public void setupTemperature(int index, int min, int max){
 //        String temp = min + "º~"+ max + "ºC";
-        String temp = min + "º ~ "+ max + "º";
+        String temp = max + "º ~ "+ min + "º";
         switch (index){
             case 0:
                 mTodayTemp.setText(temp);
