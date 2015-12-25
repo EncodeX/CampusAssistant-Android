@@ -7,6 +7,8 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
@@ -29,6 +31,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.alertdialogpro.AlertDialogPro;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -77,8 +80,11 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
     private String ipgw_username;
     private String ipgw_password;
 
-    public static final String IPGW_TAG = "IPGW";
+    public static final String IPGW_TAG = "ipwg";
     public static final String WEATHER_TAG = "weather";
+
+    private int mTheme = R.style.Theme_AlertDialogPro_Material_Light;
+    private static final int NATIVE_THEME = Integer.MIN_VALUE;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -102,8 +108,16 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
     RelativeLayout mSubDrawer;
     @Bind(R.id.drawer_button)
     ImageButton mDrawerButton;
+
     @Bind(R.id.check_class_list_button)
     FunctionButton mCheckClassListButton;
+    @Bind(R.id.check_empty_classroom_button)
+    FunctionButton mCheckEmprtClassroomButton;
+    @Bind(R.id.check_grade_button)
+    FunctionButton mCheckGradeButton;
+    @Bind(R.id.check_test_agenda_button)
+    FunctionButton mCheckTextAgendaButton;
+
     @Bind(R.id.drawer_ipgw_connect_button)
     Button mIPGWConnectButton;
     @Bind(R.id.drawer_ipgw_disconnect_button)
@@ -119,6 +133,9 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
 	@Bind(R.id.account_education_system)
 	RelativeLayout mAAOAcountLayout;
 
+    @Bind(R.id.account_education_system)
+    RelativeLayout mEducationSystemAccountLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,6 +144,12 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
         /** 初始化操作 **/
         initView();
 
+        /** 获取当前天气 **/
+        obtainCurrentWeatherInfo();
+
+        /** 获取每日天气 **/
+        obtainDaliyWeather();
+
         /** IP网关相关操作 **/
         ipgwOperation();
 
@@ -134,7 +157,15 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
         setupWeatherWeekNo();
 
         /** FunctionButton开启新Activity **/
-        mCheckClassListButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
+        setupButtonTargetActivity();
+
+        mEducationSystemAccountLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMessageAlertDialog();
+            }
+        });
+
     }
 
 	@Override
@@ -150,11 +181,6 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
 	@Override
     protected void onResume() {
         super.onResume();
-        /** 获取当前天气 **/
-        obtainCurrentWeatherInfo();
-
-        /** 获取每日天气 **/
-        obtainDaliyWeather();
     }
 
     private void initView() {
@@ -540,9 +566,6 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
 
     /**
      * 显示Toast
-     *
-     * @param message
-     * @param isShort
      */
     private void showToastWithString(String message, boolean isShort) {
         if (!isShort) {
@@ -553,7 +576,7 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
     }
 
     /**
-     * 获取天气信息
+     * 获取当前天气信息
      */
     private void obtainCurrentWeatherInfo() {
         String url = "http://api.openweathermap.org/data/2.5/weather?q=Shengyang,CN&units=metric&APPID=66e616f33710e6af3c0f25b185001dde";
@@ -587,6 +610,9 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
         AppController.getInstance().addToRequestQueue(jsonObjReq, WEATHER_TAG);
     }
 
+    /**
+     * 获取每日信息
+     */
     private void obtainDaliyWeather() {
         String url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=Shenyang,CN&cnt=3&units=metric&APPID=66e616f33710e6af3c0f25b185001dde";
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url
@@ -617,7 +643,6 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                showToastWithString("天气更新失败，请检查当前网路连接", true);
                 Log.d("weather", "Error: " + error.getMessage());
             }
         });
@@ -625,6 +650,9 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
         AppController.getInstance().addToRequestQueue(jsonObjReq, WEATHER_TAG);
     }
 
+    /**
+     * 设置星期textView
+     */
     private void setupWeatherWeekNo() {
         Calendar calendar = Calendar.getInstance();
         Date todayDate = new Date();
@@ -632,4 +660,44 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
         int i = calendar.get(Calendar.DAY_OF_WEEK);
         mWeatherItem.setupWeedNoTextview(i);
     }
+
+    /**
+     * 设置学习生活的底部四个按钮所要跳转的activity
+     */
+    private void setupButtonTargetActivity(){
+        mCheckClassListButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
+        mCheckEmprtClassroomButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
+        mCheckGradeButton.setIntentActivity("edu.neu.campusassistant.activity.GradeListActivity");
+        mCheckTextAgendaButton.setIntentActivity("edu.neu.campusassistant.activity.ExamAgendaListActivity");
+    }
+
+    private AlertDialog.Builder createAlertDialogBuilder() {
+        if (mTheme == NATIVE_THEME) {
+            return new AlertDialog.Builder(this);
+        }
+
+        return new AlertDialogPro.Builder(this, mTheme);
+    }
+
+    private void showMessageAlertDialog() {
+        createAlertDialogBuilder()
+                .setTitle(R.string.app_name)
+                .setMessage("Hello, charming AlertDialogPro!")
+                .setPositiveButton("Nice Job", new ButtonClickedListener("Dismiss"))
+                .show();
+    }
+
+    private class ButtonClickedListener implements DialogInterface.OnClickListener {
+        private CharSequence mShowWhenClicked;
+
+        public ButtonClickedListener(CharSequence showWhenClicked) {
+            mShowWhenClicked = showWhenClicked;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            showToastWithString("\"" + mShowWhenClicked + "\"" + " button clicked.", true);
+        }
+    }
+
 }
