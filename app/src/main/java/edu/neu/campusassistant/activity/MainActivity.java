@@ -3,15 +3,10 @@ package edu.neu.campusassistant.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -21,7 +16,6 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
@@ -31,7 +25,6 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.alertdialogpro.AlertDialogPro;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -57,7 +50,7 @@ import edu.neu.campusassistant.view.CircularRevealLayout;
 
 import edu.neu.campusassistant.R;
 import edu.neu.campusassistant.view.FunctionButton;
-import edu.neu.campusassistant.view.TestDialogFragment;
+import edu.neu.campusassistant.view.LoginDialogFragment;
 import edu.neu.campusassistant.view.WeatherItemView;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
@@ -66,7 +59,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity implements TestDialogFragment.TestDialogListener {
+public class MainActivity extends AppCompatActivity implements LoginDialogFragment.LoginDialogListener {
 
     private int mCircularViewX;
     private int mCircularViewY;
@@ -80,11 +73,8 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
     private String ipgw_username;
     private String ipgw_password;
 
-    public static final String IPGW_TAG = "ipwg";
+    public static final String IPGW_TAG = "IPGW";
     public static final String WEATHER_TAG = "weather";
-
-    private int mTheme = R.style.Theme_AlertDialogPro_Material_Light;
-    private static final int NATIVE_THEME = Integer.MIN_VALUE;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -112,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
     @Bind(R.id.check_class_list_button)
     FunctionButton mCheckClassListButton;
     @Bind(R.id.check_empty_classroom_button)
-    FunctionButton mCheckEmprtClassroomButton;
+    FunctionButton mCheckEmptyClassroomButton;
     @Bind(R.id.check_grade_button)
     FunctionButton mCheckGradeButton;
     @Bind(R.id.check_test_agenda_button)
@@ -130,11 +120,13 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
     ProgressWheel mIPGWProgressWheel;
     @Bind(R.id.home_weather_item)
     WeatherItemView mWeatherItem;
-	@Bind(R.id.account_education_system)
-	RelativeLayout mAAOAcountLayout;
 
-    @Bind(R.id.account_education_system)
-    RelativeLayout mEducationSystemAccountLayout;
+	@Bind(R.id.account_education_system)
+	RelativeLayout mAAOAccountLayout;
+	@Bind(R.id.account_library)
+	RelativeLayout mLibraryAccountLayout;
+	@Bind(R.id.account_ecard)
+	RelativeLayout mEcardAccountLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,32 +150,38 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
 
         /** FunctionButton开启新Activity **/
         setupButtonTargetActivity();
-
-        mEducationSystemAccountLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showMessageAlertDialog();
-            }
-        });
-
     }
 
 	@Override
-	public void onDialogNegativeClick(AppCompatDialogFragment dialog) {
-		Log.d("Dialog","Cancel");
+	public void onCancel(AppCompatDialogFragment dialog) {
+		Log.d("LoginDialog","Cancel");
+		mSubDrawer.requestFocus();
+		hideSoftKeyboard(this);
 	}
 
 	@Override
-	public void onDialogPositiveClick(AppCompatDialogFragment dialog) {
-		Log.d("Dialog","OK");
+	public void onError(AppCompatDialogFragment dialog) {
+		Log.d("LoginDialog","Error");
+		hideSoftKeyboard(this);
+	}
+
+	@Override
+	public void onLoginSuccess(AppCompatDialogFragment dialog) {
+		Log.d("LoginDialog","OK");
+		hideSoftKeyboard(this);
 	}
 
 	@Override
     protected void onResume() {
         super.onResume();
+        /** 获取当前天气 **/
+        obtainCurrentWeatherInfo();
+
+        /** 获取每日天气 **/
+        obtainDaliyWeather();
     }
 
-    private void initView() {
+	private void initView() {
         ButterKnife.bind(this);
 
         // 初始化sharedPreferences
@@ -196,9 +194,11 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
         mIPGWUsernameEditText.setText(ipgw_username);
         mIPGWPasswordEditText.setText(ipgw_password);
 
+	    // 初始化AppBar
         setSupportActionBar(mToolBar);
         mAppBar = getSupportActionBar();
 
+	    // FAB点击动画
         mBoxFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -230,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
             }
         });
 
+	    // FAB关闭动画
         mCloseBoxButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -237,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
             }
         });
 
+	    // RightNavDrawer初始化
         mDrawerLayout.setScrimColor(0x66000000);
 
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -268,6 +270,43 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
                 }
             }
         });
+
+	    // 账户绑定相关按钮
+	    mAAOAccountLayout.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+			    LoginDialogFragment dialog = new LoginDialogFragment();
+			    Bundle args = new Bundle();
+			    args.putInt(LoginDialogFragment.ACCOUNT_TYPE_KEY, LoginDialogFragment.ACCOUNT_TYPE_AAO);
+			    dialog.setArguments(args);
+
+			    dialog.show(getSupportFragmentManager(), "aao_account_login");
+		    }
+	    });
+
+	    mLibraryAccountLayout.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View view) {
+			    LoginDialogFragment dialog = new LoginDialogFragment();
+			    Bundle args = new Bundle();
+			    args.putInt(LoginDialogFragment.ACCOUNT_TYPE_KEY, LoginDialogFragment.ACCOUNT_TYPE_LIBRARY);
+			    dialog.setArguments(args);
+
+			    dialog.show(getSupportFragmentManager(), "library_account_login");
+		    }
+	    });
+
+	    mEcardAccountLayout.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View view) {
+			    LoginDialogFragment dialog = new LoginDialogFragment();
+			    Bundle args = new Bundle();
+			    args.putInt(LoginDialogFragment.ACCOUNT_TYPE_KEY, LoginDialogFragment.ACCOUNT_TYPE_ECARD);
+			    dialog.setArguments(args);
+
+			    dialog.show(getSupportFragmentManager(), "ecard_account_login");
+		    }
+	    });
     }
 
     @TargetApi(21)
@@ -606,13 +645,10 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
                 Log.d("weather", "Error: " + error.getMessage());
             }
         });
-    // Adding request to request queue
+        // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjReq, WEATHER_TAG);
     }
 
-    /**
-     * 获取每日信息
-     */
     private void obtainDaliyWeather() {
         String url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=Shenyang,CN&cnt=3&units=metric&APPID=66e616f33710e6af3c0f25b185001dde";
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url
@@ -643,10 +679,11 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                showToastWithString("天气更新失败，请检查当前网路连接", true);
                 Log.d("weather", "Error: " + error.getMessage());
             }
         });
-// Adding request to request queue
+		// Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjReq, WEATHER_TAG);
     }
 
@@ -666,38 +703,8 @@ public class MainActivity extends AppCompatActivity implements TestDialogFragmen
      */
     private void setupButtonTargetActivity(){
         mCheckClassListButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
-        mCheckEmprtClassroomButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
+        mCheckEmptyClassroomButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
         mCheckGradeButton.setIntentActivity("edu.neu.campusassistant.activity.GradeListActivity");
         mCheckTextAgendaButton.setIntentActivity("edu.neu.campusassistant.activity.ExamAgendaListActivity");
     }
-
-    private AlertDialog.Builder createAlertDialogBuilder() {
-        if (mTheme == NATIVE_THEME) {
-            return new AlertDialog.Builder(this);
-        }
-
-        return new AlertDialogPro.Builder(this, mTheme);
-    }
-
-    private void showMessageAlertDialog() {
-        createAlertDialogBuilder()
-                .setTitle(R.string.app_name)
-                .setMessage("Hello, charming AlertDialogPro!")
-                .setPositiveButton("Nice Job", new ButtonClickedListener("Dismiss"))
-                .show();
-    }
-
-    private class ButtonClickedListener implements DialogInterface.OnClickListener {
-        private CharSequence mShowWhenClicked;
-
-        public ButtonClickedListener(CharSequence showWhenClicked) {
-            mShowWhenClicked = showWhenClicked;
-        }
-
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            showToastWithString("\"" + mShowWhenClicked + "\"" + " button clicked.", true);
-        }
-    }
-
 }

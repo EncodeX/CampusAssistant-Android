@@ -43,6 +43,8 @@
 				android:layout_width="match_parent"
 				android:layout_height="?attr/actionBarSize"
 				android:background="@color/colorPrimary"
+				android:focusable="true"
+				android:focusableInTouchMode="true"
 				app:title="百宝箱"
 				app:titleTextColor="@android:color/white"/>
 			<ImageButton
@@ -96,7 +98,7 @@
 				<ScrollView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent">
-					<include layout="@layout/fuction_menu"/>
+					<include layout="@layout/function_menu"/>
 				</ScrollView>
 			</edu.neu.campusassistant.view.BoxLayout>
 		</edu.neu.campusassistant.view.CircularRevealLayout>
@@ -107,10 +109,14 @@
 		android:layout_width="296dp"
 		android:layout_height="match_parent"
 		android:background="#FFFFFF"
-		android:layout_gravity="end">
+		android:layout_gravity="end"
+		android:focusable="true"
+		android:focusableInTouchMode="true">
 		<ScrollView
 			android:layout_width="match_parent"
-			android:layout_height="match_parent">
+			android:layout_height="match_parent"
+			android:focusable="true"
+			android:focusableInTouchMode="true">
 			<include layout="@layout/drawer_menu"/>
 		</ScrollView>
 	</RelativeLayout>

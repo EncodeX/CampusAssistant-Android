@@ -13,5 +13,12 @@ public interface Constants {
 	String IPGW_USERNAME = "ipgw_username";
 	String IPGW_PASSWORD = "ipgw_password";
 
+	String IS_AAO_BOUND = "is_aao_bound";
 	String AAO_TOKEN = "aao_token";
+	String AAO_USERNAME = "aao_username";
+	String AAO_PASSWORD = "aao_password";
+
+	String IS_LIBRARY_BOUND = "is_library_bound";
+
+	String IS_ECARD_BOUND = "is_ecard_bound";
 }
