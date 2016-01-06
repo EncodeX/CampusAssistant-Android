@@ -685,7 +685,6 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 		}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				showToastWithString("天气更新失败，请检查当前网路连接", true);
 				Log.d("weather", "Error: " + error.getMessage());
 			}
 		});

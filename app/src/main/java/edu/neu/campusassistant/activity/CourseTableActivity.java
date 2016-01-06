@@ -258,7 +258,7 @@ public class CourseTableActivity extends AppCompatActivity {
 
 			List<WeekViewEvent> list = new ArrayList<WeekViewEvent>();
 
-			if(newMonth != mFirstDayOfWeek.get(Calendar.MONTH)) return list;
+			if(newMonth != mFirstDayOfWeek.get(Calendar.MONTH) + 1) return list;
 
 			int counter = 0;
 			for(Course course: mCourseList){

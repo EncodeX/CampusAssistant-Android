@@ -49,4 +49,11 @@
     <string name="profile_ipwg_title">IP网关</string>
     <string name="ipgw_user_name_placeholder">请输入校园网账号</string>
     <string name="ipgw_password_placeholder">请输入校园网密码</string>
+
+    <string-array name="spinnername">
+        <item>北京北京北京北京北京</item>
+        <item>上海 </item>
+        <item>广州</item>
+        <item>深圳</item>
+    </string-array>
 </resources>
