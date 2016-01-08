@@ -122,8 +122,6 @@ public class GradeListActivity extends AppCompatActivity {
                                 String termId = data.optJSONObject(i).optString("termId");
                                 mTermNameList.add(termName);
                                 mTermIdList.add(termId);
-                                Log.d("GradeListActivity", mTermNameList.toString());
-                                Log.d("GradeListActivity", mTermIdList.toString());
                             }
                             String errorMsg = response.optString("errMsg");
                             if (!errorMsg.equals("")){
@@ -144,6 +142,7 @@ public class GradeListActivity extends AppCompatActivity {
 
             AppController.getInstance().addToRequestQueue(request);
         }else {
+            Toast.makeText(getApplicationContext(), "登录过期，请返回重新登录", Toast.LENGTH_LONG).show();
             Log.d("GradeListActivity", "token empty");
         }
     }

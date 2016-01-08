@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
+        android:theme="@style/AppTheme.Dark"
         app:title="考试日程"
         app:titleTextColor="@android:color/white"
         android:elevation="8dp"/>

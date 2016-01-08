@@ -10,9 +10,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import edu.neu.campusassistant.R;
+import edu.neu.campusassistant.bean.Exam;
 
 /**
  * Created by JacobKong on 15/12/24.
@@ -20,10 +24,16 @@ import edu.neu.campusassistant.R;
 public class ExamAgendaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final LayoutInflater mLayoutInflater;
     private final Context mContext;
+    private List<Exam> mExamList;
+
+    public void setmExamList(List<Exam> mExamList) {
+        this.mExamList = mExamList;
+    }
 
     public ExamAgendaListAdapter(Context mContext) {
         this.mLayoutInflater = LayoutInflater.from(mContext);
         this.mContext = mContext;
+        mExamList = new ArrayList<Exam>();
     }
 
     @Override
@@ -35,27 +45,16 @@ public class ExamAgendaListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof ExamAgandeListViewHolder){
-//            Declare temp = mDeclareList.get(position);
-//            String salary =temp.getSalary() + "元";
-//            String address= temp.getServiceProvince()+ temp.getServiceCity() + temp.getServiceCounty() + temp.getServiceAddress();
-//            ((GrabListViewHolder) holder).mServiceTypeTextView.setText(temp.getServiceType());
-//            ((GrabListViewHolder)holder).mAccountTextView.setText(temp.getCustomerName());
-//            ((GrabListViewHolder)holder).mTimeTextView.setText(temp.getServiceTime());
-//            ((GrabListViewHolder)holder).mMoneyTextView.setText(salary);
-//            ((GrabListViewHolder) holder).mContactTextView.setText(temp.getPhoneNo());
-//            ((GrabListViewHolder) holder).mAddressTextView.setText(address);
-//            ((GrabListViewHolder)holder).mRemarkTextView.setText(temp.getRemark());
-//            ((GrabListViewHolder)holder).mGrabButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    grabDeclare(position);
-//                }
-//            });
+            Exam exam = mExamList.get(position);
+            ((ExamAgandeListViewHolder)holder).mExamTitleTextView.setText(exam.getCourseName());
+            ((ExamAgandeListViewHolder)holder).mExamTimeTextView.setText(exam.getTime());
+            ((ExamAgandeListViewHolder)holder).mExamRoomTextView.setText(exam.getClassroom());
+//            ((ExamAgandeListViewHolder)holder).mExamTitleTextView.setText(exam.getCourseName());
         }
     }
     @Override
     public int getItemCount() {
-        return 2;
+        return mExamList.size();
     }
 
     static class ExamAgandeListViewHolder extends RecyclerView.ViewHolder {
