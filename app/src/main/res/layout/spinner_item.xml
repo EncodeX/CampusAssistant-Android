@@ -10,7 +10,7 @@
             android:layout_centerVertical="true"
             android:id="@+id/semester_spinner_item_text_view"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:textSize="14sp"

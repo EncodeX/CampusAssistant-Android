@@ -21,16 +21,21 @@ import edu.neu.campusassistant.R;
  * Created by JacobKong on 16/1/6.
  */
 public class SemesterSpinnerAdapter extends BaseAdapter implements SpinnerAdapter{
-//    List<String> sememsterList;
+    List<String> mTermNameList;
     @Bind(R.id.semester_spinner_item_text_view)
     TextView mSemesterSpinnerItemTextView;
 
     Context mContext;
-    String[] mItems;
+//    String[] mItems;
+
+    public void setmTermNameList(List<String> mTermNameList) {
+        this.mTermNameList = mTermNameList;
+    }
 
     public SemesterSpinnerAdapter(Context mContext) {
         this.mContext = mContext;
-        mItems = mContext.getResources().getStringArray(R.array.spinnername);
+        mTermNameList = new ArrayList<String>();
+//        mItems = mContext.getResources().getStringArray(R.array.spinnername);
     }
 
 
@@ -41,21 +46,19 @@ public class SemesterSpinnerAdapter extends BaseAdapter implements SpinnerAdapte
 
     @Override
     public Object getItem(int position) {
-        return mItems[position];
+        return mTermNameList.get(position);
     }
 
     @Override
     public int getCount() {
-        return mItems.length;
+        return mTermNameList.size();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-//        TextView text = new TextView(mContext);
-//        text.setText(mItems[position]);
         View view = LayoutInflater.from(mContext).inflate(R.layout.spinner_item, null);
         ButterKnife.bind(this, view);
-        mSemesterSpinnerItemTextView.setText(mItems[position]);
+        mSemesterSpinnerItemTextView.setText(mTermNameList.get(position));
         return view;
     }
 }
