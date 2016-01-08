@@ -2,6 +2,7 @@ package edu.neu.campusassistant.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -49,7 +54,12 @@ public class ExamAgendaListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ((ExamAgandeListViewHolder)holder).mExamTitleTextView.setText(exam.getCourseName());
             ((ExamAgandeListViewHolder)holder).mExamTimeTextView.setText(exam.getTime());
             ((ExamAgandeListViewHolder)holder).mExamRoomTextView.setText(exam.getClassroom());
-//            ((ExamAgandeListViewHolder)holder).mExamTitleTextView.setText(exam.getCourseName());
+            long leftDays = caculateLeftDays(exam.getTime());
+            if (leftDays >= 0){
+                ((ExamAgandeListViewHolder)holder).mExamLeftDaysTextView.setText(""+ leftDays);
+            }else{
+                ((ExamAgandeListViewHolder)holder).mExamLeftDaysTextView.setText("过");
+            }
         }
     }
     @Override
@@ -71,6 +81,38 @@ public class ExamAgendaListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    private long caculateLeftDays(String examDateString) {
+        SimpleDateFormat sdf  =   new SimpleDateFormat( "yyyy-MM-dd" );
+        Date examDate = null;
+        try {
+            examDate = sdf.parse(examDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Date todayDate = new Date();
+        Long leftDays = getDaysBetween(todayDate, examDate);
+        return leftDays;
+    }
+
+    public static Long getDaysBetween(Date startDate, Date endDate) {
+        Calendar fromCalendar = Calendar.getInstance();
+        fromCalendar.setTime(startDate);
+        fromCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        fromCalendar.set(Calendar.MINUTE, 0);
+        fromCalendar.set(Calendar.SECOND, 0);
+        fromCalendar.set(Calendar.MILLISECOND, 0);
+
+        Calendar toCalendar = Calendar.getInstance();
+        toCalendar.setTime(endDate);
+        toCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        toCalendar.set(Calendar.MINUTE, 0);
+        toCalendar.set(Calendar.SECOND, 0);
+        toCalendar.set(Calendar.MILLISECOND, 0);
+
+        return (toCalendar.getTime().getTime() - fromCalendar.getTime().getTime()) / (1000 * 60 * 60 * 24);
     }
 
 }
