@@ -1,52 +1,52 @@
 <resources>
-    <string name="app_name">CampusAssistant</string>
-    <string name="weather_title">天气</string>
+	<string name="app_name">CampusAssistant</string>
+	<string name="weather_title">天气</string>
 
-    <string name="study_life_title">学习生活</string>
-    <string name="study_life_next_class">下一节课</string>
-    <string name="study_life_check_class_list">看课表</string>
-    <string name="study_life_check_empty_classroom">上自习</string>
-    <string name="study_life_check_grade">查成绩</string>
-    <string name="study_life_check_test_agenda">考试日程</string>
+	<string name="study_life_title">学习生活</string>
+	<string name="study_life_next_class">下一节课</string>
+	<string name="study_life_check_class_list">看课表</string>
+	<string name="study_life_check_empty_classroom">上自习</string>
+	<string name="study_life_check_grade">查成绩</string>
+	<string name="study_life_check_test_agenda">考试日程</string>
 
-    <string name="function_menu_educational_system_title">教务系统</string>
-    <string name="education_system_class_list">课程表</string>
-    <string name="education_system_foster_plan">培养计划</string>
-    <string name="education_system_score">查学分</string>
-    <string name="education_system_grade">查成绩</string>
-    <string name="education_system_empty_classroom">空教室</string>
-    <string name="education_system_test">考试日程</string>
+	<string name="function_menu_educational_system_title">教务系统</string>
+	<string name="education_system_class_list">课程表</string>
+	<string name="education_system_foster_plan">培养计划</string>
+	<string name="education_system_score">查学分</string>
+	<string name="education_system_grade">查成绩</string>
+	<string name="education_system_empty_classroom">空教室</string>
+	<string name="education_system_test">考试日程</string>
 
-    <string name="function_menu_library_title">图书馆</string>
-    <string name="library_find_book">查找图书</string>
-    <string name="library_mine_info">我的信息</string>
-    <string name="library_borrow_list">我的外借</string>
-    <string name="library_borrow_history">借阅历史</string>
+	<string name="function_menu_library_title">图书馆</string>
+	<string name="library_find_book">查找图书</string>
+	<string name="library_mine_info">我的信息</string>
+	<string name="library_borrow_list">我的外借</string>
+	<string name="library_borrow_history">借阅历史</string>
 
-    <string name="function_menu_ecard_title">校园卡</string>
-    <string name="ecard_mine_info">我的信息</string>
-    <string name="ecard_deposit_info">存款信息</string>
-    <string name="ecard_consume_info">消费信息</string>
-    <string name="ecard_report_loss">自助挂失</string>
+	<string name="function_menu_ecard_title">校园卡</string>
+	<string name="ecard_mine_info">我的信息</string>
+	<string name="ecard_deposit_info">存款信息</string>
+	<string name="ecard_consume_info">消费信息</string>
+	<string name="ecard_report_loss">自助挂失</string>
 
-    <string name="function_menu_campus_service">校园服务</string>
-    <string name="campus_service_express">查快递</string>
-    <string name="campus_service_CET">四六级</string>
-    <string name="campus_service_lost_and_found">寻失物</string>
-    <string name="campus_service_calender">看校历</string>
-    <string name="campus_service_map">校园地图</string>
+	<string name="function_menu_campus_service">校园服务</string>
+	<string name="campus_service_express">查快递</string>
+	<string name="campus_service_CET">四六级</string>
+	<string name="campus_service_lost_and_found">寻失物</string>
+	<string name="campus_service_calender">看校历</string>
+	<string name="campus_service_map">校园地图</string>
 
-    <string name="function_menu_social_title">社交</string>
-    <string name="social_assosiation">社团</string>
-    <string name="social_ad">广告</string>
-    <string name="social_class">班级</string>
+	<string name="function_menu_social_title">社交</string>
+	<string name="social_assosiation">社团</string>
+	<string name="social_ad">广告</string>
+	<string name="social_class">班级</string>
 
-    <string name="profile_account_title">个人账户</string>
-    <string name="account_education_system">教务处</string>
-    <string name="account_library">图书馆</string>
-    <string name="account_ecard">校园一卡通</string>
+	<string name="profile_account_title">个人账户</string>
+	<string name="account_education_system">教务处</string>
+	<string name="account_library">图书馆</string>
+	<string name="account_ecard">校园一卡通</string>
 
-    <string name="profile_ipwg_title">IP网关</string>
-    <string name="ipgw_user_name_placeholder">请输入校园网账号</string>
-    <string name="ipgw_password_placeholder">请输入校园网密码</string>
+	<string name="profile_ipwg_title">IP网关</string>
+	<string name="ipgw_user_name_placeholder">请输入校园网账号</string>
+	<string name="ipgw_password_placeholder">请输入校园网密码</string>
 </resources>

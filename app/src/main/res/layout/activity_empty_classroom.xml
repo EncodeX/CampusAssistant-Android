@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	tools:context="edu.neu.campusassistant.activity.EmptyClassroomActivity">
+	<android.support.v7.widget.Toolbar
+		android:id="@+id/app_bar"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/colorPrimary"
+		android:theme="@style/AppTheme.Dark"
+		app:title="空教室"
+		app:titleTextColor="@android:color/white"
+		android:elevation="8dp"/>
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/app_bar">
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+			<TextView
+				android:id="@+id/hint_text"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="点击查看教室空闲情况"
+				android:padding="12dp"/>
+			<GridView
+				android:id="@+id/classroom_list"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/hint_text"/>
+		</RelativeLayout>
+	</ScrollView>
+</RelativeLayout>

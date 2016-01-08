@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -128,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 	@Bind(R.id.account_ecard)
 	RelativeLayout mEcardAccountLayout;
 
+	private boolean mIsBoxRevealed = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -179,6 +182,19 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 
 		/** 获取每日天气 **/
 		obtainDaliyWeather();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode){
+			case KeyEvent.KEYCODE_BACK:
+				if(mIsBoxRevealed){
+					applyCircularCloseAnimation();
+					return false;
+				}
+				break;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	private void initView() {
@@ -362,6 +378,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 		mBoxTitleBar.setVisibility(View.VISIBLE);
 		mCircularRevealLayout.setVisibility(View.VISIBLE);
 		mCloseBoxButton.setEnabled(true);
+		mIsBoxRevealed = true;
 		animatorSet.start();
 	}
 
@@ -410,6 +427,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 				mBoxTitleBar.setVisibility(View.INVISIBLE);
 				mBoxFab.setVisibility(View.VISIBLE);
 				mBoxFab.setEnabled(true);
+				mIsBoxRevealed = false;
 			}
 		});
 		mCloseBoxButton.setEnabled(false);
