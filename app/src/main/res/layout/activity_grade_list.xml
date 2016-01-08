@@ -13,37 +13,17 @@
         android:background="@color/colorPrimary"
         app:title="成绩单"
         app:titleTextColor="@android:color/white"
+        android:theme="@style/AppTheme.Dark"
         android:elevation="8dp"/>
-    <RelativeLayout
-        android:layout_width="200dp"
-        android:layout_height="?actionBarSize"
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/grade_semester_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:layout_alignParentRight="true"
-        android:elevation="8dp"
-        android:clickable="true"
-        android:background="@drawable/card_foreground">
-        <!--<ImageView-->
-            <!--android:id="@+id/grade_semaster_select_arrow"-->
-            <!--android:layout_width="24dp"-->
-            <!--android:layout_height="24dp"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_marginRight="12dp"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:src="@drawable/arrow_drop_down_white"/>-->
-        <!--<Button-->
-            <!--android:id="@+id/grad_semaster_select_button"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_toLeftOf="@+id/grade_semaster_select_arrow"-->
-            <!--android:background="@drawable/card_foreground"-->
-            <!--android:textColor="@color/colorWhite"-->
-            <!--android:textAlignment="textEnd"-->
-            <!--android:text="2015-2016上学期"/>-->
-        <android.support.v7.widget.AppCompatSpinner
-	        android:id="@+id/semester_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </RelativeLayout>
+        android:layout_marginRight="12dp"
+        android:theme="@style/AppTheme.Dark"
+        >
+    </android.support.v7.widget.AppCompatSpinner>
     <RelativeLayout
         android:id="@+id/grade_average"
         android:layout_width="match_parent"

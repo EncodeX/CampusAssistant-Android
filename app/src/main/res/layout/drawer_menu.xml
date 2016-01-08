@@ -114,10 +114,10 @@
 				    android:layout_height="wrap_content"
 				    android:layout_alignParentRight="true"
 				    android:layout_centerVertical="true"
-				    android:textColor="@color/colorAccent"
+				    android:textColor="@color/colorgray"
 				    android:background="@color/colorClear"
 				    android:textSize="12sp"
-				    android:text="已绑定"/>
+				    android:text="未绑定"/>
 		    </RelativeLayout>
 		    <RelativeLayout
 			    android:id="@+id/account_ecard"
