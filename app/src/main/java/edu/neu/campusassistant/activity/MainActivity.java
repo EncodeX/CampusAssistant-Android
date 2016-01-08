@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 	public static final String IPGW_TAG = "IPGW";
 	public static final String WEATHER_TAG = "weather";
 
-	SharedPreferences sharedPreferences;
+	SharedPreferences mSharedPreferences;
 	SharedPreferences.Editor editor;
 
 	@Bind(R.id.app_bar)
@@ -127,7 +128,13 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 	@Bind(R.id.account_library)
 	RelativeLayout mLibraryAccountLayout;
 	@Bind(R.id.account_ecard)
-	RelativeLayout mEcardAccountLayout;
+	RelativeLayout mECardAccountLayout;
+	@Bind(R.id.account_education_system_bind)
+	TextView mAAOAccountBindLabel;
+	@Bind(R.id.account_ecard_bind)
+	TextView mECardAccountBindLabel;
+	@Bind(R.id.account_library_bind)
+	TextView mLibraryAccountBindLabel;
 
 	private boolean mIsBoxRevealed = false;
 
@@ -171,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 	@Override
 	public void onLoginSuccess(AppCompatDialogFragment dialog) {
 		Log.d("LoginDialog", "OK");
+		refreshAccountBindingState();
 		hideSoftKeyboard(this);
 	}
 
@@ -201,12 +209,12 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 		ButterKnife.bind(this);
 
 		// 初始化sharedPreferences
-		sharedPreferences = getSharedPreferences(Constants.SHARED_PREFS_KEY, MODE_PRIVATE);
-		editor = sharedPreferences.edit();
+		mSharedPreferences = getSharedPreferences(Constants.SHARED_PREFS_KEY, MODE_PRIVATE);
+		editor = mSharedPreferences.edit();
 
 		// 初始化文本框内容
-		ipgw_username = sharedPreferences.getString(Constants.IPGW_USERNAME, "");
-		ipgw_password = sharedPreferences.getString(Constants.IPGW_PASSWORD, "");
+		ipgw_username = mSharedPreferences.getString(Constants.IPGW_USERNAME, "");
+		ipgw_password = mSharedPreferences.getString(Constants.IPGW_PASSWORD, "");
 		mIPGWUsernameEditText.setText(ipgw_username);
 		mIPGWPasswordEditText.setText(ipgw_password);
 
@@ -314,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 			}
 		});
 
-		mEcardAccountLayout.setOnClickListener(new View.OnClickListener() {
+		mECardAccountLayout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				LoginDialogFragment dialog = new LoginDialogFragment();
@@ -325,6 +333,9 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 				dialog.show(getSupportFragmentManager(), "ecard_account_login");
 			}
 		});
+
+		// 账户绑定相关文字信息
+		refreshAccountBindingState();
 	}
 
 	@TargetApi(21)
@@ -427,10 +438,10 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 				mBoxTitleBar.setVisibility(View.INVISIBLE);
 				mBoxFab.setVisibility(View.VISIBLE);
 				mBoxFab.setEnabled(true);
-				mIsBoxRevealed = false;
 			}
 		});
 		mCloseBoxButton.setEnabled(false);
+		mIsBoxRevealed = false;
 		animatorSet.start();
 	}
 
@@ -726,8 +737,21 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 	 */
 	private void setupButtonTargetActivity() {
 		mCheckClassListButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
-		mCheckEmptyClassroomButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
+		mCheckEmptyClassroomButton.setIntentActivity("edu.neu.campusassistant.activity.EmptyClassroomActivity");
 		mCheckGradeButton.setIntentActivity("edu.neu.campusassistant.activity.GradeListActivity");
 		mCheckTextAgendaButton.setIntentActivity("edu.neu.campusassistant.activity.ExamAgendaListActivity");
+	}
+
+	/**
+	 * 刷新绑定文字信息
+	 */
+	private void refreshAccountBindingState(){
+		if(mSharedPreferences.getBoolean(Constants.IS_AAO_BOUND,false)){
+			mAAOAccountBindLabel.setText("已绑定");
+			mAAOAccountBindLabel.setTextColor(getResources().getColor(R.color.colorAccent));
+		}else{
+			mAAOAccountBindLabel.setText("未绑定");
+			mAAOAccountBindLabel.setTextColor(getResources().getColor(R.color.colorgray));
+		}
 	}
 }

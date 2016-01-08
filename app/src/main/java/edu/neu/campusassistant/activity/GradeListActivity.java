@@ -55,7 +55,9 @@ public class GradeListActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
         mRecyclerView.setAdapter(new GradeListAdapter(this));
 
-//        adapter = new ArrayAdapter<String>(this ,android.R.layout.simple_spinner_item, mItems);
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinnername, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        mSemesterSpinner.setAdapter(adapter);
         mSemesterSpinner.setAdapter(new SemesterSpinnerAdapter(this));
         mSemesterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

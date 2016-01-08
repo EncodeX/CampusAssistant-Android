@@ -21,9 +21,9 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentRight="true"
         android:layout_marginRight="12dp"
-        android:theme="@style/AppTheme.Dark"
-        >
-    </android.support.v7.widget.AppCompatSpinner>
+        app:theme="@style/ThemeOverlay.AppCompat.Dark"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:elevation="8dp"/>
     <RelativeLayout
         android:id="@+id/grade_average"
         android:layout_width="match_parent"

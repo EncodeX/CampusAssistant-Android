@@ -17,6 +17,7 @@ public interface Constants {
 	String AAO_TOKEN = "aao_token";
 	String AAO_USERNAME = "aao_username";
 	String AAO_PASSWORD = "aao_password";
+	String AAO_REMEMBER_PASSWORD = "aao_remember_password";
 
 	String IS_LIBRARY_BOUND = "is_library_bound";
 

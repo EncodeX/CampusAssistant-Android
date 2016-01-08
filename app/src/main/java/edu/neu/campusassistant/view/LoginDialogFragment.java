@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -51,6 +53,8 @@ public class LoginDialogFragment extends AppCompatDialogFragment {
 	EditText mUserNameInput;
 	@Bind(R.id.password_input)
 	EditText mPasswordInput;
+	@Bind(R.id.save_password_check_box)
+	CheckBox mSavePasswordCheckBox;
 
 	LoginDialogListener mListener;
 	int mAccountType;
@@ -73,13 +77,14 @@ public class LoginDialogFragment extends AppCompatDialogFragment {
 		View dialogView = View.inflate(getActivity(), R.layout.login_dialog, null);
 
 		ButterKnife.bind(this,dialogView);
-		initView();
 
 		this.setCancelable(true);
 		builder.setView(dialogView);
 
 		this.mAccountType = getArguments().getInt(ACCOUNT_TYPE_KEY, ACCOUNT_TYPE_UNKNOWN);
 		mSharedPreferences = getContext().getSharedPreferences(Constants.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
+
+		initView();
 
 		return builder.create();
 	}
@@ -97,6 +102,38 @@ public class LoginDialogFragment extends AppCompatDialogFragment {
 			public void onClick(View view) {
 				if(mListener!=null) mListener.onCancel(LoginDialogFragment.this);
 				LoginDialogFragment.this.dismiss();
+			}
+		});
+
+		switch (mAccountType){
+			case ACCOUNT_TYPE_AAO:
+				final String username = mSharedPreferences.getString(Constants.AAO_USERNAME,"");
+				mUserNameInput.setText(username);
+
+				if(mSharedPreferences.getBoolean(Constants.AAO_REMEMBER_PASSWORD,false)){
+					final String password = mSharedPreferences.getString(Constants.AAO_PASSWORD,"");
+					mPasswordInput.setText(password);
+					mSavePasswordCheckBox.setChecked(true);
+				}else {
+					mSavePasswordCheckBox.setChecked(false);
+				}
+				break;
+			case ACCOUNT_TYPE_LIBRARY:
+				break;
+			case ACCOUNT_TYPE_ECARD:
+				break;
+		}
+
+		mSavePasswordCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+				SharedPreferences.Editor editor = mSharedPreferences.edit();
+				if(b){
+					editor.putBoolean(Constants.AAO_REMEMBER_PASSWORD, true);
+				}else{
+					editor.putBoolean(Constants.AAO_REMEMBER_PASSWORD, false);
+				}
+				editor.apply();
 			}
 		});
 	}
@@ -120,9 +157,10 @@ public class LoginDialogFragment extends AppCompatDialogFragment {
 
 	private JsonObjectRequest getBindAAOAccountRequest(){
 		final String userName = mUserNameInput.getText().toString();
-		final String password = MD5Utils.generateMD5(mPasswordInput.getText().toString());
+		final String password = mPasswordInput.getText().toString();
+		final String md5Password = MD5Utils.generateMD5(password);
 		final String requestString =
-				"http://202.118.31.241:8080/api/v1/login?userName=" + userName + "&passwd=" + password;
+				"http://202.118.31.241:8080/api/v1/login?userName=" + userName + "&passwd=" + md5Password;
 		JsonObjectRequest request = new JsonObjectRequest(
 				requestString,
 				new Response.Listener<JSONObject>() {
@@ -138,11 +176,16 @@ public class LoginDialogFragment extends AppCompatDialogFragment {
 
 								editor.putString(Constants.AAO_TOKEN, token);
 								editor.putString(Constants.AAO_USERNAME, userName);
-								editor.putString(Constants.AAO_PASSWORD, password);
+								if(mSavePasswordCheckBox.isChecked()){
+									editor.putString(Constants.AAO_PASSWORD, password);
+								} else{
+									editor.putString(Constants.AAO_PASSWORD, "");
+								}
 								editor.putBoolean(Constants.IS_AAO_BOUND, true);
 								editor.apply();
 								LoginDialogFragment.this.dismiss();
 								Toast.makeText(getContext(), "绑定成功", Toast.LENGTH_LONG).show();
+								mListener.onLoginSuccess(LoginDialogFragment.this);
 								break;
 							case -1:
 								Toast.makeText(getContext(), response.optString("errMsg"), Toast.LENGTH_LONG).show();
