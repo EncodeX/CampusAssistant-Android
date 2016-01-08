@@ -2,25 +2,37 @@ package edu.neu.campusassistant.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import edu.neu.campusassistant.R;
+import edu.neu.campusassistant.bean.Grade;
 
 /**
  * Created by JacobKong on 15/12/24.
  */
 public class GradeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+
     private final LayoutInflater mLayoutInflater;
     private final Context mContext;
+    private List<Grade> mGradeList;
+
+    public void setmGradeList(List<Grade> mGradeList) {
+        this.mGradeList = mGradeList;
+    }
 
     public GradeListAdapter(Context mContext) {
         this.mLayoutInflater = LayoutInflater.from(mContext);
         this.mContext = mContext;
+        mGradeList = new ArrayList<Grade>();
     }
 
     @Override
@@ -32,27 +44,17 @@ public class GradeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof GradeListAdapterViewHolder){
-//            Declare temp = mDeclareList.get(position);
-//            String salary =temp.getSalary() + "元";
-//            String address= temp.getServiceProvince()+ temp.getServiceCity() + temp.getServiceCounty() + temp.getServiceAddress();
-//            ((GrabListViewHolder) holder).mServiceTypeTextView.setText(temp.getServiceType());
-//            ((GrabListViewHolder)holder).mAccountTextView.setText(temp.getCustomerName());
-//            ((GrabListViewHolder)holder).mTimeTextView.setText(temp.getServiceTime());
-//            ((GrabListViewHolder)holder).mMoneyTextView.setText(salary);
-//            ((GrabListViewHolder) holder).mContactTextView.setText(temp.getPhoneNo());
-//            ((GrabListViewHolder) holder).mAddressTextView.setText(address);
-//            ((GrabListViewHolder)holder).mRemarkTextView.setText(temp.getRemark());
-//            ((GrabListViewHolder)holder).mGrabButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    grabDeclare(position);
-//                }
-//            });
+            Grade grade = mGradeList.get(position);
+            ((GradeListAdapterViewHolder)holder).mGradeClassTitleTextView.setText(grade.getCourseName());
+            ((GradeListAdapterViewHolder)holder).mGradeNormalTextView.setText("平时:" + grade.getScore1());
+            ((GradeListAdapterViewHolder)holder).mGradeMiddleTextView.setText("期中:" + grade.getScore2());
+            ((GradeListAdapterViewHolder)holder).mGradeFinalTextView.setText("期末:" + grade.getScore3());
+            ((GradeListAdapterViewHolder)holder).mGradeTotalTextView.setText(grade.getScore());
         }
     }
     @Override
     public int getItemCount() {
-        return 2;
+        return mGradeList.size();
     }
 
     static class GradeListAdapterViewHolder extends RecyclerView.ViewHolder {
@@ -64,6 +66,8 @@ public class GradeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         TextView mGradeMiddleTextView;
         @Bind(R.id.grade_final_mark_text_view)
         TextView mGradeFinalTextView;
+        @Bind(R.id.grade_total_mark_text_view)
+        TextView mGradeTotalTextView;
 
         public GradeListAdapterViewHolder(View itemView) {
             super(itemView);

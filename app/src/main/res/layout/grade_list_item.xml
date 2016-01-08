@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="76dp">
+                android:layout_height="76dp"
+    android:clickable="true"
+    android:background="@drawable/card_foreground">
     <TextView
         android:id="@+id/grade_class_title_text_view"
         android:layout_height="wrap_content"
@@ -36,6 +38,15 @@
             android:textSize="12sp"
             android:textColor="@color/colorBlack"
             android:text="期中:无"/>
+        <TextView
+            android:id="@+id/grade_final_mark_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/grade_middle_mark_text_view"
+            android:layout_marginLeft="12dp"
+            android:textSize="12sp"
+            android:textColor="@color/colorBlack"
+            android:text="期末:无"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="64dp"
@@ -50,9 +61,9 @@
             android:textColor="@color/colorOrange"
             android:layout_centerHorizontal="true"
             android:textSize="12sp"
-            android:text="期末"/>
+            android:text="总成绩"/>
         <TextView
-            android:id="@+id/grade_final_mark_text_view"
+            android:id="@+id/grade_total_mark_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
