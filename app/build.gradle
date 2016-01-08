@@ -34,6 +34,7 @@ dependencies {
 	compile 'com.pnikosis:materialish-progress:1.7'             //  https://github.com/pnikosis/materialish-progress
 	compile 'com.github.amlcurran.showcaseview:library:5.3.0'   //  https://github.com/amlcurran/ShowcaseView
 	compile 'com.github.fengdai:alertdialogpro-theme-material:0.2.6' // https://github.com/fengdai/AlertDialogPro
+	compile 'com.jakewharton:disklrucache:2.0.2'                //  DiskLruCache
 
 	compile project(':android-week-view')                       //  https://github.com/alamkanak/Android-Week-View
 }
