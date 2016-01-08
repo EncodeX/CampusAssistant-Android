@@ -102,6 +102,11 @@ public class BuildingListAdapter extends BaseAdapter implements SpinnerAdapter {
 		return mBuildingIdList.get(index);
 	}
 
+	public String getBuildingName(int index){
+		if(index > mBuildingNameList.size()) return null;
+		return mBuildingNameList.get(index);
+	}
+
 	public void setListRefreshListener(BuildingListRefreshListener buildingListRefreshListener) {
 		this.mBuildingListRefreshListener = buildingListRefreshListener;
 	}

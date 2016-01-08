@@ -82,6 +82,16 @@ public class ClassroomListAdapter extends BaseAdapter {
 		this.mClassroomListRefreshListener = classroomListRefreshListener;
 	}
 
+	public String getClassroomId(int index){
+		if(index > mClassroomIdList.size()) return null;
+		return mClassroomIdList.get(index);
+	}
+
+	public String getClassroomName(int index){
+		if(index > mClassroomNameList.size()) return null;
+		return mClassroomNameList.get(index);
+	}
+
 	public void refreshClassroomList(String buildingId) {
 		final String token = mSharedPreferences.getString(Constants.AAO_TOKEN, "");
 
