@@ -24,6 +24,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
 			android:layout_alignParentRight="true"
+			android:dropDownVerticalOffset="4dp"
 			app:theme="@style/ThemeOverlay.AppCompat.Dark"
 			app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 	</RelativeLayout>

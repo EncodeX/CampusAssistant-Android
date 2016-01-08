@@ -6,6 +6,7 @@
 		android:id="@+id/building_name_label"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_centerInParent="true"
+		android:layout_marginLeft="8dp"
+		android:layout_centerVertical="true"
 		android:textColor="@color/colorWhite"/>
 </RelativeLayout>

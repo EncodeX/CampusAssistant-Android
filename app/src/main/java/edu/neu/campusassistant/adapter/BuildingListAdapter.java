@@ -39,7 +39,7 @@ public class BuildingListAdapter extends BaseAdapter implements SpinnerAdapter {
 	private Context mContext;
 	private SharedPreferences mSharedPreferences;
 
-	private ListRefreshListener mListRefreshListener;
+	private BuildingListRefreshListener mBuildingListRefreshListener;
 
 	public BuildingListAdapter(Context context) {
 		this.mBuildingIdList = new ArrayList<>();
@@ -97,15 +97,20 @@ public class BuildingListAdapter extends BaseAdapter implements SpinnerAdapter {
 		return convertView;
 	}
 
-	public void setListRefreshListener(ListRefreshListener listRefreshListener) {
-		this.mListRefreshListener = listRefreshListener;
+	public String getBuildingId(int index){
+		if(index > mBuildingIdList.size()) return null;
+		return mBuildingIdList.get(index);
+	}
+
+	public void setListRefreshListener(BuildingListRefreshListener buildingListRefreshListener) {
+		this.mBuildingListRefreshListener = buildingListRefreshListener;
 	}
 
 	public void refreshBuildingList() {
 		final String token = mSharedPreferences.getString(Constants.AAO_TOKEN, "");
 
 		if (token.equals("")) {
-			if(mListRefreshListener != null) mListRefreshListener.onRefreshListFailed();
+			if(mBuildingListRefreshListener != null) mBuildingListRefreshListener.onRefreshListFailed();
 			return;
 		}
 
@@ -115,7 +120,7 @@ public class BuildingListAdapter extends BaseAdapter implements SpinnerAdapter {
 				new Response.ErrorListener() {
 					@Override
 					public void onErrorResponse(VolleyError error) {
-						if(mListRefreshListener != null) mListRefreshListener.onRefreshListFailed();
+						if(mBuildingListRefreshListener != null) mBuildingListRefreshListener.onRefreshListFailed();
 					}
 				}
 		);
@@ -132,7 +137,7 @@ public class BuildingListAdapter extends BaseAdapter implements SpinnerAdapter {
 		}
 	}
 
-	public interface ListRefreshListener{
+	public interface BuildingListRefreshListener {
 		void onRefreshListSucceeded();
 		void onRefreshListFailed();
 	}
@@ -153,7 +158,7 @@ public class BuildingListAdapter extends BaseAdapter implements SpinnerAdapter {
 					mBuildingNameList.add(object.optString("buildingName"));
 				}
 
-				if(mListRefreshListener != null) mListRefreshListener.onRefreshListSucceeded();
+				if(mBuildingListRefreshListener != null) mBuildingListRefreshListener.onRefreshListSucceeded();
 				notifyDataSetChanged();
 			}
 		}
