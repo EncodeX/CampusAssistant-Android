@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	tools:context="edu.neu.campusassistant.activity.DevelopPlanActivity">
+	<RelativeLayout
+		android:id="@+id/app_bar_layout"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/colorPrimary"
+		android:elevation="8dp">
+		<android.support.v7.widget.Toolbar
+			android:id="@+id/app_bar"
+			android:layout_width="match_parent"
+			android:layout_height="?attr/actionBarSize"
+			android:theme="@style/AppTheme.Dark"
+			app:title="培养计划"
+			app:titleTextColor="@android:color/white"/>
+		<android.support.v7.widget.AppCompatSpinner
+			android:id="@+id/profession_spinner"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_alignParentRight="true"
+			android:dropDownVerticalOffset="4dp"
+			app:theme="@style/ThemeOverlay.AppCompat.Dark"
+			app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+	</RelativeLayout>
+	<TextView
+		android:id="@+id/hint_text"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/app_bar_layout"
+		android:text="批次: "
+		android:padding="12dp"/>
+	<View
+		android:id="@+id/divider"
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:layout_below="@id/hint_text"
+		android:alpha="0.4"
+		android:background="@color/colorgray"/>
+	<ListView
+		android:id="@+id/course_list"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/divider"/>
+</RelativeLayout>

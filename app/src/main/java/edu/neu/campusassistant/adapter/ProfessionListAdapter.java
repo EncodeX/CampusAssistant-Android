@@ -2,10 +2,12 @@ package edu.neu.campusassistant.adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
@@ -28,22 +30,21 @@ import edu.neu.campusassistant.utils.Constants;
 /**
  * Created with Android Studio.
  * Author: Enex Tapper
- * Date: 16/1/8
+ * Date: 16/1/9
  * Project: CampusAssistant
  * Package: edu.neu.campusassistant.adapter
  */
-public class BuildingListAdapter extends BaseAdapter implements SpinnerAdapter {
+public class ProfessionListAdapter extends BaseAdapter implements SpinnerAdapter{
 
-	private List<String> mBuildingNameList;
-	private List<String> mBuildingIdList;
+	private List<String> mProfessionIdList, mProfessionNameList;
 	private Context mContext;
 	private SharedPreferences mSharedPreferences;
 
-	private BuildingListRefreshListener mBuildingListRefreshListener;
+	private ProfessionListRefreshListener mProfessionListRefreshListener;
 
-	public BuildingListAdapter(Context context) {
-		this.mBuildingIdList = new ArrayList<>();
-		this.mBuildingNameList = new ArrayList<>();
+	public ProfessionListAdapter(Context context) {
+		this.mProfessionIdList = new ArrayList<>();
+		this.mProfessionNameList = new ArrayList<>();
 		this.mContext = context;
 
 		this.mSharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
@@ -51,12 +52,11 @@ public class BuildingListAdapter extends BaseAdapter implements SpinnerAdapter {
 
 	@Override
 	public int getCount() {
-		return mBuildingIdList.size();
+		return mProfessionIdList.size();
 	}
 
 	@Override
 	public Object getItem(int i) {
-		// 暂时没有用
 		return null;
 	}
 
@@ -76,7 +76,7 @@ public class BuildingListAdapter extends BaseAdapter implements SpinnerAdapter {
 			viewHolderItem = (ViewHolderItem) view.getTag();
 		}
 
-		viewHolderItem.textLabel.setText(mBuildingNameList.get(i));
+		viewHolderItem.textLabel.setText(mProfessionNameList.get(i));
 
 		return view;
 	}
@@ -92,40 +92,35 @@ public class BuildingListAdapter extends BaseAdapter implements SpinnerAdapter {
 			viewHolderItem = (ViewHolderItem) convertView.getTag();
 		}
 
-		viewHolderItem.textLabel.setText(mBuildingNameList.get(position));
+		viewHolderItem.textLabel.setText(mProfessionNameList.get(position));
 
 		return convertView;
 	}
 
-	public String getBuildingId(int index){
-		if(index > mBuildingIdList.size()) return null;
-		return mBuildingIdList.get(index);
+	public String getProfessionId(int index){
+		return mProfessionIdList.get(index);
 	}
 
-	public String getBuildingName(int index){
-		if(index > mBuildingNameList.size()) return null;
-		return mBuildingNameList.get(index);
+	public String getProfessionName(int index){
+		return mProfessionNameList.get(index);
 	}
 
-	public void setListRefreshListener(BuildingListRefreshListener buildingListRefreshListener) {
-		this.mBuildingListRefreshListener = buildingListRefreshListener;
+	public void setProfessionListRefreshListener(ProfessionListRefreshListener professionListRefreshListener) {
+		this.mProfessionListRefreshListener = professionListRefreshListener;
 	}
 
-	public void refreshBuildingList() {
+	public void refreshProfessionList(){
 		final String token = mSharedPreferences.getString(Constants.AAO_TOKEN, "");
-
-		if (token.equals("")) {
-			if(mBuildingListRefreshListener != null) mBuildingListRefreshListener.onRefreshListFailed();
-			return;
-		}
+		final String batchId = mSharedPreferences.getString(Constants.AAO_PLAN_BATCH_ID, "");
 
 		JsonObjectRequest request = new JsonObjectRequest(
-				"http://202.118.31.241:8080/api/v1/buildings?token=" + token,
-				new BuildingJSONObjectListener(),
+				"http://202.118.31.241:8080/api/v1/professionDevelopPlan/" + batchId + "?token=" + token,
+				new ProfessionJsonObjectListener(),
 				new Response.ErrorListener() {
 					@Override
 					public void onErrorResponse(VolleyError error) {
-						if(mBuildingListRefreshListener != null) mBuildingListRefreshListener.onRefreshListFailed();
+						Log.d("ProfessionListAdapter", "获取专业列表失败");
+						if(mProfessionListRefreshListener != null) mProfessionListRefreshListener.onRefreshListFailed();
 					}
 				}
 		);
@@ -142,30 +137,35 @@ public class BuildingListAdapter extends BaseAdapter implements SpinnerAdapter {
 		}
 	}
 
-	public interface BuildingListRefreshListener {
-		void onRefreshListSucceeded();
-		void onRefreshListFailed();
-	}
-
-	private class BuildingJSONObjectListener implements Response.Listener<JSONObject> {
+	private class ProfessionJsonObjectListener implements Response.Listener<JSONObject>{
 		@Override
 		public void onResponse(JSONObject response) {
+			Log.d("ProfessionListAdapter",response.toString());
 			JSONArray data = response.optJSONArray("data");
 
-			if(data!=null){
-				mBuildingIdList.clear();
-				mBuildingNameList.clear();
+			if (data != null) {
+				mProfessionIdList.clear();
+				mProfessionNameList.clear();
 
-				for(int i=0; i<data.length(); ++i){
+				mProfessionIdList.add("");
+				mProfessionNameList.add("请选择专业");
+
+				for(int i=0; i<data.length() ; ++i){
 					JSONObject object = data.optJSONObject(i);
 					if(object == null) continue;
-					mBuildingIdList.add(object.optString("buildingId"));
-					mBuildingNameList.add(object.optString("buildingName"));
+
+					mProfessionIdList.add(object.optString("professionId"));
+					mProfessionNameList.add(object.optString("professionName"));
 				}
 
-				if(mBuildingListRefreshListener != null) mBuildingListRefreshListener.onRefreshListSucceeded();
 				notifyDataSetChanged();
+				if(mProfessionListRefreshListener != null) mProfessionListRefreshListener.onRefreshListSucceeded();
 			}
 		}
+	}
+
+	public interface ProfessionListRefreshListener{
+		void onRefreshListSucceeded();
+		void onRefreshListFailed();
 	}
 }

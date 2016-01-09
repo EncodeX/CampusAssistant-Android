@@ -20,6 +20,9 @@ public interface Constants {
 	String AAO_PASSWORD = "aao_password";
 	String AAO_REMEMBER_PASSWORD = "aao_remember_password";
 
+	String AAO_PLAN_BATCH_ID = "aao_plan_batch_id";
+	String AAO_PLAN_PROFESSION_ID = "aao_plan_profession_id";
+
 	String IS_LIBRARY_BOUND = "is_library_bound";
 
 	String IS_ECARD_BOUND = "is_ecard_bound";

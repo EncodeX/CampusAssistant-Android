@@ -281,7 +281,8 @@ public class CourseTableActivity extends AppCompatActivity {
 		String classroom = course.getClassroom();
 
 //		if(eventTitle.length() > 9) eventTitle = eventTitle.substring(0,8) + "…";
-		eventTitle = eventTitle.concat("\n\n" + classroom.substring(0,2) + "\n" + classroom.substring(2, classroom.length()));
+//		eventTitle = eventTitle.concat("\n\n" + classroom.substring(0,2) + "\n" + classroom.substring(2, classroom.length()));
+		eventTitle = eventTitle.concat("\n\n" + classroom);
 
 		return eventTitle;
 	}

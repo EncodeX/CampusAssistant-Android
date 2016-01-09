@@ -39,7 +39,8 @@
                 android:layout_weight="1"
                 app:fb_src="@drawable/ic_study_life_develop_plan"
                 app:fb_text="@string/education_system_foster_plan"
-                app:fb_text_size="12sp"/>
+                app:fb_text_size="12sp"
+	            app:fb_intent_activity=".activity.DevelopPlanActivity"/>
 	        <edu.neu.campusassistant.view.FunctionButton
 		        android:id="@+id/education_system_test"
 		        android:layout_width="0dp"
