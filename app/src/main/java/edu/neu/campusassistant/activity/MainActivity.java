@@ -31,7 +31,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.nineoldandroids.view.ViewHelper;
@@ -39,15 +38,18 @@ import com.nineoldandroids.view.ViewHelper;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import edu.neu.campusassistant.bean.Course;
 import edu.neu.campusassistant.utils.AnimateBuilder;
 import edu.neu.campusassistant.utils.AppController;
 import edu.neu.campusassistant.utils.Constants;
+import edu.neu.campusassistant.utils.CourseTableManager;
 import edu.neu.campusassistant.view.BoxLayout;
 import edu.neu.campusassistant.view.CircularRevealLayout;
 
@@ -130,17 +132,6 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 	RelativeLayout mLibraryAccountLayout;
 	@Bind(R.id.account_ecard)
 	RelativeLayout mECardAccountLayout;
-	@Bind(R.id.account_education_system_bind)
-	TextView mAAOAccountBindLabel;
-	@Bind(R.id.account_ecard_bind)
-	TextView mECardAccountBindLabel;
-	@Bind(R.id.account_library_bind)
-	TextView mLibraryAccountBindLabel;
-
-	@Bind(R.id.user_name)
-	TextView mUserName;
-	@Bind(R.id.user_info)
-	TextView mUserInfo;
 
 	private boolean mIsBoxRevealed = false;
 
@@ -166,6 +157,9 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 
 		/** FunctionButton开启新Activity 已废弃 **/
 //		setupButtonTargetActivity();
+
+		/** 初始化课表 **/
+		initCourseReminder();
 	}
 
 	@Override
@@ -196,13 +190,22 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 
 		/** 获取每日天气 **/
 		obtainDaliyWeather();
+
+		/** 刷新下节课信息 **/
+		refreshCourseReminder();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		CourseTableManager.getInstance(this).removeListener(mListListener);
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		switch (keyCode){
+		switch (keyCode) {
 			case KeyEvent.KEYCODE_BACK:
-				if(mIsBoxRevealed){
+				if (mIsBoxRevealed) {
 					applyCircularCloseAnimation();
 					return false;
 				}
@@ -739,7 +742,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 	}
 
 	/**
-	 * 设置学习生活的底部四个按钮所要跳转的activity
+	 * 设置学习生活的底部四个按钮所要跳转的activity 已废弃
 	 */
 	@Deprecated
 	private void setupButtonTargetActivity() {
@@ -752,18 +755,29 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 	/**
 	 * 刷新绑定文字信息
 	 */
-	private void refreshAccountBindingState(){
-		if(mSharedPreferences.getBoolean(Constants.IS_AAO_BOUND,false)){
+	@Bind(R.id.account_education_system_bind)
+	TextView mAAOAccountBindLabel;
+	@Bind(R.id.account_ecard_bind)
+	TextView mECardAccountBindLabel;
+	@Bind(R.id.account_library_bind)
+	TextView mLibraryAccountBindLabel;
+	@Bind(R.id.user_name)
+	TextView mUserName;
+	@Bind(R.id.user_info)
+	TextView mUserInfo;
+
+	private void refreshAccountBindingState() {
+		if (mSharedPreferences.getBoolean(Constants.IS_AAO_BOUND, false)) {
 			mAAOAccountBindLabel.setText("已绑定");
 			mAAOAccountBindLabel.setTextColor(getResources().getColor(R.color.colorAccent));
-		}else{
+		} else {
 			mAAOAccountBindLabel.setText("未绑定");
 			mAAOAccountBindLabel.setTextColor(getResources().getColor(R.color.colorgray));
 		}
 
 		final String token = mSharedPreferences.getString(Constants.AAO_TOKEN, "");
 
-		if(!token.equals("")){
+		if (!token.equals("")) {
 			JsonObjectRequest request = new JsonObjectRequest(
 					"http://202.118.31.241:8080/api/v1/schoolRoll?token=" + token,
 					new Response.Listener<JSONObject>() {
@@ -792,5 +806,80 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 
 			AppController.getInstance().addToRequestQueue(request);
 		}
+	}
+
+	/**
+	 * 下节课程提示
+	 */
+	@Bind(R.id.next_class_text_view)
+	TextView mNextClassTitle;
+	@Bind(R.id.next_class_name)
+	TextView mNextClassName;
+	@Bind(R.id.next_class_location)
+	TextView mNextClassLocation;
+	@Bind(R.id.next_class_time)
+	TextView mNextClassTime;
+
+	private CourseTableManager.CourseListListener mListListener;
+
+	private void initCourseReminder() {
+		this.mListListener = new CourseTableManager.CourseListListener() {
+			@Override
+			public void onCourseListLoaded(List<Course> courseList) {
+				Calendar now = Calendar.getInstance();
+				Course nextCourse = courseList.size() > 0 ? courseList.get(0) : null;
+				for (Course course : courseList) {
+					if (now.after(course.getStartTime()) && now.before(course.getEndTime())) {
+						// 正在上课
+						final String time = course.getStartSection() + "-" +
+								(course.getStartSection() + course.getSections() - 1) + "节";
+
+						mNextClassTitle.setVisibility(View.VISIBLE);
+						mNextClassTitle.setText("正在上课");
+						mNextClassName.setText(course.getCourseName());
+						mNextClassLocation.setText(course.getClassroom());
+						mNextClassTime.setText(time);
+
+						break;
+					}
+					if(nextCourse!= null){
+						if(nextCourse.getStartTime().before(now)){
+							nextCourse = course;
+						}else if(nextCourse.getStartTime().after(now)){
+							if(nextCourse.getStartTime().get(Calendar.DAY_OF_MONTH) == now.get(Calendar.DAY_OF_MONTH)){
+								// 下一节课
+								final String time = nextCourse.getStartSection() + " - " +
+										(nextCourse.getStartSection() + nextCourse.getSections() - 1) + " 节";
+
+								mNextClassTitle.setVisibility(View.VISIBLE);
+								mNextClassTitle.setText("下一节课");
+								mNextClassName.setText(nextCourse.getCourseName());
+								mNextClassLocation.setText(nextCourse.getClassroom());
+								mNextClassTime.setText(time);
+							}else{
+								// 没课了
+								mNextClassTitle.setVisibility(View.INVISIBLE);
+								mNextClassLocation.setVisibility(View.INVISIBLE);
+								mNextClassTime.setVisibility(View.INVISIBLE);
+								mNextClassName.setText("今天已经没有课了");
+							}
+							break;
+						}
+					}
+				}
+			}
+
+			@Override
+			public void onError(VolleyError error) {
+				Toast.makeText(getApplicationContext(), "获取课程表失败 请检查网络连接", Toast.LENGTH_LONG).show();
+				Log.d("CourseTableActivity", "Error: " + error.getMessage());
+			}
+		};
+
+		CourseTableManager.getInstance(this).addListener(mListListener);
+	}
+
+	private void refreshCourseReminder() {
+		CourseTableManager.getInstance(this).loadCourseList();
 	}
 }

@@ -16,6 +16,7 @@ public class Course {
 	private String classroom;
 	private String teacher;
 	private String weeks;
+	private int startSection;
 	private int sections;
 
 	public String getClassroom() {
@@ -74,6 +75,14 @@ public class Course {
 		this.sections = sections;
 	}
 
+	public int getStartSection() {
+		return startSection;
+	}
+
+	public void setStartSection(int startSection) {
+		this.startSection = startSection;
+	}
+
 	@Override
 	public String toString() {
 		return "\nCourse{" +
@@ -84,6 +93,7 @@ public class Course {
 				",\n\tteacher= " + teacher +
 				",\n\tweeks= " + weeks +
 				",\n\tsections= " + sections +
+				",\n\tstartSection= " + startSection +
 				"\n}";
 	}
 }

@@ -15,12 +15,7 @@ import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,8 +30,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import edu.neu.campusassistant.R;
 import edu.neu.campusassistant.bean.Course;
-import edu.neu.campusassistant.utils.AppController;
 import edu.neu.campusassistant.utils.Constants;
+import edu.neu.campusassistant.utils.CourseTableManager;
 
 public class CourseTableActivity extends AppCompatActivity {
 
@@ -52,7 +47,7 @@ public class CourseTableActivity extends AppCompatActivity {
 	private SharedPreferences mSharedPreferences;
 	private List<Course> mCourseList;
 
-	private JSONArray mCourseData;
+	private CourseTableManager.CourseListListener mListListener;
 
 	private int mColorList[] = {
 			R.color.event_color_01,
@@ -76,6 +71,12 @@ public class CourseTableActivity extends AppCompatActivity {
 
 		// 初始化数据
 		initData();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		CourseTableManager.getInstance(this).removeListener(mListListener);
 	}
 
 	private void initView() {
@@ -119,7 +120,7 @@ public class CourseTableActivity extends AppCompatActivity {
 				editor.putBoolean(Constants.IS_CAMPUS_HUNNAN, b);
 				editor.apply();
 
-				refreshCourseTable();
+				CourseTableManager.getInstance(CourseTableActivity.this).loadCourseList();
 			}
 		});
 
@@ -128,120 +129,22 @@ public class CourseTableActivity extends AppCompatActivity {
 
 	private void initData() {
 		mCourseList = new ArrayList<>();
-		String token = mSharedPreferences.getString(Constants.AAO_TOKEN, "");
-
-		if (!token.equals("")) {
-			final String requestString = "http://202.118.31.241:8080/api/v1/courseSchedule2?token=" + token;
-
-			JsonObjectRequest request = new JsonObjectRequest(
-					requestString,
-					new Response.Listener<JSONObject>() {
-						@Override
-						public void onResponse(JSONObject response) {
-							mCourseData = response.optJSONArray("data");
-							refreshCourseTable();
-						}
-					},
-					new Response.ErrorListener() {
-						@Override
-						public void onErrorResponse(VolleyError error) {
-							Toast.makeText(getApplicationContext(), "获取课程表失败 请检查网络连接", Toast.LENGTH_LONG).show();
-							Log.d("CourseTableActivity", "Error: " + error.getMessage());
-						}
-					}
-			);
-
-			AppController.getInstance().addToRequestQueue(request);
-		}
-	}
-
-	private void refreshCourseTable(){
-		if(mCourseData != null){
-			int nextCourse = 0, dayOfWeek = 0;
-			mCourseList.clear();
-			for (int i = 0; i < mCourseData.length(); i++) {
-				String str = mCourseData.optJSONObject(i).optString("room");
-
-				if (nextCourse == 12){
-					nextCourse = 0;
-					dayOfWeek++;
-				}
-
-				if ((i % 6) * 2 < nextCourse) continue;
-
-				if (str.equals("")) {
-					nextCourse += 2;
-					continue;
-				}
-				StringTokenizer tokenizer = new StringTokenizer(str, " ");
-
-				Course course = new Course();
-
-				// ===  课程名  === //
-				course.setCourseName(tokenizer.nextToken());
-
-				// ===  周数  === //
-				course.setWeeks(tokenizer.nextToken());
-
-				// ===  课节与时间  === //
-				String section = tokenizer.nextToken();
-				if (section.equals("节")) {
-					course.setSections(2);
-					nextCourse += 2;
-				} else {
-					int sections = Integer.valueOf(section.substring(0, 1));
-					course.setSections(sections);
-					nextCourse += sections;
-				}
-
-				Calendar startTime, endTime;
-
-				endTime = (Calendar) mFirstDayOfWeek.clone();
-				endTime.add(Calendar.DAY_OF_MONTH, dayOfWeek);
-				if(nextCourse > 4){
-					if(nextCourse > 8){
-						endTime.add(Calendar.MINUTE, 30);
-					}
-					endTime.add(Calendar.HOUR, 10 + nextCourse);
-				}else {
-					endTime.add(Calendar.HOUR, 8 + nextCourse);
-					if(mSharedPreferences.getBoolean(Constants.IS_CAMPUS_HUNNAN,false)){
-						endTime.add(Calendar.MINUTE, 30);
-					}
-				}
-				startTime = (Calendar) endTime.clone();
-				startTime.add(Calendar.HOUR, -course.getSections());
-
-				if(course.getSections() == 2){
-					switch (nextCourse){
-						case 2:
-						case 6:
-						case 10:
-							endTime.add(Calendar.MINUTE, -10);
-							break;
-						case 4:
-						case 8:
-						case 12:
-							startTime.add(Calendar.MINUTE, 10);
-							break;
-					}
-				}
-
-				course.setStartTime(startTime);
-				course.setEndTime(endTime);
-
-				// ===  教室  === //
-				course.setClassroom(tokenizer.nextToken());
-
-				// ===  教师  === //
-				String teacher = tokenizer.nextToken();
-				course.setTeacher(teacher.substring(0,teacher.length()-1).replace(";"," "));
-
-				mCourseList.add(course);
+		mListListener = new CourseTableManager.CourseListListener() {
+			@Override
+			public void onCourseListLoaded(List<Course> courseList) {
+				mCourseList = courseList;
+				mWeekView.notifyDatasetChanged();
 			}
 
-			mWeekView.notifyDatasetChanged();
-		}
+			@Override
+			public void onError(VolleyError error) {
+				Toast.makeText(getApplicationContext(), "获取课程表失败 请检查网络连接", Toast.LENGTH_LONG).show();
+				Log.d("CourseTableActivity", "Error: " + error.getMessage());
+			}
+		};
+
+		CourseTableManager.getInstance(this).addListener(mListListener);
+		CourseTableManager.getInstance(this).loadCourseList();
 	}
 
 	/**

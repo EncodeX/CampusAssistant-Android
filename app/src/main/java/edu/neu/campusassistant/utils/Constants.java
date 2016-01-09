@@ -23,9 +23,11 @@ public interface Constants {
 	String AAO_PLAN_BATCH_ID = "aao_plan_batch_id";
 	String AAO_PLAN_PROFESSION_ID = "aao_plan_profession_id";
 
+	String IS_CAMPUS_HUNNAN = "is_campus_hunnan";
+	String CURRENT_TIMETABLE_HUNNAN = "current_timetable_hunnan";
+	String COURSE_TABLE_TIMESTAMP = "course_table_timestamp";   //留作今后备用
+
 	String IS_LIBRARY_BOUND = "is_library_bound";
 
 	String IS_ECARD_BOUND = "is_ecard_bound";
-
-	String IS_CAMPUS_HUNNAN = "is_campus_hunnan";
 }

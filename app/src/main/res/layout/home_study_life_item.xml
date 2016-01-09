@@ -43,6 +43,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_alignParentLeft="true"
+                android:visibility="invisible"
                 android:textSize="12sp"
                 android:textColor="@color/colorWhite"
                 android:text="@string/study_life_next_class"/>
@@ -57,7 +58,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/colorWhite"
-                android:text="移动互联导论"/>
+                android:text="今天已经没有课了"/>
             <TextView
                 android:id="@+id/next_class_location"
                 android:layout_width="wrap_content"
@@ -67,9 +68,9 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:layout_alignParentLeft="true"
+                android:visibility="invisible"
                 android:textSize="12sp"
-                android:textColor="@color/colorWhite"
-                android:text="建筑B403"/>
+                android:textColor="@color/colorWhite"/>
             <TextView
                 android:id="@+id/next_class_time"
                 android:layout_width="wrap_content"
@@ -78,9 +79,9 @@
                 android:layout_toRightOf="@id/next_class_location"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
+                android:visibility="invisible"
                 android:textSize="12sp"
-                android:textColor="@color/colorWhite"
-                android:text="5-6节"/>
+                android:textColor="@color/colorWhite"/>
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/button_Panel"
