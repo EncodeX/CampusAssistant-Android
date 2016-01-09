@@ -37,7 +37,7 @@
                 android:layout_width="0dp"
                 android:layout_height="64dp"
                 android:layout_weight="1"
-                app:fb_src="@drawable/study_life_check_classes"
+                app:fb_src="@drawable/ic_study_life_develop_plan"
                 app:fb_text="@string/education_system_foster_plan"
                 app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -45,7 +45,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_study_life_test_agenda"
 		        app:fb_text="@string/education_system_test"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -53,7 +53,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_study_life_check_classes"
 		        app:fb_text="@string/education_system_class_list"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -61,7 +61,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_study_life_empty_classroom"
 		        app:fb_text="@string/education_system_empty_classroom"
 		        app:fb_text_size="12sp"/>
         </LinearLayout>
@@ -76,7 +76,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_study_life_search_grade"
 		        app:fb_text="@string/education_system_grade"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -84,7 +84,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_study_life_credit"
 		        app:fb_text="@string/education_system_score"
 		        app:fb_text_size="12sp"/>
             <View
@@ -123,7 +123,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_library_search"
 		        app:fb_text="@string/library_find_book"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -131,7 +131,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_library_info"
 		        app:fb_text="@string/library_mine_info"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -139,7 +139,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_library_my_borrowing"
 		        app:fb_text="@string/library_borrow_list"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -147,7 +147,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_library_history"
 		        app:fb_text="@string/library_borrow_history"
 		        app:fb_text_size="12sp"/>
         </LinearLayout>
@@ -182,7 +182,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_ecard_info"
 		        app:fb_text="@string/ecard_mine_info"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -190,7 +190,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_ecard_balance"
 		        app:fb_text="@string/ecard_deposit_info"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -198,7 +198,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_ecard_consumption"
 		        app:fb_text="@string/ecard_consume_info"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -206,7 +206,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_ecard_report"
 		        app:fb_text="@string/ecard_report_loss"
 		        app:fb_text_size="12sp"/>
         </LinearLayout>
@@ -241,7 +241,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_service_cet"
 		        app:fb_text="@string/campus_service_CET"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -249,7 +249,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_service_delivery"
 		        app:fb_text="@string/campus_service_express"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -257,7 +257,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_service_lost"
 		        app:fb_text="@string/campus_service_lost_and_found"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -265,7 +265,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_service_calendar"
 		        app:fb_text="@string/campus_service_calender"
 		        app:fb_text_size="12sp"/>
         </LinearLayout>
@@ -281,7 +281,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_service_map"
 		        app:fb_text="@string/campus_service_map"
 		        app:fb_text_size="12sp"/>
             <View
@@ -321,7 +321,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_study_life_check_classes"
 		        app:fb_text="@string/social_assosiation"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -329,7 +329,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_study_life_check_classes"
 		        app:fb_text="@string/social_class"
 		        app:fb_text_size="12sp"/>
 	        <edu.neu.campusassistant.view.FunctionButton
@@ -337,7 +337,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="64dp"
 		        android:layout_weight="1"
-		        app:fb_src="@drawable/study_life_check_classes"
+		        app:fb_src="@drawable/ic_study_life_check_classes"
 		        app:fb_text="@string/social_ad"
 		        app:fb_text_size="12sp"/>
             <View

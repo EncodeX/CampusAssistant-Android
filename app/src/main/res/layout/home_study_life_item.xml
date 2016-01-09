@@ -95,7 +95,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    app:fb_src="@drawable/study_life_check_classes"
+                    app:fb_src="@drawable/ic_study_life_check_classes"
                     app:fb_text="@string/study_life_check_class_list"
                     app:fb_text_color="@color/colorOrange"
                     app:fb_text_size="14sp"/>
@@ -104,7 +104,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    app:fb_src="@drawable/study_life_empty_classroom"
+                    app:fb_src="@drawable/ic_study_life_empty_classroom"
                     app:fb_text="@string/study_life_check_empty_classroom"
                     app:fb_text_color="@color/colorOrange"
                     app:fb_text_size="14sp"/>
@@ -113,7 +113,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    app:fb_src="@drawable/study_life_search_grade"
+                    app:fb_src="@drawable/ic_study_life_search_grade"
                     app:fb_text="@string/study_life_check_grade"
                     app:fb_text_color="@color/colorOrange"
                     app:fb_text_size="14sp"/>
@@ -122,7 +122,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    app:fb_src="@drawable/study_life_test_agenda"
+                    app:fb_src="@drawable/ic_study_life_test_agenda"
                     app:fb_text="@string/study_life_check_test_agenda"
                     app:fb_text_color="@color/colorOrange"
                     app:fb_text_size="14sp"/>
