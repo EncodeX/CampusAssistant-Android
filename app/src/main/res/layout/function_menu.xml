@@ -47,7 +47,8 @@
 		        android:layout_weight="1"
 		        app:fb_src="@drawable/ic_study_life_test_agenda"
 		        app:fb_text="@string/education_system_test"
-		        app:fb_text_size="12sp"/>
+		        app:fb_text_size="12sp"
+		        app:fb_intent_activity=".activity.ExamAgendaListActivity"/>
 	        <edu.neu.campusassistant.view.FunctionButton
 		        android:id="@+id/education_system_class_list"
 		        android:layout_width="0dp"
@@ -55,7 +56,8 @@
 		        android:layout_weight="1"
 		        app:fb_src="@drawable/ic_study_life_check_classes"
 		        app:fb_text="@string/education_system_class_list"
-		        app:fb_text_size="12sp"/>
+		        app:fb_text_size="12sp"
+		        app:fb_intent_activity=".activity.CourseTableActivity"/>
 	        <edu.neu.campusassistant.view.FunctionButton
 		        android:id="@+id/education_system_empty_classroom"
 		        android:layout_width="0dp"
@@ -63,7 +65,8 @@
 		        android:layout_weight="1"
 		        app:fb_src="@drawable/ic_study_life_empty_classroom"
 		        app:fb_text="@string/education_system_empty_classroom"
-		        app:fb_text_size="12sp"/>
+		        app:fb_text_size="12sp"
+		        app:fb_intent_activity=".activity.EmptyClassroomActivity"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/line2"
@@ -78,7 +81,8 @@
 		        android:layout_weight="1"
 		        app:fb_src="@drawable/ic_study_life_search_grade"
 		        app:fb_text="@string/education_system_grade"
-		        app:fb_text_size="12sp"/>
+		        app:fb_text_size="12sp"
+		        app:fb_intent_activity=".activity.GradeListActivity"/>
 	        <edu.neu.campusassistant.view.FunctionButton
 		        android:id="@+id/education_system_score"
 		        android:layout_width="0dp"

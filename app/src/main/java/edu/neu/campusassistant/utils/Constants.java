@@ -8,6 +8,7 @@ package edu.neu.campusassistant.utils;
  * Package: edu.neu.campusassistant.utils
  */
 public interface Constants {
+	String PACKAGE_NAME = "edu.neu.campusassistant";
 	String SHARED_PREFS_KEY = "edu.neu.campusassistant";
 
 	String IPGW_USERNAME = "ipgw_username";

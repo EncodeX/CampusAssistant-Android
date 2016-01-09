@@ -98,7 +98,8 @@
                     app:fb_src="@drawable/ic_study_life_check_classes"
                     app:fb_text="@string/study_life_check_class_list"
                     app:fb_text_color="@color/colorOrange"
-                    app:fb_text_size="14sp"/>
+                    app:fb_text_size="14sp"
+                    app:fb_intent_activity=".activity.CourseTableActivity"/>
                 <edu.neu.campusassistant.view.FunctionButton
                     android:id="@+id/check_empty_classroom_button"
                     android:layout_width="0dp"
@@ -107,7 +108,8 @@
                     app:fb_src="@drawable/ic_study_life_empty_classroom"
                     app:fb_text="@string/study_life_check_empty_classroom"
                     app:fb_text_color="@color/colorOrange"
-                    app:fb_text_size="14sp"/>
+                    app:fb_text_size="14sp"
+                    app:fb_intent_activity=".activity.EmptyClassroomActivity"/>
                 <edu.neu.campusassistant.view.FunctionButton
                     android:id="@+id/check_grade_button"
                     android:layout_width="0dp"
@@ -116,7 +118,8 @@
                     app:fb_src="@drawable/ic_study_life_search_grade"
                     app:fb_text="@string/study_life_check_grade"
                     app:fb_text_color="@color/colorOrange"
-                    app:fb_text_size="14sp"/>
+                    app:fb_text_size="14sp"
+                    app:fb_intent_activity=".activity.GradeListActivity"/>
                 <edu.neu.campusassistant.view.FunctionButton
                     android:id="@+id/check_test_agenda_button"
                     android:layout_width="0dp"
@@ -125,7 +128,8 @@
                     app:fb_src="@drawable/ic_study_life_test_agenda"
                     app:fb_text="@string/study_life_check_test_agenda"
                     app:fb_text_color="@color/colorOrange"
-                    app:fb_text_size="14sp"/>
+                    app:fb_text_size="14sp"
+                    app:fb_intent_activity=".activity.ExamAgendaListActivity"/>
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>

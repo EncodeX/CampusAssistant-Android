@@ -7,5 +7,6 @@
 		<attr name="fb_text_size" format="dimension"/>
 		<attr name="fb_src" format="reference"/>
 		<!--<attr name="fb_scale_type" format="string"/>-->
+		<attr name="fb_intent_activity" format="string"/>
 	</declare-styleable>
 </resources>

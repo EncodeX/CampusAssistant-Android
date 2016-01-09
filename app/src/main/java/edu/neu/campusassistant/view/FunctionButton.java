@@ -14,6 +14,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import edu.neu.campusassistant.R;
+import edu.neu.campusassistant.utils.Constants;
 
 /**
  * Created with Android Studio.
@@ -75,6 +76,10 @@ public class FunctionButton extends RelativeLayout {
 		mSrc = attributes.getResourceId(R.styleable.FunctionButton_fb_src, R.drawable.weather_sun);
 //		mScaleType = attributes.getNonResourceString(R.styleable.FunctionButton_fb_scale_type);
 
+		mIntentActivity = attributes.getString(R.styleable.FunctionButton_fb_intent_activity);
+
+		attributes.recycle();
+
 		mButtonIcon.setImageResource(mSrc);
 //		mButtonIcon.setScaleType();
 
@@ -90,9 +95,9 @@ public class FunctionButton extends RelativeLayout {
 			@Override
 			public void onClick(View view) {
 				Class<?> intentActivity = null;
-				if(mIntentActivity!=null){
+				if(mIntentActivity!=null && !mIntentActivity.equals("")){
 					try {
-						intentActivity = Class.forName(mIntentActivity);
+						intentActivity = Class.forName(Constants.PACKAGE_NAME + mIntentActivity);
 						if(intentActivity!=null)
 							mContext.startActivity(new Intent(mContext,intentActivity));
 					} catch (ClassNotFoundException e) {

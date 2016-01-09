@@ -164,8 +164,8 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 		/** 设置weekNo**/
 		setupWeatherWeekNo();
 
-		/** FunctionButton开启新Activity **/
-		setupButtonTargetActivity();
+		/** FunctionButton开启新Activity 已废弃 **/
+//		setupButtonTargetActivity();
 	}
 
 	@Override
@@ -741,6 +741,7 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 	/**
 	 * 设置学习生活的底部四个按钮所要跳转的activity
 	 */
+	@Deprecated
 	private void setupButtonTargetActivity() {
 		mCheckClassListButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
 		mCheckEmptyClassroomButton.setIntentActivity("edu.neu.campusassistant.activity.EmptyClassroomActivity");
