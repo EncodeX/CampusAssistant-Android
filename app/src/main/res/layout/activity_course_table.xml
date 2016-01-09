@@ -15,12 +15,25 @@
 		app:title="课程表"
 		app:titleTextColor="@android:color/white"
 		android:elevation="8dp"/>
+	<android.support.v7.widget.SwitchCompat
+		android:id="@+id/campus_switch"
+		android:layout_width="wrap_content"
+		android:layout_height="?attr/actionBarSize"
+		android:layout_alignParentRight="true"
+		android:elevation="8dp"
+		android:layout_marginRight="8dp"
+		android:text="浑南校区 "
+		android:textSize="14sp"
+		android:textColor="@color/colorWhite"
+		android:theme="@style/AppTheme.Switch"/>
 	<com.alamkanak.weekview.WeekView
 		android:id="@+id/week_view"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_below="@id/app_bar"
 		app:eventTextColor="@android:color/white"
+		app:eventTextSize="10sp"
+		app:eventCornerRadius="2dp"
 		app:textSize="12sp"
 		app:hourHeight="60dp"
 		app:headerColumnPadding="4dp"

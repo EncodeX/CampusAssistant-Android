@@ -22,4 +22,6 @@ public interface Constants {
 	String IS_LIBRARY_BOUND = "is_library_bound";
 
 	String IS_ECARD_BOUND = "is_ecard_bound";
+
+	String IS_CAMPUS_HUNNAN = "is_campus_hunnan";
 }

@@ -4,9 +4,11 @@ import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
@@ -23,8 +25,10 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import butterknife.Bind;
@@ -41,15 +45,31 @@ public class CourseTableActivity extends AppCompatActivity {
 	ActionBar mAppBar;
 	@Bind(R.id.week_view)
 	WeekView mWeekView;
+	@Bind(R.id.campus_switch)
+	SwitchCompat mCampusSwitch;
 
-	Calendar mFirstDayOfWeek;
-	SharedPreferences mSharedPreferences;
-	List<Course> mCourseList;
+	private Calendar mFirstDayOfWeek;
+	private SharedPreferences mSharedPreferences;
+	private List<Course> mCourseList;
+
+	private JSONArray mCourseData;
+
+	private int mColorList[] = {
+			R.color.event_color_01,
+			R.color.event_color_02,
+			R.color.event_color_03,
+			R.color.event_color_04,
+			R.color.event_color_05,
+			R.color.event_color_06,
+			R.color.event_color_07
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_course_table);
+
+		mSharedPreferences = this.getSharedPreferences(Constants.SHARED_PREFS_KEY, MODE_PRIVATE);
 
 		// 初始化视图
 		initView();
@@ -91,12 +111,23 @@ public class CourseTableActivity extends AppCompatActivity {
 		mFirstDayOfWeek.set(Calendar.SECOND,0);
 		mFirstDayOfWeek.set(Calendar.MILLISECOND,0);
 		mWeekView.goToDate(mFirstDayOfWeek);
+
+		mCampusSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+				SharedPreferences.Editor editor = mSharedPreferences.edit();
+				editor.putBoolean(Constants.IS_CAMPUS_HUNNAN, b);
+				editor.apply();
+
+				refreshCourseTable();
+			}
+		});
+
+		mCampusSwitch.setChecked(mSharedPreferences.getBoolean(Constants.IS_CAMPUS_HUNNAN, false));
 	}
 
 	private void initData() {
 		mCourseList = new ArrayList<>();
-
-		mSharedPreferences = this.getSharedPreferences(Constants.SHARED_PREFS_KEY, MODE_PRIVATE);
 		String token = mSharedPreferences.getString(Constants.AAO_TOKEN, "");
 
 		if (!token.equals("")) {
@@ -107,94 +138,8 @@ public class CourseTableActivity extends AppCompatActivity {
 					new Response.Listener<JSONObject>() {
 						@Override
 						public void onResponse(JSONObject response) {
-							JSONArray data = response.optJSONArray("data");
-							if (data != null) {
-								int nextCourse = 0, dayOfWeek = 0;
-								mCourseList.clear();
-								for (int i = 0; i < data.length(); i++) {
-									String str = data.optJSONObject(i).optString("room");
-
-									if (nextCourse == 12){
-										nextCourse = 0;
-										dayOfWeek++;
-									}
-
-									if ((i % 6) * 2 < nextCourse) continue;
-
-									if (str.equals("")) {
-										nextCourse += 2;
-										continue;
-									}
-									StringTokenizer tokenizer = new StringTokenizer(str, " ");
-
-									Course course = new Course();
-
-									// ===  课程名  === //
-									course.setCourseName(tokenizer.nextToken());
-
-									// ===  周数  === //
-									course.setWeeks(tokenizer.nextToken());
-
-									// ===  课节与时间  === //
-									String section = tokenizer.nextToken();
-									if (section.equals("节")) {
-										course.setSections(2);
-										nextCourse += 2;
-									} else {
-										int sections = Integer.valueOf(section.substring(0, 1));
-										course.setSections(sections);
-										nextCourse += sections;
-									}
-
-									Calendar startTime, endTime;
-
-									endTime = (Calendar) mFirstDayOfWeek.clone();
-									endTime.add(Calendar.DAY_OF_MONTH, dayOfWeek);
-									if(nextCourse > 4){
-										if(nextCourse > 8){
-											endTime.add(Calendar.MINUTE, 30);
-										}
-										endTime.add(Calendar.HOUR, 10 + nextCourse);
-									}else {
-										endTime.add(Calendar.HOUR, 8 + nextCourse);
-									}
-									startTime = (Calendar) endTime.clone();
-									startTime.add(Calendar.HOUR, -course.getSections());
-
-									if(course.getSections() == 2){
-										switch (nextCourse){
-											case 2:
-											case 6:
-											case 10:
-												endTime.add(Calendar.MINUTE, -10);
-												break;
-											case 4:
-											case 8:
-											case 12:
-												startTime.add(Calendar.MINUTE, 10);
-												break;
-										}
-									}
-
-									course.setStartTime(startTime);
-									course.setEndTime(endTime);
-
-									// ===  教室  === //
-									course.setClassroom(tokenizer.nextToken());
-
-									// ===  教师  === //
-									String teacher = tokenizer.nextToken();
-									course.setTeacher(teacher.substring(0,teacher.length()-1).replace(";"," "));
-
-									mCourseList.add(course);
-								}
-
-								for(Course c:mCourseList){
-									Log.d("CourseTableActivity", c.toString());
-								}
-
-								mWeekView.notifyDatasetChanged();
-							}
+							mCourseData = response.optJSONArray("data");
+							refreshCourseTable();
 						}
 					},
 					new Response.ErrorListener() {
@@ -207,6 +152,95 @@ public class CourseTableActivity extends AppCompatActivity {
 			);
 
 			AppController.getInstance().addToRequestQueue(request);
+		}
+	}
+
+	private void refreshCourseTable(){
+		if(mCourseData != null){
+			int nextCourse = 0, dayOfWeek = 0;
+			mCourseList.clear();
+			for (int i = 0; i < mCourseData.length(); i++) {
+				String str = mCourseData.optJSONObject(i).optString("room");
+
+				if (nextCourse == 12){
+					nextCourse = 0;
+					dayOfWeek++;
+				}
+
+				if ((i % 6) * 2 < nextCourse) continue;
+
+				if (str.equals("")) {
+					nextCourse += 2;
+					continue;
+				}
+				StringTokenizer tokenizer = new StringTokenizer(str, " ");
+
+				Course course = new Course();
+
+				// ===  课程名  === //
+				course.setCourseName(tokenizer.nextToken());
+
+				// ===  周数  === //
+				course.setWeeks(tokenizer.nextToken());
+
+				// ===  课节与时间  === //
+				String section = tokenizer.nextToken();
+				if (section.equals("节")) {
+					course.setSections(2);
+					nextCourse += 2;
+				} else {
+					int sections = Integer.valueOf(section.substring(0, 1));
+					course.setSections(sections);
+					nextCourse += sections;
+				}
+
+				Calendar startTime, endTime;
+
+				endTime = (Calendar) mFirstDayOfWeek.clone();
+				endTime.add(Calendar.DAY_OF_MONTH, dayOfWeek);
+				if(nextCourse > 4){
+					if(nextCourse > 8){
+						endTime.add(Calendar.MINUTE, 30);
+					}
+					endTime.add(Calendar.HOUR, 10 + nextCourse);
+				}else {
+					endTime.add(Calendar.HOUR, 8 + nextCourse);
+					if(mSharedPreferences.getBoolean(Constants.IS_CAMPUS_HUNNAN,false)){
+						endTime.add(Calendar.MINUTE, 30);
+					}
+				}
+				startTime = (Calendar) endTime.clone();
+				startTime.add(Calendar.HOUR, -course.getSections());
+
+				if(course.getSections() == 2){
+					switch (nextCourse){
+						case 2:
+						case 6:
+						case 10:
+							endTime.add(Calendar.MINUTE, -10);
+							break;
+						case 4:
+						case 8:
+						case 12:
+							startTime.add(Calendar.MINUTE, 10);
+							break;
+					}
+				}
+
+				course.setStartTime(startTime);
+				course.setEndTime(endTime);
+
+				// ===  教室  === //
+				course.setClassroom(tokenizer.nextToken());
+
+				// ===  教师  === //
+				String teacher = tokenizer.nextToken();
+				course.setTeacher(teacher.substring(0,teacher.length()-1).replace(";"," "));
+
+				mCourseList.add(course);
+			}
+
+			mWeekView.notifyDatasetChanged();
 		}
 	}
 
@@ -244,9 +278,10 @@ public class CourseTableActivity extends AppCompatActivity {
 	private String getEventTitle(Course course) {
 //		return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH) + 1, time.get(Calendar.DAY_OF_MONTH));
 		String eventTitle = course.getCourseName();
+		String classroom = course.getClassroom();
 
-		if(eventTitle.length() > 9) eventTitle = eventTitle.substring(0,8) + "…";
-		eventTitle = eventTitle.concat("\n\n" + course.getClassroom());
+//		if(eventTitle.length() > 9) eventTitle = eventTitle.substring(0,8) + "…";
+		eventTitle = eventTitle.concat("\n\n" + classroom.substring(0,2) + "\n" + classroom.substring(2, classroom.length()));
 
 		return eventTitle;
 	}
@@ -257,22 +292,24 @@ public class CourseTableActivity extends AppCompatActivity {
 			Log.v("CourseTableActivity", newYear + " " + newMonth);
 
 			List<WeekViewEvent> list = new ArrayList<WeekViewEvent>();
+			Map<String, Integer> courseColorList = new HashMap<>();
 
 			if(newMonth != mFirstDayOfWeek.get(Calendar.MONTH) + 1) return list;
 
-			int counter = 0;
+			int counter = 0, colorCounter = 0;
 			for(Course course: mCourseList){
 				WeekViewEvent event = new WeekViewEvent(
-						counter,
+						counter++,
 						getEventTitle(course),
 						course.getStartTime(),
 						course.getEndTime()
 				);
 
-				event.setColor(getResources().getColor(R.color.colorOrange));
+				if(!courseColorList.containsKey(course.getCourseName())){
+					courseColorList.put(course.getCourseName(), mColorList[colorCounter++]);
+				}
+				event.setColor(getResources().getColor(courseColorList.get(course.getCourseName())));
 				list.add(event);
-
-				counter++;
 			}
 
 			return list;

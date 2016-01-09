@@ -13,11 +13,16 @@
 	<color name="rippleBlack">#1A000000</color>
 	<color name="rippleWhite">#66FFFFFF</color>
 
-	<color name="event_color_01">#59dbe0</color>
-	<color name="event_color_02">#f57f68</color>
-	<color name="event_color_03">#87d288</color>
-	<color name="event_color_04">#f8b552</color>
+	<color name="event_color_01">#7986CB</color>
+	<color name="event_color_02">#009688</color>
+	<color name="event_color_03">#43A047</color>
+	<color name="event_color_04">#EF6C00</color>
+	<color name="event_color_05">#0091EA</color>
+	<color name="event_color_06">#EF5350</color>
+	<color name="event_color_07">#78909C</color>
 
 	<color name="background_dark">#ff212121</color>
 	<color name="background_light">#fffafafa</color>
+
+	<color name="switch_checked">#90CAF9</color>
 </resources>

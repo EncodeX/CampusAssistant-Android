@@ -29,6 +29,10 @@
 	</style>
 	<style name="AppTheme.Dark.Spinner.PopupMenu" parent="Widget.AppCompat.DropDownItem.Spinner"/>
 
+	<style name="AppTheme.Switch" parent="AppTheme">
+		<item name="colorAccent">@color/colorWhite</item>
+	</style>
+
 	<style name="AppTheme.Button.Pink" parent="Widget.AppCompat.Button">
 		<item name="android:background">@drawable/btn_pink</item>
 		<item name="android:textColor">@android:color/white</item>
