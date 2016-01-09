@@ -91,7 +91,8 @@
 		        android:layout_weight="1"
 		        app:fb_src="@drawable/ic_study_life_credit"
 		        app:fb_text="@string/education_system_score"
-		        app:fb_text_size="12sp"/>
+		        app:fb_text_size="12sp"
+		        app:fb_intent_activity=".activity.aao.CreditStatisticsActivity"/>
             <View
                 android:layout_width="0dp"
                 android:layout_height="64dp"

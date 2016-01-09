@@ -30,6 +30,8 @@
 		</activity>
 		<activity android:name=".activity.aao.DevelopPlanActivity">
 		</activity>
+		<activity android:name=".activity.aao.CreditStatisticsActivity">
+		</activity>
 	</application>
 
 </manifest>

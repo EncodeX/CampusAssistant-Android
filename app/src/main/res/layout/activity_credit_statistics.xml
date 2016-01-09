@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	tools:context="edu.neu.campusassistant.activity.aao.CreditStatisticsActivity">
+	<android.support.v7.widget.Toolbar
+		android:id="@+id/app_bar"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/colorPrimary"
+		android:theme="@style/AppTheme.Dark"
+		android:elevation="8dp"
+		app:title="学业预警"
+		app:titleTextColor="@android:color/white"/>
+	<ListView
+		android:id="@+id/credit_list"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/app_bar"/>
+</RelativeLayout>
