@@ -1,4 +1,4 @@
-package edu.neu.campusassistant.activity;
+package edu.neu.campusassistant.activity.aao;
 
 import android.content.Context;
 import android.content.SharedPreferences;

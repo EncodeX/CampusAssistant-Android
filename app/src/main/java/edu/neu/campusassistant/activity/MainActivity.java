@@ -191,8 +191,8 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 		/** 获取每日天气 **/
 		obtainDaliyWeather();
 
-		/** 刷新下节课信息 **/
-		refreshCourseReminder();
+		/** 账户绑定相关文字信息 **/
+		refreshAccountBindingState();
 	}
 
 	@Override
@@ -342,9 +342,6 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 				dialog.show(getSupportFragmentManager(), "ecard_account_login");
 			}
 		});
-
-		// 账户绑定相关文字信息
-		refreshAccountBindingState();
 	}
 
 	@TargetApi(21)
@@ -746,10 +743,10 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 	 */
 	@Deprecated
 	private void setupButtonTargetActivity() {
-		mCheckClassListButton.setIntentActivity("edu.neu.campusassistant.activity.CourseTableActivity");
-		mCheckEmptyClassroomButton.setIntentActivity("edu.neu.campusassistant.activity.EmptyClassroomActivity");
-		mCheckGradeButton.setIntentActivity("edu.neu.campusassistant.activity.GradeListActivity");
-		mCheckTextAgendaButton.setIntentActivity("edu.neu.campusassistant.activity.ExamAgendaListActivity");
+		mCheckClassListButton.setIntentActivity("edu.neu.campusassistant.activity.aao.CourseTableActivity");
+		mCheckEmptyClassroomButton.setIntentActivity("edu.neu.campusassistant.activity.aao.EmptyClassroomActivity");
+		mCheckGradeButton.setIntentActivity("edu.neu.campusassistant.activity.aao.GradeListActivity");
+		mCheckTextAgendaButton.setIntentActivity("edu.neu.campusassistant.activity.aao.ExamAgendaListActivity");
 	}
 
 	/**
@@ -770,42 +767,45 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 		if (mSharedPreferences.getBoolean(Constants.IS_AAO_BOUND, false)) {
 			mAAOAccountBindLabel.setText("已绑定");
 			mAAOAccountBindLabel.setTextColor(getResources().getColor(R.color.colorAccent));
+
+			final String token = mSharedPreferences.getString(Constants.AAO_TOKEN, "");
+
+			if (!token.equals("")) {
+				JsonObjectRequest request = new JsonObjectRequest(
+						"http://202.118.31.241:8080/api/v1/schoolRoll?token=" + token,
+						new Response.Listener<JSONObject>() {
+							@Override
+							public void onResponse(JSONObject response) {
+								JSONArray data = response.optJSONArray("data");
+
+								if (data != null) {
+									JSONObject object = data.optJSONObject(0);
+									final String info = object.optString("collegeName") + " " +
+											object.optString("professionName") + " " +
+											object.optString("StudentId");
+
+									mUserName.setText(object.optString("StudentName"));
+									mUserInfo.setText(info);
+								}
+							}
+						},
+						new Response.ErrorListener() {
+							@Override
+							public void onErrorResponse(VolleyError error) {
+								Log.d("MainActivity", "学籍信息获取失败");
+							}
+						}
+				);
+
+				AppController.getInstance().addToRequestQueue(request);
+			}
 		} else {
 			mAAOAccountBindLabel.setText("未绑定");
 			mAAOAccountBindLabel.setTextColor(getResources().getColor(R.color.colorgray));
 		}
 
-		final String token = mSharedPreferences.getString(Constants.AAO_TOKEN, "");
-
-		if (!token.equals("")) {
-			JsonObjectRequest request = new JsonObjectRequest(
-					"http://202.118.31.241:8080/api/v1/schoolRoll?token=" + token,
-					new Response.Listener<JSONObject>() {
-						@Override
-						public void onResponse(JSONObject response) {
-							JSONArray data = response.optJSONArray("data");
-
-							if (data != null) {
-								JSONObject object = data.optJSONObject(0);
-								final String info = object.optString("collegeName") + " " +
-										object.optString("professionName") + " " +
-										object.optString("StudentId");
-
-								mUserName.setText(object.optString("StudentName"));
-								mUserInfo.setText(info);
-							}
-						}
-					},
-					new Response.ErrorListener() {
-						@Override
-						public void onErrorResponse(VolleyError error) {
-							Log.d("MainActivity", "学籍信息获取失败");
-						}
-					}
-			);
-
-			AppController.getInstance().addToRequestQueue(request);
-		}
+		// 同时刷新课程信息
+		refreshCourseReminder();
 	}
 
 	/**
@@ -880,6 +880,10 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 	}
 
 	private void refreshCourseReminder() {
+		if(!mSharedPreferences.getBoolean(Constants.IS_AAO_BOUND,false)){
+			mNextClassName.setText("绑定教务账户以开启课程提醒功能");
+			return;
+		}
 		CourseTableManager.getInstance(this).loadCourseList();
 	}
 }

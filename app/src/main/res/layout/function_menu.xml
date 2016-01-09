@@ -40,7 +40,7 @@
                 app:fb_src="@drawable/ic_study_life_develop_plan"
                 app:fb_text="@string/education_system_foster_plan"
                 app:fb_text_size="12sp"
-	            app:fb_intent_activity=".activity.DevelopPlanActivity"/>
+	            app:fb_intent_activity=".activity.aao.DevelopPlanActivity"/>
 	        <edu.neu.campusassistant.view.FunctionButton
 		        android:id="@+id/education_system_test"
 		        android:layout_width="0dp"
@@ -49,7 +49,7 @@
 		        app:fb_src="@drawable/ic_study_life_test_agenda"
 		        app:fb_text="@string/education_system_test"
 		        app:fb_text_size="12sp"
-		        app:fb_intent_activity=".activity.ExamAgendaListActivity"/>
+		        app:fb_intent_activity=".activity.aao.ExamAgendaListActivity"/>
 	        <edu.neu.campusassistant.view.FunctionButton
 		        android:id="@+id/education_system_class_list"
 		        android:layout_width="0dp"
@@ -58,7 +58,7 @@
 		        app:fb_src="@drawable/ic_study_life_check_classes"
 		        app:fb_text="@string/education_system_class_list"
 		        app:fb_text_size="12sp"
-		        app:fb_intent_activity=".activity.CourseTableActivity"/>
+		        app:fb_intent_activity=".activity.aao.CourseTableActivity"/>
 	        <edu.neu.campusassistant.view.FunctionButton
 		        android:id="@+id/education_system_empty_classroom"
 		        android:layout_width="0dp"
@@ -67,7 +67,7 @@
 		        app:fb_src="@drawable/ic_study_life_empty_classroom"
 		        app:fb_text="@string/education_system_empty_classroom"
 		        app:fb_text_size="12sp"
-		        app:fb_intent_activity=".activity.EmptyClassroomActivity"/>
+		        app:fb_intent_activity=".activity.aao.EmptyClassroomActivity"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/line2"
@@ -83,7 +83,7 @@
 		        app:fb_src="@drawable/ic_study_life_search_grade"
 		        app:fb_text="@string/education_system_grade"
 		        app:fb_text_size="12sp"
-		        app:fb_intent_activity=".activity.GradeListActivity"/>
+		        app:fb_intent_activity=".activity.aao.GradeListActivity"/>
 	        <edu.neu.campusassistant.view.FunctionButton
 		        android:id="@+id/education_system_score"
 		        android:layout_width="0dp"

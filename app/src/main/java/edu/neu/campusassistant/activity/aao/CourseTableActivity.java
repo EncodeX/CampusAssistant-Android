@@ -1,4 +1,4 @@
-package edu.neu.campusassistant.activity;
+package edu.neu.campusassistant.activity.aao;
 
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

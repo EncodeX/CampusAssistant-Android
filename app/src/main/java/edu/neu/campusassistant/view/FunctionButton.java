@@ -2,6 +2,7 @@ package edu.neu.campusassistant.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.text.TextPaint;
@@ -10,6 +11,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,6 +36,7 @@ public class FunctionButton extends RelativeLayout {
 	private String mScaleType;
 
 	private String mIntentActivity;     // exp: "edu.neu.campusassistant.activity.MainActivity"
+	private SharedPreferences mSharedPreferences;
 
 	@Bind(R.id.function_button_icon)
 	SquareImageView mButtonIcon;
@@ -50,6 +53,7 @@ public class FunctionButton extends RelativeLayout {
 
 	public FunctionButton(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
+		mSharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
 		init(context, attrs);
 	}
 
@@ -97,6 +101,15 @@ public class FunctionButton extends RelativeLayout {
 				Class<?> intentActivity = null;
 				if(mIntentActivity!=null && !mIntentActivity.equals("")){
 					try {
+						// 检查账户是否绑定
+						// TODO: 16/1/9 今后加入更多账户类型检查
+						if(mIntentActivity.contains("aao")){
+							if(!mSharedPreferences.getBoolean(Constants.IS_AAO_BOUND, false)){
+								Toast.makeText(getContext(), "请先绑定教务账户再使用此功能", Toast.LENGTH_LONG).show();
+								return;
+							}
+						}
+
 						intentActivity = Class.forName(Constants.PACKAGE_NAME + mIntentActivity);
 						if(intentActivity!=null)
 							mContext.startActivity(new Intent(mContext,intentActivity));

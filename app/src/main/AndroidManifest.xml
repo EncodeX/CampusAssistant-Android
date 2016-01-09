@@ -20,15 +20,15 @@
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-		<activity android:name=".activity.CourseTableActivity">
+		<activity android:name=".activity.aao.CourseTableActivity">
 		</activity>
-		<activity android:name=".activity.ExamAgendaListActivity">
+		<activity android:name=".activity.aao.ExamAgendaListActivity">
 		</activity>
-		<activity android:name=".activity.GradeListActivity">
+		<activity android:name=".activity.aao.GradeListActivity">
 		</activity>
-		<activity android:name=".activity.EmptyClassroomActivity">
+		<activity android:name=".activity.aao.EmptyClassroomActivity">
 		</activity>
-		<activity android:name=".activity.DevelopPlanActivity">
+		<activity android:name=".activity.aao.DevelopPlanActivity">
 		</activity>
 	</application>
 

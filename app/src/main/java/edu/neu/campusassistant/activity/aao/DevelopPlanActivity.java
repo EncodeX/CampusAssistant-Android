@@ -1,4 +1,4 @@
-package edu.neu.campusassistant.activity;
+package edu.neu.campusassistant.activity.aao;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -21,14 +21,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import edu.neu.campusassistant.R;
 import edu.neu.campusassistant.adapter.DevelopPlanCourseListAdapter;
 import edu.neu.campusassistant.adapter.ProfessionListAdapter;
-import edu.neu.campusassistant.bean.DevelopPlanCourse;
 import edu.neu.campusassistant.utils.AppController;
 import edu.neu.campusassistant.utils.Constants;
 
