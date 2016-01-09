@@ -31,6 +31,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.nineoldandroids.view.ViewHelper;
@@ -135,6 +136,11 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 	TextView mECardAccountBindLabel;
 	@Bind(R.id.account_library_bind)
 	TextView mLibraryAccountBindLabel;
+
+	@Bind(R.id.user_name)
+	TextView mUserName;
+	@Bind(R.id.user_info)
+	TextView mUserInfo;
 
 	private boolean mIsBoxRevealed = false;
 
@@ -752,6 +758,38 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 		}else{
 			mAAOAccountBindLabel.setText("未绑定");
 			mAAOAccountBindLabel.setTextColor(getResources().getColor(R.color.colorgray));
+		}
+
+		final String token = mSharedPreferences.getString(Constants.AAO_TOKEN, "");
+
+		if(!token.equals("")){
+			JsonObjectRequest request = new JsonObjectRequest(
+					"http://202.118.31.241:8080/api/v1/schoolRoll?token=" + token,
+					new Response.Listener<JSONObject>() {
+						@Override
+						public void onResponse(JSONObject response) {
+							JSONArray data = response.optJSONArray("data");
+
+							if (data != null) {
+								JSONObject object = data.optJSONObject(0);
+								final String info = object.optString("collegeName") + " " +
+										object.optString("professionName") + " " +
+										object.optString("StudentId");
+
+								mUserName.setText(object.optString("StudentName"));
+								mUserInfo.setText(info);
+							}
+						}
+					},
+					new Response.ErrorListener() {
+						@Override
+						public void onErrorResponse(VolleyError error) {
+							Log.d("MainActivity", "学籍信息获取失败");
+						}
+					}
+			);
+
+			AppController.getInstance().addToRequestQueue(request);
 		}
 	}
 }

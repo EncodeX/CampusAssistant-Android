@@ -36,7 +36,7 @@
 			    android:textColor="@color/colorWhite"
 			    android:textSize="20sp"
 			    android:textStyle="bold"
-			    android:text="用户名"/>
+			    android:text="未绑定"/>
 		    <TextView
 			    android:id="@+id/user_info"
 			    android:layout_below="@+id/user_name"
@@ -45,7 +45,7 @@
 			    android:layout_marginTop="6dp"
 			    android:textColor="@color/colorWhite"
 			    android:textSize="14sp"
-			    android:text="软件学院 软件工程 20132037"/>
+			    android:text="绑定教务账户使用更多功能"/>
 	    </RelativeLayout>
     </RelativeLayout>
     <LinearLayout
@@ -89,10 +89,10 @@
 				    android:layout_height="wrap_content"
 				    android:layout_alignParentRight="true"
 				    android:background="@color/colorClear"
-				    android:textColor="@color/colorAccent"
+				    android:textColor="@color/colorgray"
 				    android:layout_centerVertical="true"
 				    android:textSize="12sp"
-				    android:text="已绑定"/>
+				    android:text="未绑定"/>
 		    </RelativeLayout>
 		    <RelativeLayout
 			    android:id="@+id/account_library"
