@@ -40,6 +40,9 @@ public class CourseTableManager {
 
 		this.mFirstDayOfWeek = Calendar.getInstance();
 		if (mFirstDayOfWeek.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+			if(mFirstDayOfWeek.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+				mFirstDayOfWeek.add(Calendar.DAY_OF_YEAR, -7);
+			}
 			mFirstDayOfWeek.set(mFirstDayOfWeek.get(Calendar.YEAR), mFirstDayOfWeek.get(Calendar.MONTH), mFirstDayOfWeek.get(Calendar.DAY_OF_MONTH) - mFirstDayOfWeek.get(Calendar.DAY_OF_WEEK) + 2);
 		}
 		mFirstDayOfWeek.set(Calendar.HOUR_OF_DAY, 0);

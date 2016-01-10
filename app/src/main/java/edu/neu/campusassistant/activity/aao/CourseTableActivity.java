@@ -104,6 +104,9 @@ public class CourseTableActivity extends AppCompatActivity {
 		setupDateTimeInterpreter(false);
 
 		if (mFirstDayOfWeek.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+			if(mFirstDayOfWeek.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+				mFirstDayOfWeek.add(Calendar.DAY_OF_YEAR, -7);
+			}
 			mFirstDayOfWeek.set(mFirstDayOfWeek.get(Calendar.YEAR), mFirstDayOfWeek.get(Calendar.MONTH), mFirstDayOfWeek.get(Calendar.DAY_OF_MONTH) - mFirstDayOfWeek.get(Calendar.DAY_OF_WEEK) + 2);
 		}
 		mFirstDayOfWeek.set(Calendar.HOUR,0);
@@ -166,8 +169,8 @@ public class CourseTableActivity extends AppCompatActivity {
 				if (shortDate)
 					weekday = String.valueOf(weekday.charAt(0));
 //				return weekday.toUpperCase() + format.format(date.getTime());
-				return weekday.toUpperCase();
-//				return format.format(date.getTime());
+//				return weekday.toUpperCase();
+				return format.format(date.getTime());
 			}
 
 			@Override

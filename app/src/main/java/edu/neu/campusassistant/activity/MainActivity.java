@@ -835,6 +835,8 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 								(course.getStartSection() + course.getSections() - 1) + "节";
 
 						mNextClassTitle.setVisibility(View.VISIBLE);
+						mNextClassLocation.setVisibility(View.VISIBLE);
+						mNextClassTime.setVisibility(View.VISIBLE);
 						mNextClassTitle.setText("正在上课");
 						mNextClassName.setText(course.getCourseName());
 						mNextClassLocation.setText(course.getClassroom());
@@ -852,6 +854,8 @@ public class MainActivity extends AppCompatActivity implements LoginDialogFragme
 										(nextCourse.getStartSection() + nextCourse.getSections() - 1) + " 节";
 
 								mNextClassTitle.setVisibility(View.VISIBLE);
+								mNextClassLocation.setVisibility(View.VISIBLE);
+								mNextClassTime.setVisibility(View.VISIBLE);
 								mNextClassTitle.setText("下一节课");
 								mNextClassName.setText(nextCourse.getCourseName());
 								mNextClassLocation.setText(nextCourse.getClassroom());
